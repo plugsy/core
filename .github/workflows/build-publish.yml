@@ -16,8 +16,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
       - name: Get version from package.json after release step
         id: extractver
         run: echo "::set-output name=version::$(yarn get-version --silent)"
