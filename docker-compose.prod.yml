@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  dockerdash-app-prod:
+    container_name: dockerdash-prod
+    build:
+      context: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '3000:3000'

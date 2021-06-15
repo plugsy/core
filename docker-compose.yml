@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  dockerdash-app:
+    container_name: dockerdash
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    command: yarn dev
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/user/Internal/DockerDash/:/home/node/app
+      - notused:/home/node/app/node_modules
+    ports:
+      - '3000:3000'
+
+
+volumes:
+  notused:

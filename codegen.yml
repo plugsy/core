@@ -1,0 +1,35 @@
+schema: "**/*.server.graphql"
+generates:
+  ./types.graphql.ts:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+  ./:
+    documents: "**/*.graphql"
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.graphql.ts
+      baseTypesPath: types.graphql.ts
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - named-operations-object
+      - typescript-operations
+      - typescript-react-apollo
+
+  ./server/schema/typeDefs/index.ts:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typed-document-node
+    config:
+      contextType: ../context#Context
+      useIndexSignature: true
+      defaultMapper: DeepPartial<{T}>
+      scalars: 
+        Date: Date

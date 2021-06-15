@@ -1,0 +1,59 @@
+scalar Date
+
+type Query {
+  connected: Boolean!
+  lastUpdated: Date
+  containers: [Container!]!
+  categories: [Category!]!
+  error: String
+}
+
+type Mutation {
+  connected: Boolean!
+}
+
+type Subscription {
+  connected: Boolean!
+  lastUpdated: Date
+  containers: [Container!]!
+  categories: [Category!]!
+  error: String
+}
+
+type Category {
+  name: String!
+  containers: [Container!]!
+}
+
+enum CategoryState {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum ContainerState {
+  RUNNING
+  EXITED
+  CREATED
+  PAUSED
+  RESTARTING
+  DEAD
+  REMOVING
+  UNKNOWN
+}
+
+type ContainerExtras {
+  names: [String!]!
+  status: String!
+  created: Date!
+}
+
+type Container {
+  name: String!
+  category: String
+  icon: String
+  link: String
+  state: ContainerState!
+  extra: ContainerExtras!
+  children: [Container!]!
+}

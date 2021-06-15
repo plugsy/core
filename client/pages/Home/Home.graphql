@@ -1,0 +1,41 @@
+fragment FullCategory on Category {
+  name
+  containers {
+    name
+    icon
+    link
+    state
+    children {
+      name
+      state
+      icon
+    }
+  }
+}
+
+query Init {
+  lastUpdated
+  connected
+  categories {
+    ...FullCategory
+  }
+  error
+}
+
+subscription Connected {
+  connected
+}
+
+subscription LastUpdated {
+  lastUpdated
+}
+
+subscription Categories {
+  categories {
+    ...FullCategory
+  }
+}
+
+subscription Error {
+  error
+}

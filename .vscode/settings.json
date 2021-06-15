@@ -1,0 +1,8 @@
+{
+    "search.exclude": {
+        ".cache": true,
+        ".next": true,
+        "dist/*": true,
+        "yarn.lock": true
+    }
+}
