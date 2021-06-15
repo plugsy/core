@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: 'Release NPM, GitHub, Docker'
+    name: 'Release GitHub, Docker'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -17,15 +17,15 @@ jobs:
         with:
           node-version: 12
       - name: Install dependencies
-        run: npm ci
+        run: yarn --frozen-lockfile
       - name: Get version from package.json after release step
         id: extractver
-        run: echo "::set-output name=version::$(npm run get-version --silent)"
+        run: echo "::set-output name=version::$(yarn get-version --silent)"
       - name: Release to Docker
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         run: |
           echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
-          npm run docker-build
+          yarn  docker-build
           docker tag inlustra/autodockerdash:latest inlustra/autodockerdash:${{ steps.extractver.outputs.version }}
           docker push inlustra/autodockerdash:${{ steps.extractver.outputs.version }}
           docker push inlustra/autodockerdash:latest
