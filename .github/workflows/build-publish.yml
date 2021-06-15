@@ -25,7 +25,7 @@ jobs:
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         run: |
           echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_USERNAME}} --password-stdin
-          yarn  docker-build
+          yarn docker:build
           docker tag inlustra/autodockerdash:latest inlustra/autodockerdash:${{ steps.extractver.outputs.version }}
           docker push inlustra/autodockerdash:${{ steps.extractver.outputs.version }}
           docker push inlustra/autodockerdash:latest
