@@ -17,6 +17,6 @@ COPY . .
 ENV NODE_ENV=production
 ENV NODE_PATH=./dist
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN yarn build  --max-old-space-size=8192
+RUN yarn build
 
 CMD [ "node", "./dist/index.js" ]
