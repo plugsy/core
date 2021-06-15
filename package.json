@@ -8,7 +8,7 @@
   "scripts": {
     "start": "nodemon",
     "get-version": "node -pe \"require('./package.json').version\"",
-    "docker:build": "cross-conf-env docker build . -t $npm_package_config_imageRepo:$npm_package_version",
+    "docker:build": "cross-conf-env docker build . -t $npm_package_config_imageRepo:$npm_package_version -t $npm_package_config_imageRepo:latest",
     "type-check": "tsc",
     "build": "yarn icongen && yarn codegen && parcel build ./server/index.ts --target node && ANALYZE=TRUE next build",
     "web:prod": "next start",
