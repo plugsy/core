@@ -20,7 +20,7 @@ jobs:
         run: yarn --frozen-lockfile
       - name: Get version from package.json
         id: extractver
-        run: echo "::set-output name=version::$(yarn get-version --silent)"
+        run: echo "::set-output name=version::$(yarn run --silent get-version )"
       # This is the a separate action that sets up buildx runner
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

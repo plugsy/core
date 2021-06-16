@@ -2,6 +2,7 @@
   "name": "auto-docker-dash",
   "version": "0.1.0",
   "private": false,
+  "license": "MIT",
   "config": {
     "imageRepo": "inlustra/autodockerdash"
   },
