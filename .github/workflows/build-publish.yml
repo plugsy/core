@@ -7,43 +7,71 @@ on:
 
 jobs:
   release:
-    name: 'Release GitHub, Docker'
+    name: "Release GitHub, Docker"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 12
+      - name: Setup yarn cache
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install dependencies
         run: yarn --frozen-lockfile
+
       - name: Get version from package.json
-        id: extractver
+        id: initversion
         run: echo "::set-output name=version::$(yarn run --silent get-version )"
+
+      - name: Release to GitHub
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: add-bot
+          GIT_AUTHOR_EMAIL: thomas@thenairn.com
+          GIT_COMMITTER_NAME: add-bot
+          GIT_COMMITTER_EMAIL: thomas@thenairn.com
+        run: npm run release
+
+      - name: Get version from package.json after release step
+        id: extractver
+        run: echo "::set-output name=version::$(npm run get-version --silent)"
+
       # This is the a separate action that sets up buildx runner
       - name: Set up Docker Buildx
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: docker/setup-buildx-action@v1
       # So now you can use Actions' own caching!
       - name: Cache Docker layers
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
       # And make it available for the builds
       - name: Build and push
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: inlustra/autodockerdash:${{ steps.extractver.outputs.version }},inlustra/latest
+          tags: inlustra/autodockerdash:${{ steps.extractver.outputs.version }},inlustra/autodockerdash:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -52,16 +80,18 @@ jobs:
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       - name: Create Pull Request with updated package files
-        uses: peter-evans/create-pull-request@v2.4.4
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          commit-message: 'chore(release): ${{ steps.extractver.outputs.version }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(release): ${{ steps.extractver.outputs.version }}"
           committer: add-bot <thomas@thenairn.com>
           author: add-bot <thomas@thenairn.com>
-          title: 'chore(release): ${{ steps.extractver.outputs.version }}'
-          body: 'Version bump in package.json and package-lock.json for release [${{ steps.extractver.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ steps.extractver.outputs.version }})'
+          title: "chore(release): ${{ steps.extractver.outputs.version }}"
+          body: "Version bump in package.json and yarn.lock for release [${{ steps.extractver.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ steps.extractver.outputs.version }})"
           branch: version-bump/${{ steps.extractver.outputs.version }}
