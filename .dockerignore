@@ -10,3 +10,4 @@ node_modules
 dist
 *generated*
 .github
+README.md
