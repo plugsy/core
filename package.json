@@ -8,7 +8,7 @@
   },
   "release": {
     "branches": [
-      "main"
+      "master"
     ],
     "plugins": [
       [
@@ -23,7 +23,13 @@
           "preset": "conventionalcommits"
         }
       ],
-      "@semantic-release/github"
+      "@semantic-release/github",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ]
     ]
   },
   "scripts": {
@@ -90,7 +96,6 @@
     "@types/styled-components": "^5.1.10",
     "babel-plugin-styled-components": "^1.12.0",
     "concurrently": "^6.2.0",
-    "conventional-changelog-conventionalcommits": "^4.6.0",
     "cross-conf-env": "^1.2.1",
     "next-compose-plugins": "^2.2.1",
     "next-fonts": "^1.5.1",

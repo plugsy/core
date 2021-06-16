@@ -28,7 +28,7 @@ jobs:
 
       - name: Get version from package.json
         id: initversion
-        run: echo "::set-output name=version::$(yarn run --silent get-version )"
+        run: echo "::set-output name=version::$(yarn run --silent get-version)"
 
       - name: Release to GitHub
         id: release
@@ -42,7 +42,7 @@ jobs:
 
       - name: Get version from package.json after release step
         id: extractver
-        run: echo "::set-output name=version::$(npm run get-version --silent)"
+        run: echo "::set-output name=version::$(yarn run --silent get-version)"
 
       # This is the a separate action that sets up buildx runner
       - name: Set up Docker Buildx
