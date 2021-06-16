@@ -1,6 +1,10 @@
+
 # Auto Docker Dash
 
 A simple dashboard to show you the status of your current docker stack.
+
+https://user-images.githubusercontent.com/2565465/122217617-ddc0db80-cead-11eb-9adb-1365638158a2.mov
+
 
 ## Why?
 
