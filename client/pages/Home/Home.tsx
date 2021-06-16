@@ -118,12 +118,13 @@ export function Home({
     if (connectedData?.connected) setConnected(connectedData.connected);
   }, [connectedData]);
   const lastUpdatedDate = lastUpdated ? parseISO(lastUpdated) : new Date();
+  const lastUpdatedSeconds = Math.max(
+    0,
+    differenceInSeconds(new Date(), lastUpdatedDate)
+  );
   const lastUpdatedStr = lastUpdated
     ? formatDistanceToNowShort(lastUpdatedDate)
     : "N/A";
-  const isOld = lastUpdated
-    ? differenceInSeconds(new Date(), lastUpdatedDate) > 60
-    : true;
   return (
     <HomeContainer>
       <StatusBoxContainers>
@@ -136,9 +137,15 @@ export function Home({
         </StatusBoxContainer>
         <StatusBoxContainer>
           <StatusBox
-            title={" Updated"}
+            title={"Updated"}
             text={lastUpdatedStr}
-            status={isOld ? "GREEN" : "RED"}
+            status={
+              lastUpdatedSeconds > 60
+                ? "YELLOW"
+                : lastUpdatedSeconds > 300
+                ? "RED"
+                : "GREEN"
+            }
           />
         </StatusBoxContainer>
       </StatusBoxContainers>
