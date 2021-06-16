@@ -19,6 +19,8 @@ _I also wanted to play with GraphQL subscriptions and observables_
 - Display the status of the containers
   - Will also show the status of children containers, see [children](#children)
 - Ability to add a link to each of the containers
+- Websocket connections for updates every 5 seconds
+  - Currently relies on the system clocks of both machines not being out (Will fix in the future)
 
 ## Getting started
 
