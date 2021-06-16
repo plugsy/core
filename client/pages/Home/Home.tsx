@@ -158,7 +158,7 @@ export function Home({
       </StatusBoxContainers>
 
       <CategoriesContainer>
-        {/* {categories?.map((category) => (
+        {categories?.map((category) => (
           <DockerCategory
             key={`category-${category.name}`}
             name={category.name}
@@ -187,7 +187,7 @@ export function Home({
               }
             )}
           />
-        ))} */}
+        ))}
       </CategoriesContainer>
     </HomeContainer>
   );
