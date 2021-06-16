@@ -1,5 +1,6 @@
 import differenceInSeconds from "date-fns/differenceInSeconds/index.js";
 import parseISO from "date-fns/parseISO";
+import Head from "next/head";
 import React, { useEffect, useMemo, useState } from "react";
 import useInterval from "react-use/lib/useInterval";
 import styled from "styled-components";
@@ -131,65 +132,71 @@ export function Home({
     [lastUpdated, lastUpdatedData, lastUpdatedSeconds]
   );
   return (
-    <HomeContainer>
-      <StatusBoxContainers>
-        <StatusBoxContainer>
-          <StatusBox
-            title={"Docker"}
-            text={connected ? "OK" : "DC'd"}
-            status={connected ? "GREEN" : "RED"}
-          />
-        </StatusBoxContainer>
-        <StatusBoxContainer>
-          <StatusBox
-            title={"Updated"}
-            text={lastUpdatedStr}
-            status={
-              lastUpdatedSeconds === undefined
-                ? "GREY"
-                : lastUpdatedSeconds > 60
-                ? "YELLOW"
-                : lastUpdatedSeconds > 300
-                ? "RED"
-                : "GREEN"
-            }
-          />
-        </StatusBoxContainer>
-      </StatusBoxContainers>
+    <>
+      <Head>
+        <title>Auto Docker Dash</title>
+        <meta property="og:title" content="Auto Docker Dash" key="title" />
+      </Head>
+      <HomeContainer>
+        <StatusBoxContainers>
+          <StatusBoxContainer>
+            <StatusBox
+              title={"Docker"}
+              text={connected ? "OK" : "DC'd"}
+              status={connected ? "GREEN" : "RED"}
+            />
+          </StatusBoxContainer>
+          <StatusBoxContainer>
+            <StatusBox
+              title={"Updated"}
+              text={lastUpdatedStr}
+              status={
+                lastUpdatedSeconds === undefined
+                  ? "GREY"
+                  : lastUpdatedSeconds > 60
+                  ? "YELLOW"
+                  : lastUpdatedSeconds > 300
+                  ? "RED"
+                  : "GREEN"
+              }
+            />
+          </StatusBoxContainer>
+        </StatusBoxContainers>
 
-      <CategoriesContainer>
-        {categories?.map((category) => (
-          <DockerCategory
-            key={`category-${category.name}`}
-            name={category.name}
-            containers={category.containers.map(
-              ({ name, link, icon, state, children }) => {
-                return {
-                  key: name,
-                  text: name,
-                  link: link ?? undefined,
-                  iconPack: icon?.split("/")[0],
-                  icon: icon?.split("/")[1],
-                  state: toTitleCase(state),
-                  status: containerStatesToStatus([
-                    state,
-                    ...children.map((child) => child.state),
-                  ]),
-                  children: children.map(({ name, icon, state }) => ({
+        <CategoriesContainer>
+          {categories?.map((category) => (
+            <DockerCategory
+              key={`category-${category.name}`}
+              name={category.name}
+              containers={category.containers.map(
+                ({ name, link, icon, state, children }) => {
+                  return {
                     key: name,
                     text: name,
+                    link: link ?? undefined,
                     iconPack: icon?.split("/")[0],
                     icon: icon?.split("/")[1],
-                    status: containerStateToStatus(state),
                     state: toTitleCase(state),
-                  })),
-                };
-              }
-            )}
-          />
-        ))}
-      </CategoriesContainer>
-    </HomeContainer>
+                    status: containerStatesToStatus([
+                      state,
+                      ...children.map((child) => child.state),
+                    ]),
+                    children: children.map(({ name, icon, state }) => ({
+                      key: name,
+                      text: name,
+                      iconPack: icon?.split("/")[0],
+                      icon: icon?.split("/")[1],
+                      status: containerStateToStatus(state),
+                      state: toTitleCase(state),
+                    })),
+                  };
+                }
+              )}
+            />
+          ))}
+        </CategoriesContainer>
+      </HomeContainer>
+    </>
   );
 }
 
