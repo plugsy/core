@@ -1,7 +1,5 @@
 import { parse } from "date-fns";
 import Docker from "dockerode";
-import fs from "fs";
-import path from "path";
 
 interface LabeledParams {
   name: string;
@@ -40,7 +38,6 @@ export type State =
 
 export async function getDockerContainers(docker: Docker, config: LabelConfig) {
   const containers = await docker.listContainers({ all: true });
-  const fileContent = JSON.stringify(containers, null, 4);
 
   return containers
     .map((container): DockerContainer => {
