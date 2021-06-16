@@ -1,6 +1,7 @@
 import differenceInSeconds from "date-fns/differenceInSeconds/index.js";
 import parseISO from "date-fns/parseISO";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import useInterval from "react-use/lib/useInterval";
 import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
@@ -118,13 +119,17 @@ export function Home({
     if (connectedData?.connected) setConnected(connectedData.connected);
   }, [connectedData]);
   const lastUpdatedDate = lastUpdated ? parseISO(lastUpdated) : new Date();
-  const lastUpdatedSeconds = Math.max(
-    0,
-    differenceInSeconds(new Date(), lastUpdatedDate)
+  const [lastUpdatedSeconds, setLastUpdatedSeconds] = useState<number>(0);
+  useInterval(() => {
+    // TODO: Sync this with server time as if there's a clock difference, this doesn't work so great
+    setLastUpdatedSeconds(
+      Math.max(0, differenceInSeconds(new Date(), lastUpdatedDate))
+    );
+  }, 1000);
+  const lastUpdatedStr = useMemo(
+    () => (lastUpdated ? formatDistanceToNowShort(lastUpdatedDate) : "N/A"),
+    [lastUpdated, lastUpdatedData, lastUpdatedSeconds]
   );
-  const lastUpdatedStr = lastUpdated
-    ? formatDistanceToNowShort(lastUpdatedDate)
-    : "N/A";
   return (
     <HomeContainer>
       <StatusBoxContainers>
@@ -140,7 +145,9 @@ export function Home({
             title={"Updated"}
             text={lastUpdatedStr}
             status={
-              lastUpdatedSeconds > 60
+              lastUpdatedSeconds === undefined
+                ? "GREY"
+                : lastUpdatedSeconds > 60
                 ? "YELLOW"
                 : lastUpdatedSeconds > 300
                 ? "RED"
@@ -151,7 +158,7 @@ export function Home({
       </StatusBoxContainers>
 
       <CategoriesContainer>
-        {categories?.map((category) => (
+        {/* {categories?.map((category) => (
           <DockerCategory
             key={`category-${category.name}`}
             name={category.name}
@@ -180,7 +187,7 @@ export function Home({
               }
             )}
           />
-        ))}
+        ))} */}
       </CategoriesContainer>
     </HomeContainer>
   );
