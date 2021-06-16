@@ -11,8 +11,6 @@ const apolloServer = new ApolloServer({
   subscriptions: {
     path: "/graphql",
     keepAlive: 9000,
-    onConnect: () => console.log("connected"),
-    onDisconnect: () => console.log("disconnected"),
   },
   playground: {
     subscriptionEndpoint: "/graphql",
@@ -36,11 +34,6 @@ async function startServer() {
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 
   // tslint:disable-next-line:no-console
-  console.log(
-    `> Server listening at http://localhost:${port} as ${
-      dev ? "development" : process.env.NODE_ENV
-    }`
-  );
 
   async function closeServer() {
     try {
@@ -55,6 +48,9 @@ async function startServer() {
 
   process.on("SIGTERM", closeServer);
   process.on("SIGINT", closeServer);
+  return `> Server listening at http://localhost:${port} as ${
+    dev ? "development" : process.env.NODE_ENV
+  }`;
 }
 
 startServer().then(console.log);

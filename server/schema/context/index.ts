@@ -44,7 +44,6 @@ export const initContext =
     try {
       const { res, req, operation } = ctx;
       const isClosed$ = new BehaviorSubject(false);
-      console.log(ctx.connection?.context);
       req?.on("close", () => {
         isClosed$.next(true);
       });
@@ -74,7 +73,7 @@ export const initContext =
         isClosed$,
       };
     } catch (error) {
-      console.error(error);
+      console.error("Unable to init context", error);
       throw error;
     }
   };
