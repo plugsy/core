@@ -42,10 +42,6 @@ export async function getDockerContainers(docker: Docker, config: LabelConfig) {
   const containers = await docker.listContainers({ all: true });
   const fileContent = JSON.stringify(containers, null, 4);
 
-  fs.writeFileSync(path.join(".", `file.json`), fileContent, {
-    encoding: "utf8",
-    flag: "w",
-  });
   return containers
     .map((container): DockerContainer => {
       const state: State = (() => {
