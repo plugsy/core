@@ -12,13 +12,14 @@ export function createIsomorphLink(opts?: {
     return schemaLink(opts?.ctx);
   } else {
     const { HttpLink } = require("@apollo/client");
+    let scheme = location.protocol === "https:" ? "wss" : "ws";
     const wsLink = new WebSocketLink({
-      uri: `wss://${location.host}/graphql`,
+      uri: `${scheme}://${location.host}/graphql`,
       options: {
         lazy: true,
         reconnect: true,
         timeout: 300000,
-        minTimeout: 30000
+        minTimeout: 30000,
       },
     });
 
