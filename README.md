@@ -36,6 +36,7 @@ Add a couple of labels to all of your containers you wish to appear on the dashb
 
 ### Step 2
 Run the container with the `DOCKER_SOCKET` location environment variable. 
+
 Will default to `/var/run/docker.sock`
 
 ## Usage
@@ -98,3 +99,19 @@ Example:
 
 You can get the name of the pack looking at the url for the individual pack.
 `https://react-icons.github.io/react-icons/icons?name=fi`
+
+
+## Development
+
+Simple enough:
+
+`docker-compose up --build`
+
+### Notes: 
+
+The development build will not include all of the icons, and will instead generate a static icon instead.
+
+This is to reduce the build time. Webpack loading 18,000 dynamic icons is looooooong, any feedback on how to speed that up is appreciated!
+
+### CI:
+Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
