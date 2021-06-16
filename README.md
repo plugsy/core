@@ -109,9 +109,12 @@ Simple enough:
 
 ### Notes: 
 
-The development build will not include all of the icons, and will instead generate a static icon instead.
+- The development build will not include all of the icons, and will instead generate a static icon instead.
+  - This is to reduce the build time. Webpack loading 18,000 dynamic icons is looooooong, any feedback on how to speed that up is appreciated!
+- Uses a custom Next.js server built with Parcel
+  - This is in order for us to support websockets as Next.js doesn't by default.
 
-This is to reduce the build time. Webpack loading 18,000 dynamic icons is looooooong, any feedback on how to speed that up is appreciated!
+
 
 ### CI:
 Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
