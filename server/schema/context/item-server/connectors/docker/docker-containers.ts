@@ -1,4 +1,3 @@
-import { parse } from "date-fns";
 import Docker from "dockerode";
 
 interface LabeledParams {
@@ -10,12 +9,8 @@ interface LabeledParams {
 }
 
 interface Params {
-  state: State;
-  extra: {
-    names: string[];
-    status: string;
-    created: Date;
-  };
+  state: 'GREY' | 'RED' | 'YELLOW' | 'GREEN';
+  status: string;
 }
 
 export interface DockerContainer extends Params, LabeledParams {}
@@ -26,48 +21,40 @@ export async function getRunningDockerContainerCount(docker: Docker) {
   return (await docker.listContainers()).length;
 }
 
-export type State =
-  | "created"
-  | "exited"
-  | "running"
-  | "restarting"
-  | "dead"
-  | "paused"
-  | "removing"
-  | "unknown";
+const dockerStateToStatus = (state: string) => {
+  switch (state) {
+    case "created":
+    case "paused":
+    case "exited":
+      return "GREY";
+    case "unknown":
+    case "dead":
+      return "RED";
+    case "removing":
+    case "restarting":
+      return "YELLOW";
+    case "running":
+      return "GREEN";
+    default:
+      console.warn("Un-mapped docker state found: ", state);
+      return "GREY";
+  }
+};
 
 export async function getDockerContainers(docker: Docker, config: LabelConfig) {
   const containers = await docker.listContainers({ all: true });
 
   return containers
     .map((container): DockerContainer => {
-      const state: State = (() => {
-        switch (container.State) {
-          case "created":
-          case "exited":
-          case "running":
-          case "restarting":
-          case "dead":
-          case "paused":
-          case "removing":
-            return container.State;
-          default:
-            console.warn("Un-mapped docker state found: ", container.State);
-            return "unknown";
-        }
-      })();
+      
       return {
-        state,
+        state: dockerStateToStatus(container.State),
+        status: container.State,
         name: container.Labels[config.nameLabel] ?? null,
         category: container.Labels[config.categoryLabel] ?? null,
         icon: container.Labels[config.iconLabel] ?? null,
         link: container.Labels[config.linkLabel] ?? null,
         parents: container.Labels[config.parentsLabel] ?? null,
-        extra: {
-          names: container.Names,
-          status: container.Status,
-          created: parse(`${container.Created}`, "t", new Date()),
-        },
       };
     })
     .filter((container) => container.name !== null);

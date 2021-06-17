@@ -1,6 +1,6 @@
 fragment FullCategory on Category {
   name
-  containers {
+  items {
     name
     icon
     link
@@ -14,28 +14,28 @@ fragment FullCategory on Category {
 }
 
 query Init {
-  lastUpdated
-  connected
   categories {
     ...FullCategory
   }
-  error
+  connections {
+    id
+    connected
+    lastUpdated
+    error
+  }
 }
 
-subscription Connected {
-  connected
-}
-
-subscription LastUpdated {
-  lastUpdated
+subscription Connections {
+  connections {
+    id
+    connected
+    lastUpdated
+    error
+  }
 }
 
 subscription Categories {
   categories {
     ...FullCategory
   }
-}
-
-subscription Error {
-  error
 }

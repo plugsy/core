@@ -1,43 +1,52 @@
 import next from "next";
-import { createServer } from "http";
-import express from "express";
+import { createServer, Server } from "http";
+import express, { Express } from "express";
 
 import { ApolloServer } from "apollo-server-express";
 import { serverOptions } from "./schema";
 
-const apolloServer = new ApolloServer({
-  ...serverOptions(),
-  tracing: true,
-  subscriptions: {
-    path: "/graphql",
-    keepAlive: 9000,
-  },
-  playground: {
-    subscriptionEndpoint: "/graphql",
-  },
-});
-
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
 
-async function startServer() {
+async function startAPI(httpServer: Server, expressServer: Express) {
+  const apolloServer = new ApolloServer({
+    ...serverOptions(),
+    tracing: true,
+    subscriptions: {
+      path: "/graphql",
+      keepAlive: 9000,
+    },
+    playground: {
+      subscriptionEndpoint: "/graphql",
+    },
+  });
+
+  apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
+  apolloServer.installSubscriptionHandlers(httpServer);
+
+  return apolloServer;
+}
+
+async function startFrontend(expressServer: Express) {
   const nextApp = next({ dev });
   const nextHandle = nextApp.getRequestHandler();
 
-  await nextApp.prepare();
-  const expressServer = express();
-
-  apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
-  const httpServer = createServer(expressServer);
-  apolloServer.installSubscriptionHandlers(httpServer);
   expressServer.all("*", (req, res) => nextHandle(req, res));
-  await new Promise<void>((resolve) => httpServer.listen(port, resolve));
+  await nextApp.prepare();
+}
 
-  // tslint:disable-next-line:no-console
+async function startServer() {
+  const expressServer = express();
+  const httpServer = createServer(expressServer);
+
+  const api = await startAPI(httpServer, expressServer);
+  await startFrontend(expressServer);
+
+  await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 
   async function closeServer() {
     try {
-      await apolloServer.stop();
+      await api.stop();
     } catch {}
     try {
       httpServer.close(() => {

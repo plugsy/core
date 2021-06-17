@@ -60,24 +60,7 @@ function toTitleCase(str: string) {
   });
 }
 
-const containerStateToStatus = (state: ContainerState) => {
-  switch (state) {
-    case ContainerState.Created:
-    case ContainerState.Paused:
-    case ContainerState.Exited:
-      return "GREY";
-    case ContainerState.Unknown:
-    case ContainerState.Dead:
-      return "RED";
-    case ContainerState.Removing:
-    case ContainerState.Restarting:
-      return "YELLOW";
-    case ContainerState.Running:
-      return "GREEN";
-  }
-};
-
-function containerStatesToStatus(containerStates: ContainerState[]) {
+function statesToStatus(containerStates: ContainerState[]) {
   const statuses = containerStates.map(containerStateToStatus);
   if (statuses.some((status) => status === "RED")) return "RED";
   if (statuses.some((status) => status === "YELLOW")) return "YELLOW";
