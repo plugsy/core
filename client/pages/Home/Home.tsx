@@ -1,29 +1,22 @@
-import differenceInSeconds from "date-fns/differenceInSeconds/index.js";
-import parseISO from "date-fns/parseISO";
 import Head from "next/head";
-import React, { useEffect, useMemo, useState } from "react";
-import useInterval from "react-use/lib/useInterval";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
-import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
-import { ContainerState } from "../../../types.graphql";
+import { State } from "../../../types.graphql";
+import { ConnectionStatus } from "../../components/ConnectionStatus";
 import { DockerCategory } from "../../components/DockerCategory";
-import { StatusBox } from "../../components/StatusBox";
 import {
-  useLastUpdatedSubscription,
   useCategoriesSubscription,
   FullCategoryFragment,
   InitDocument,
   InitQuery,
-  useErrorSubscription,
-  useConnectedSubscription,
+  FullConnectionFragment,
+  useConnectionsSubscription,
 } from "./Home.generated.graphql";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
-  initialError?: string;
-  initialLastUpdated?: string;
-  initialConnected?: boolean;
+  initialConnections?: FullConnectionFragment[];
 }
 
 const HomeContainer = styled.div`
@@ -35,22 +28,17 @@ const CategoriesContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-const StatusBoxContainer = styled.div`
+const Connection = styled.div``;
+const ConnectionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const StatusBoxContainers = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 32px;
-
   flex-wrap: wrap;
-  margin: -24px 0 0 -24px;
-  width: calc(100% + 24px);
-  ${StatusBoxContainer} {
-    margin: 24px 0 0 24px;
+  margin: -18px 0 0 -18px;
+  padding-left: 32px;
+  padding-right: 32px;
+
+  ${Connection} {
+    margin: 18px 0 0 18px;
   }
 `;
 
@@ -60,42 +48,17 @@ function toTitleCase(str: string) {
   });
 }
 
-const containerStateToStatus = (state: ContainerState) => {
-  switch (state) {
-    case ContainerState.Created:
-    case ContainerState.Paused:
-    case ContainerState.Exited:
-      return "GREY";
-    case ContainerState.Unknown:
-    case ContainerState.Dead:
-      return "RED";
-    case ContainerState.Removing:
-    case ContainerState.Restarting:
-      return "YELLOW";
-    case ContainerState.Running:
-      return "GREEN";
-  }
-};
-
-function containerStatesToStatus(containerStates: ContainerState[]) {
-  const statuses = containerStates.map(containerStateToStatus);
-  if (statuses.some((status) => status === "RED")) return "RED";
-  if (statuses.some((status) => status === "YELLOW")) return "YELLOW";
-  if (statuses.every((status) => status === "GREY")) return "GREY";
-  if (statuses.every((status) => status === "GREEN")) return "GREEN";
+function statesToStatus(containerStates: State[]) {
+  if (containerStates.some((status) => status === "RED")) return "RED";
+  if (containerStates.some((status) => status === "YELLOW")) return "YELLOW";
+  if (containerStates.every((status) => status === "GREY")) return "GREY";
+  if (containerStates.every((status) => status === "GREEN")) return "GREEN";
   return "GREY";
 }
 
-export function Home({
-  initialCategories,
-  initialError,
-  initialLastUpdated,
-  initialConnected,
-}: Props) {
-  const [lastUpdated, setLastUpdated] = useState(initialLastUpdated);
-  const [_, setError] = useState<string | undefined | null>(initialError);
+export function Home({ initialCategories, initialConnections }: Props) {
   const [categories, setCategories] = useState(initialCategories);
-  const [connected, setConnected] = useState(initialConnected);
+  const [connections, setConnections] = useState(initialConnections);
 
   const { data: categoriesData } = useCategoriesSubscription();
 
@@ -103,34 +66,13 @@ export function Home({
     if (categoriesData?.categories) setCategories(categoriesData.categories);
   }, [categoriesData]);
 
-  const { data: lastUpdatedData } = useLastUpdatedSubscription();
+  const { data: connectionsData } = useConnectionsSubscription();
 
   useEffect(() => {
-    if (lastUpdatedData?.lastUpdated)
-      setLastUpdated(lastUpdatedData?.lastUpdated);
-  }, [lastUpdatedData]);
+    if (connectionsData?.connections)
+      setConnections(connectionsData.connections);
+  }, [connectionsData]);
 
-  const { data: errorData } = useErrorSubscription();
-  useEffect(() => {
-    if (errorData?.error) setError(errorData.error);
-  }, [errorData]);
-
-  const { data: connectedData } = useConnectedSubscription();
-  useEffect(() => {
-    if (connectedData?.connected) setConnected(connectedData.connected);
-  }, [connectedData]);
-  const lastUpdatedDate = lastUpdated ? parseISO(lastUpdated) : new Date();
-  const [lastUpdatedSeconds, setLastUpdatedSeconds] = useState<number>(0);
-  useInterval(() => {
-    // TODO: Sync this with server time as if there's a clock difference, this doesn't work so great
-    setLastUpdatedSeconds(
-      Math.max(0, differenceInSeconds(new Date(), lastUpdatedDate))
-    );
-  }, 1000);
-  const lastUpdatedStr = useMemo(
-    () => (lastUpdated ? formatDistanceToNowShort(lastUpdatedDate) : "N/A"),
-    [lastUpdated, lastUpdatedData, lastUpdatedSeconds]
-  );
   return (
     <>
       <Head>
@@ -138,56 +80,31 @@ export function Home({
         <meta property="og:title" content="Auto Docker Dash" key="title" />
       </Head>
       <HomeContainer>
-        <StatusBoxContainers>
-          <StatusBoxContainer>
-            <StatusBox
-              title={"Docker"}
-              text={connected ? "OK" : "DC'd"}
-              status={connected ? "GREEN" : "RED"}
-            />
-          </StatusBoxContainer>
-          <StatusBoxContainer>
-            <StatusBox
-              title={"Updated"}
-              text={lastUpdatedStr}
-              status={
-                lastUpdatedSeconds === undefined
-                  ? "GREY"
-                  : lastUpdatedSeconds > 60
-                  ? "YELLOW"
-                  : lastUpdatedSeconds > 300
-                  ? "RED"
-                  : "GREEN"
-              }
-            />
-          </StatusBoxContainer>
-        </StatusBoxContainers>
-
         <CategoriesContainer>
           {categories?.map((category) => (
             <DockerCategory
               key={`category-${category.name}`}
               name={category.name}
-              containers={category.containers.map(
-                ({ name, link, icon, state, children }) => {
+              containers={category.items.map(
+                ({ name, link, icon, state, children, status }) => {
                   return {
                     key: name,
                     text: name,
                     link: link ?? undefined,
                     iconPack: icon?.split("/")[0],
                     icon: icon?.split("/")[1],
-                    state: toTitleCase(state),
-                    status: containerStatesToStatus([
+                    state: statesToStatus([
                       state,
                       ...children.map((child) => child.state),
                     ]),
-                    children: children.map(({ name, icon, state }) => ({
+                    status: status ? toTitleCase(status) : undefined,
+                    children: children.map(({ name, icon, state, status }) => ({
                       key: name,
                       text: name,
+                      status: status ? toTitleCase(status) : undefined,
                       iconPack: icon?.split("/")[0],
                       icon: icon?.split("/")[1],
-                      status: containerStateToStatus(state),
-                      state: toTitleCase(state),
+                      state: statesToStatus([state]),
                     })),
                   };
                 }
@@ -195,21 +112,32 @@ export function Home({
             />
           ))}
         </CategoriesContainer>
+        <ConnectionsContainer>
+          {connections?.map((props) => {
+            return (
+              <Connection key={`connection-${props.id}`}>
+                <ConnectionStatus {...props} />
+              </Connection>
+            );
+          })}
+        </ConnectionsContainer>
       </HomeContainer>
     </>
   );
 }
 
 export async function getServerSideProps() {
-  const { data } = await apolloClient.query<InitQuery>({
+  const { data, error } = await apolloClient.query<InitQuery>({
     query: InitDocument,
+    fetchPolicy: "no-cache",
   });
+  if (error) {
+    console.log(error);
+  }
   return {
     props: {
-      initialCategories: data?.categories,
-      initialError: data?.error,
-      initialLastUpdated: data?.lastUpdated,
-      initialConnected: data?.connected,
+      initialCategories: data?.categories ?? [],
+      initialConnections: data?.connections ?? [],
     } as Props,
   };
 }

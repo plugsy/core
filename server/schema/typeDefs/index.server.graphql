@@ -1,11 +1,9 @@
 scalar Date
 
 type Query {
-  connected: Boolean!
-  lastUpdated: Date
-  containers: [Container!]!
+  items: [Item!]!
   categories: [Category!]!
-  error: String
+  connections: [Connection!]!
 }
 
 type Mutation {
@@ -13,47 +11,38 @@ type Mutation {
 }
 
 type Subscription {
-  connected: Boolean!
-  lastUpdated: Date
-  containers: [Container!]!
+  items: [Item!]!
   categories: [Category!]!
-  error: String
+  connections: [Connection!]!
 }
 
 type Category {
   name: String!
-  containers: [Container!]!
+  items: [Item!]!
 }
 
-enum CategoryState {
+enum State {
   GREEN
   YELLOW
   RED
+  GREY
 }
 
-enum ContainerState {
-  RUNNING
-  EXITED
-  CREATED
-  PAUSED
-  RESTARTING
-  DEAD
-  REMOVING
-  UNKNOWN
-}
-
-type ContainerExtras {
-  names: [String!]!
-  status: String!
-  created: Date!
-}
-
-type Container {
+type Item {
   name: String!
   category: String
   icon: String
   link: String
-  state: ContainerState!
-  extra: ContainerExtras!
-  children: [Container!]!
+  state: State!
+  status: String
+  parents: [String!]!
+  children: [Item!]!
+}
+
+type Connection {
+  id: String!
+  connected: Boolean!
+  lastUpdated: Date
+  error: String
+  items: [Item!]!
 }

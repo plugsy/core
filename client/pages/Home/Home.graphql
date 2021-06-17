@@ -1,7 +1,8 @@
 fragment FullCategory on Category {
   name
-  containers {
+  items {
     name
+    status
     icon
     link
     state
@@ -9,33 +10,35 @@ fragment FullCategory on Category {
       name
       state
       icon
+      status
     }
   }
 }
 
-query Init {
-  lastUpdated
+fragment FullConnection on Connection {
+  id
   connected
-  categories {
-    ...FullCategory
-  }
+  lastUpdated
   error
 }
 
-subscription Connected {
-  connected
+query Init {
+  categories {
+    ...FullCategory
+  }
+  connections {
+    ...FullConnection
+  }
 }
 
-subscription LastUpdated {
-  lastUpdated
+subscription Connections {
+  connections {
+    ...FullConnection
+  }
 }
 
 subscription Categories {
   categories {
     ...FullCategory
   }
-}
-
-subscription Error {
-  error
 }

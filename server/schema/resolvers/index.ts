@@ -2,13 +2,14 @@ import {
   QueryResolvers,
   MutationResolvers,
   SubscriptionResolvers,
-  ContainerResolvers,
+  ItemResolvers,
+  Item as GQLItem,
 } from "../typeDefs";
 import { firstValueFrom } from "rxjs";
 import { latestValueFrom as toAsyncIterable } from "rxjs-for-await";
 import {
   Category as GQLCategory,
-  Container as GQLContainer,
+  Connection as GQLConnection,
 } from "../typeDefs";
 import { DateScalarType } from "../../../lib/apollo/scalars/Date";
 import { map } from "rxjs/operators";
@@ -17,73 +18,51 @@ export const Query: QueryResolvers = {
   categories: async (_, __, { categories$ }) => {
     return await firstValueFrom(categories$);
   },
-
-  connected: async (_, __, { connected$ }) => {
-    const val = await firstValueFrom(connected$);
-    return val;
+  items: async (_, __, { items$ }) => {
+    return await firstValueFrom(items$);
   },
-
-  containers: async (_, __, { containers$ }) => {
-    return await firstValueFrom(containers$);
-  },
-  error: async (_, __, { error$ }) => {
-    return await firstValueFrom(error$);
-  },
-  lastUpdated: async (_, __, { lastUpdated$ }) => {
-    return await firstValueFrom(lastUpdated$);
+  connections: async (_, __, { connectionData$ }) => {
+    return await firstValueFrom(connectionData$);
   },
 };
 
 export const Mutation: MutationResolvers = {};
 
 export const Subscription: SubscriptionResolvers = {
-  connected: {
-    subscribe: (_, __, { connected$ }) => {
-      return toAsyncIterable(connected$);
-    },
-    resolve: (x: boolean) => x,
-  },
-  lastUpdated: {
-    subscribe: (_, __, { lastUpdated$ }) => {
-      return toAsyncIterable(lastUpdated$);
-    },
-
-    resolve: (x: Date | null) => x,
-  },
-  error: {
-    subscribe: (_, __, { error$ }) => {
-      return toAsyncIterable(error$);
-    },
-    resolve: (x: string | null) => x,
-  },
   categories: {
     subscribe: (_, __, { categories$ }) => {
       return toAsyncIterable(categories$);
     },
     resolve: (x: GQLCategory[]) => x,
   },
-  containers: {
-    subscribe: (_, __, { containers$ }) => {
-      return toAsyncIterable(containers$);
+  items: {
+    subscribe: (_, __, { items$ }) => {
+      return toAsyncIterable(items$);
     },
-    resolve: (x: GQLContainer[]) => x,
+    resolve: (x: GQLItem[]) => x,
+  },
+  connections: {
+    subscribe: (_, __, { connectionData$ }) => {
+      return toAsyncIterable(connectionData$);
+    },
+    resolve: (x: GQLConnection[]) => x,
   },
 };
 
 export const Date = DateScalarType;
 
-export const Container: ContainerResolvers = {
-  children: async ({ name }, __, { containers$ }) => {
+export const Item: ItemResolvers = {
+  children: async ({ name }, __, { items$ }) => {
     if (!name) return [];
     return await firstValueFrom(
-      containers$.pipe(
-        map((containers) =>
-          containers.filter(({ parents }) =>
+      items$.pipe(
+        map((items) => {
+          return items.filter(({ parents }) =>
             parents.some(
               (parent) => parent.toLowerCase() === name.toLowerCase()
             )
-          )
-        )
+          );
+        })
       )
     );
   },
