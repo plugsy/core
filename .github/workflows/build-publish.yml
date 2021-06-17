@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Run schemagen to ensure that the file gets included in the release
+        run: yarn run gen:json
+
       - name: Get version from package.json
         id: initversion
         run: echo "::set-output name=version::$(yarn run --silent get-version)"
