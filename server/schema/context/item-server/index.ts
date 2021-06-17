@@ -30,8 +30,11 @@ function initialiseItemServer() {
     initialiseConnectionPool();
 
   getServerConfig()
-    .pipe(map((config) => config.connectors))
     .pipe(
+      map((config) => config.connectors),
+      tap((connectors) =>
+        console.log(connectors)
+      ),
       map((connectors) => {
         if (Array.isArray(connectors)) {
           return connectors.map(getConnector);

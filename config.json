@@ -1,0 +1,16 @@
+{
+  "$schema": "./server/schema/context/item-server/config/schema.json",
+  "connectors": [
+    {
+      "type": "docker",
+      "config": {}
+    },
+    {
+      "type": "raw",
+      "config": {
+        "id": "file",
+        "items": []
+      }
+    }
+  ]
+}

@@ -5,14 +5,14 @@ import { Connection, ConnectionData, Item } from "../model";
 import { getDockerContainers, LabelConfig } from "./docker-containers";
 
 export interface DockerConnectionConfig {
-  id: string;
+  id?: string;
   dockerOptions?: DockerOptions;
   interval?: number;
   labelConfig?: Partial<LabelConfig>;
 }
 
 export const dockerConnection = ({
-  id,
+  id = "docker",
   dockerOptions,
   interval = 5000,
   labelConfig,
@@ -20,12 +20,11 @@ export const dockerConnection = ({
   let docker: Docker | null = null;
 
   async function getDocker(config: DockerOptions): Promise<Docker> {
-    // TODO: Handle if the config changes, will save a container restart?
     docker = docker ?? new Docker(config);
     await docker.ping();
     return docker;
   }
-
+  
   const latest = new BehaviorSubject<ConnectionData>({
     id,
     connected: false,

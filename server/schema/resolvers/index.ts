@@ -56,13 +56,13 @@ export const Item: ItemResolvers = {
     if (!name) return [];
     return await firstValueFrom(
       items$.pipe(
-        map((items) =>
-          items.filter(({ parents }) =>
+        map((items) => {
+          return items.filter(({ parents }) =>
             parents.some(
               (parent) => parent.toLowerCase() === name.toLowerCase()
             )
-          )
-        )
+          );
+        })
       )
     );
   },

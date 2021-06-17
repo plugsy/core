@@ -35,6 +35,7 @@ type Item {
   link: String
   state: State!
   status: String
+  parents: [String!]!
   children: [Item!]!
 }
 
