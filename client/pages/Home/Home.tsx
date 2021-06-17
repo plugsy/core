@@ -6,17 +6,14 @@ import useInterval from "react-use/lib/useInterval";
 import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
-import { ContainerState } from "../../../types.graphql";
+import { State } from "../../../types.graphql";
 import { DockerCategory } from "../../components/DockerCategory";
 import { StatusBox } from "../../components/StatusBox";
 import {
-  useLastUpdatedSubscription,
   useCategoriesSubscription,
   FullCategoryFragment,
   InitDocument,
   InitQuery,
-  useErrorSubscription,
-  useConnectedSubscription,
 } from "./Home.generated.graphql";
 
 interface Props {
@@ -60,25 +57,16 @@ function toTitleCase(str: string) {
   });
 }
 
-function statesToStatus(containerStates: ContainerState[]) {
-  const statuses = containerStates.map(containerStateToStatus);
-  if (statuses.some((status) => status === "RED")) return "RED";
-  if (statuses.some((status) => status === "YELLOW")) return "YELLOW";
-  if (statuses.every((status) => status === "GREY")) return "GREY";
-  if (statuses.every((status) => status === "GREEN")) return "GREEN";
+function statesToStatus(containerStates: State[]) {
+  if (containerStates.some((status) => status === "RED")) return "RED";
+  if (containerStates.some((status) => status === "YELLOW")) return "YELLOW";
+  if (containerStates.every((status) => status === "GREY")) return "GREY";
+  if (containerStates.every((status) => status === "GREEN")) return "GREEN";
   return "GREY";
 }
 
-export function Home({
-  initialCategories,
-  initialError,
-  initialLastUpdated,
-  initialConnected,
-}: Props) {
-  const [lastUpdated, setLastUpdated] = useState(initialLastUpdated);
-  const [_, setError] = useState<string | undefined | null>(initialError);
+export function Home({ initialCategories, initialError }: Props) {
   const [categories, setCategories] = useState(initialCategories);
-  const [connected, setConnected] = useState(initialConnected);
 
   const { data: categoriesData } = useCategoriesSubscription();
 
@@ -86,34 +74,6 @@ export function Home({
     if (categoriesData?.categories) setCategories(categoriesData.categories);
   }, [categoriesData]);
 
-  const { data: lastUpdatedData } = useLastUpdatedSubscription();
-
-  useEffect(() => {
-    if (lastUpdatedData?.lastUpdated)
-      setLastUpdated(lastUpdatedData?.lastUpdated);
-  }, [lastUpdatedData]);
-
-  const { data: errorData } = useErrorSubscription();
-  useEffect(() => {
-    if (errorData?.error) setError(errorData.error);
-  }, [errorData]);
-
-  const { data: connectedData } = useConnectedSubscription();
-  useEffect(() => {
-    if (connectedData?.connected) setConnected(connectedData.connected);
-  }, [connectedData]);
-  const lastUpdatedDate = lastUpdated ? parseISO(lastUpdated) : new Date();
-  const [lastUpdatedSeconds, setLastUpdatedSeconds] = useState<number>(0);
-  useInterval(() => {
-    // TODO: Sync this with server time as if there's a clock difference, this doesn't work so great
-    setLastUpdatedSeconds(
-      Math.max(0, differenceInSeconds(new Date(), lastUpdatedDate))
-    );
-  }, 1000);
-  const lastUpdatedStr = useMemo(
-    () => (lastUpdated ? formatDistanceToNowShort(lastUpdatedDate) : "N/A"),
-    [lastUpdated, lastUpdatedData, lastUpdatedSeconds]
-  );
   return (
     <>
       <Head>
@@ -121,7 +81,7 @@ export function Home({
         <meta property="og:title" content="Auto Docker Dash" key="title" />
       </Head>
       <HomeContainer>
-        <StatusBoxContainers>
+        {/* <StatusBoxContainers>
           <StatusBoxContainer>
             <StatusBox
               title={"Docker"}
@@ -144,14 +104,14 @@ export function Home({
               }
             />
           </StatusBoxContainer>
-        </StatusBoxContainers>
+        </StatusBoxContainers> */}
 
         <CategoriesContainer>
           {categories?.map((category) => (
             <DockerCategory
               key={`category-${category.name}`}
               name={category.name}
-              containers={category.containers.map(
+              containers={category.items.map(
                 ({ name, link, icon, state, children }) => {
                   return {
                     key: name,
@@ -159,18 +119,18 @@ export function Home({
                     link: link ?? undefined,
                     iconPack: icon?.split("/")[0],
                     icon: icon?.split("/")[1],
-                    state: toTitleCase(state),
-                    status: containerStatesToStatus([
+                    state: statesToStatus([
                       state,
                       ...children.map((child) => child.state),
                     ]),
-                    children: children.map(({ name, icon, state }) => ({
+                    status: status ? toTitleCase(status) : undefined,
+                    children: children.map(({ name, icon, state, status }) => ({
                       key: name,
                       text: name,
+                      status: status ? toTitleCase(status) : undefined,
                       iconPack: icon?.split("/")[0],
                       icon: icon?.split("/")[1],
-                      status: containerStateToStatus(state),
-                      state: toTitleCase(state),
+                      state: statesToStatus([state]),
                     })),
                   };
                 }
@@ -190,9 +150,6 @@ export async function getServerSideProps() {
   return {
     props: {
       initialCategories: data?.categories,
-      initialError: data?.error,
-      initialLastUpdated: data?.lastUpdated,
-      initialConnected: data?.connected,
     } as Props,
   };
 }

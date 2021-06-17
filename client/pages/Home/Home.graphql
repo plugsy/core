@@ -2,6 +2,7 @@ fragment FullCategory on Category {
   name
   items {
     name
+    status
     icon
     link
     state
@@ -9,8 +10,16 @@ fragment FullCategory on Category {
       name
       state
       icon
+      status
     }
   }
+}
+
+fragment FullConnection on Connection {
+  id
+  connected
+  lastUpdated
+  error
 }
 
 query Init {
@@ -18,19 +27,13 @@ query Init {
     ...FullCategory
   }
   connections {
-    id
-    connected
-    lastUpdated
-    error
+    ...FullConnection
   }
 }
 
 subscription Connections {
   connections {
-    id
-    connected
-    lastUpdated
-    error
+    ...FullConnection
   }
 }
 

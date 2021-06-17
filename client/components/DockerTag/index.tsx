@@ -11,8 +11,8 @@ interface DockerEntity {
   iconPack?: string;
   text?: string;
   link?: string;
-  status: "GREEN" | "YELLOW" | "RED" | "GREY";
-  state: string;
+  status?: string;
+  state: "GREEN" | "YELLOW" | "RED" | "GREY";
 }
 
 export interface DockerTagProps extends DockerEntity {
@@ -51,7 +51,7 @@ const Popover: React.FC<{ entities: DockerEntity[] }> = ({ entities }) => {
       {entities.map(({ text, icon, status, iconPack, state }, i) => (
         <Fragment key={`child-${text}`}>
           <PopoverEntity>
-            <StatusBar status={status} />
+            <StatusBar state={state} />
             <TagInfo>
               {icon && iconPack ? (
                 <Icon>
@@ -61,7 +61,7 @@ const Popover: React.FC<{ entities: DockerEntity[] }> = ({ entities }) => {
               <TextContainer>
                 <SmallMargins>{text}</SmallMargins>
                 <Muted>
-                  <Small>{state}</Small>
+                  <Small>{status}</Small>
                 </Muted>
               </TextContainer>
             </TagInfo>
@@ -109,18 +109,18 @@ const Muted = styled(Text)`
 `;
 
 interface StatusBarProps {
-  status: DockerTagProps["status"];
+  state: DockerTagProps["state"];
 }
 
 const StatusBar = styled.div<StatusBarProps>`
   width: 6px;
   border-radius: 6px;
-  background: ${({ status }) =>
-    status === "GREEN"
+  background: ${({ state }) =>
+    state === "GREEN"
       ? "green"
-      : status === "YELLOW"
+      : state === "YELLOW"
       ? "yellow"
-      : status === "GREY"
+      : state === "GREY"
       ? "grey"
       : "red"}; ;
 `;
@@ -172,7 +172,7 @@ export const DockerTag: React.FC<DockerTagProps> = ({
           onMouseOver={() => setPopoverOpen(true)}
           onMouseLeave={() => setPopoverOpen(false)}
         >
-          <StatusBar status={status} />
+          <StatusBar state={state} />
           <Margins>
             <TagInfo>
               {icon && iconPack ? (
@@ -182,7 +182,7 @@ export const DockerTag: React.FC<DockerTagProps> = ({
               ) : null}
               <TextContainer>
                 <SmallMargins>{text}</SmallMargins>
-                <Small>{state}</Small>
+                <Small>{status}</Small>
               </TextContainer>
             </TagInfo>
           </Margins>
