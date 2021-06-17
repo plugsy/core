@@ -86,7 +86,7 @@ This file should be mounted at `/config.json` in the container.
 Example file:
 ```
 {
-  "$schema": "./server/schema/context/item-server/config/schema.json", 
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json", 
   "connectors": [
     {
       "type": "docker",
