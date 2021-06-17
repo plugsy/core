@@ -23,7 +23,17 @@
           "preset": "conventionalcommits"
         }
       ],
-      "@semantic-release/github",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "./server/schema/context/item-server/config/schema.json",
+              "label": "Config Schema"
+            }
+          ]
+        }
+      ],
       [
         "@semantic-release/npm",
         {
@@ -42,10 +52,10 @@
     "analyze": "serve .next/analyze",
     "gen:gql": "graphql-codegen",
     "gen:icons": "node icongenerator.js",
-    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --ignoreErrors -o ./server/config/schema.json",
-    "gen": "yarn gen:gql && yarn gen:icons && gen:json",
+    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --ignoreErrors -o ./server/schema/context/item-server/config/schema.json",
+    "gen": "yarn gen:gql && yarn gen:icons && yarn gen:json",
     "dev:build": "parcel ./server/index.ts --target node",
-    "dev": "yarn gen && concurrently --kill-others-on-fail -n  gql,parcel,node \"yarn gen:graphql -w\" \"yarn dev:build\" \"yarn start\""
+    "dev": "yarn gen && concurrently --kill-others-on-fail -n  gql,parcel,node \"yarn gen:gql -w\" \"yarn dev:build\" \"yarn start\""
   },
   "dependencies": {
     "@apollo/client": "^3.3.20",
