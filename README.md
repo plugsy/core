@@ -24,22 +24,8 @@ _I also wanted to play with GraphQL subscriptions and observables_
 
 ## Getting started
 
-### Step 1
-Add a couple of labels to all of your containers you wish to appear on the dashboard.
-
-| Label               | Description                                                                                                                           |
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| dockerDash.name     | Name of the container to appear in the dashboard                                                                                      |
-| dockerDash.category | Give the category a name under which the container will appear                                                                        |
-| dockerDash.icon     | This is an icon that will appear to the left of the container, see [icons](#icons)                                                    |
-| dockerDash.link     | A http(s) link to the container, useful if the container is hosting a webpage etc.                                                    |
-| dockerDash.parents  | A list of parents associated with this container, must equal what is in dockerDash.name labels. Comma separated for multiple parents. |
-|                     |                                                                                                                                       |
-
-### Step 2
-Run the container with the `DOCKER_SOCKET` location environment variable. 
-
-Will default to `/var/run/docker.sock`
+### Step 1          
+Run the container!
 
 ## Usage
 
@@ -88,6 +74,48 @@ services:
       dockerDash.icon: 'fi/FiPenTool'
       dockerDash.link: https://todo.thenairn.com
 ```
+
+## Configuration
+
+There is now a configuration file that can be optionally added in order to include various connectors (Such as raw files).
+
+This file should be mounted at `/config.json` in the container. 
+
+**Note**: Including the $schema in the file will help with auto complete in your preferred IDE, be sure to grab the link from the Github releases page. 
+
+Example file:
+```
+{
+  "$schema": "./server/schema/context/item-server/config/schema.json", 
+  "connectors": [
+    {
+      "type": "docker",
+      "config": {}
+    },
+    {
+      "type": "raw",
+      "config": {
+        "id": "file",
+        "items": [
+          {
+            "category": "Other",
+            "name": "Beer Tab",
+            "state": "GREEN",
+            "icon": "fi/FiBeer"
+          },
+          {
+            "name": "Beer Tab Dependency",
+            "state": "GREEN",
+            "icon": "fi/FiBeer",
+            "parents": ["Beer Tab"]
+          },
+        ]
+      }
+    }
+  ]
+}
+```
+
 
 #### Icons
 

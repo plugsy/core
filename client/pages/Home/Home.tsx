@@ -1,15 +1,10 @@
-import differenceInSeconds from "date-fns/differenceInSeconds/index.js";
-import parseISO from "date-fns/parseISO";
 import Head from "next/head";
-import React, { Fragment, useEffect, useMemo, useState } from "react";
-import useInterval from "react-use/lib/useInterval";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
-import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
 import { State } from "../../../types.graphql";
 import { ConnectionStatus } from "../../components/ConnectionStatus";
 import { DockerCategory } from "../../components/DockerCategory";
-import { StatusBox } from "../../components/StatusBox";
 import {
   useCategoriesSubscription,
   FullCategoryFragment,

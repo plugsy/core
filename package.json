@@ -47,7 +47,7 @@
     "get-version": "node -pe \"require('./package.json').version\"",
     "release": "semantic-release",
     "type-check": "tsc",
-    "build": "yarn icongen && yarn codegen && parcel build ./server/index.ts --target node && ANALYZE=TRUE next build",
+    "build": "yarn gen && parcel build ./server/index.ts --target node && ANALYZE=TRUE next build",
     "web:prod": "next start",
     "analyze": "serve .next/analyze",
     "gen:gql": "graphql-codegen",

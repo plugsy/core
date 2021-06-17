@@ -9,7 +9,17 @@
       "type": "raw",
       "config": {
         "id": "file",
-        "items": []
+        "items": [
+          {
+            "category": "Links",
+            "name": "Test Item",
+            "state": "GREY"
+          },
+          {
+            "name": "test item 2",
+            "state": "GREY"
+          }
+        ]
       }
     }
   ]

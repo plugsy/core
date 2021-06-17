@@ -1,6 +1,6 @@
 import differenceInSeconds from "date-fns/differenceInSeconds";
 import parseISO from "date-fns/parseISO";
-import React, { Fragment } from "react";
+import React from "react";
 import styled from "styled-components";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
 import { StatusBox } from "../StatusBox";
