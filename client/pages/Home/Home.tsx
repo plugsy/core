@@ -17,6 +17,7 @@ import {
   useConnectionsSubscription,
   useServerTimeSubscription,
 } from "./Home.generated.graphql";
+import { useHarmonicIntervalFn } from "react-use";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
@@ -71,15 +72,26 @@ function useServerTime(initialServerTime: Date | string) {
         : initialServerTime
     )
   );
+  const [tempSecondsOut, setTempSecondsOut] = useState(secondsOut);
   useEffect(() => {
     if (serverTimeData?.serverTime)
-      setSecondsOut(
-        differenceInMilliseconds(new Date(), parseISO(serverTimeData?.serverTime))
+      setTempSecondsOut(
+        differenceInMilliseconds(
+          new Date(),
+          parseISO(serverTimeData?.serverTime)
+        )
       );
   }, [serverTimeData]);
+  useHarmonicIntervalFn(() => {
+    setSecondsOut(tempSecondsOut);
+  }, 1000);
+  
   const normalisedDate = useCallback(
     (date: Date | string) =>
-      addMilliseconds(typeof date === "string" ? parseISO(date) : date, secondsOut),
+      addMilliseconds(
+        typeof date === "string" ? parseISO(date) : date,
+        secondsOut
+      ),
     [secondsOut]
   );
   return { secondsOut, normalisedDate };
@@ -151,7 +163,9 @@ export function Home({
             return (
               <Connection key={`connection-${props.id}`}>
                 <ConnectionStatus
-                  lastUpdated={lastUpdated ? normalisedDate(lastUpdated) : undefined}
+                  lastUpdated={
+                    lastUpdated ? normalisedDate(lastUpdated) : undefined
+                  }
                   {...props}
                 />
               </Connection>

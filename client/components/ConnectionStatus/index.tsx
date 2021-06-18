@@ -49,11 +49,17 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   connected,
 }) => {
   const [lastUpdatedSeconds, setLastUpdatedSeconds] = useState(0);
+  const [lastUpdatedStr, setLastUpdatedStr] = useState(
+    lastUpdated ? formatDistanceToNowShort(lastUpdated) : undefined
+  );
   useHarmonicIntervalFn(() => {
-    setLastUpdatedSeconds(
-      Math.max(0, differenceInSeconds(new Date(), lastUpdated ?? new Date()))
-    );
-  }, 100);
+    if (lastUpdated) {
+      setLastUpdatedSeconds(
+        Math.max(0, differenceInSeconds(new Date(), lastUpdated))
+      );
+      setLastUpdatedStr(formatDistanceToNowShort(lastUpdated));
+    }
+  }, 1000);
   return (
     <ConnectionStatusContainer>
       <ConnectionStatusId>{toTitleCase(id)}</ConnectionStatusId>
@@ -65,15 +71,13 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
             status={connected ? "GREEN" : "RED"}
           />
         </StatusBoxContainer>
-        {lastUpdated ? (
+        {lastUpdatedStr ? (
           <StatusBoxContainer>
             <StatusBox
               title={"Updated"}
-              text={formatDistanceToNowShort(lastUpdated)}
+              text={lastUpdatedStr}
               status={
-                lastUpdated === undefined
-                  ? "GREY"
-                  : lastUpdatedSeconds > 60
+                lastUpdatedSeconds > 60
                   ? "YELLOW"
                   : lastUpdatedSeconds > 300
                   ? "RED"
