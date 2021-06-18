@@ -6,11 +6,13 @@ fragment FullCategory on Category {
     icon
     link
     state
+    connectorType
     children {
       name
       state
       icon
       status
+      connectorType
     }
   }
 }

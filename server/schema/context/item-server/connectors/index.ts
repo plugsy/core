@@ -7,6 +7,11 @@ import {
   WebsiteConnectionConfig,
 } from "./website";
 
+export type ConnectorType =
+  | DOCKER_CONNECTOR_TYPE
+  | RAW_CONNECTOR_TYPE
+  | WEBSITE_CONNECTOR_TYPE;
+
 type DockerconnectorConfig = {
   type: DOCKER_CONNECTOR_TYPE;
   config: DockerConnectionConfig;

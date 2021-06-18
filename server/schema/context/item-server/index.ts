@@ -4,10 +4,13 @@ import { getServerConfig } from "./config";
 import { getConnector } from "./connectors";
 import { categoriser } from "./categoriser";
 import { Item } from "./connectors/model";
-import { State as GQLState } from "../../typeDefs";
+import {
+  State as GQLState,
+  ConnectorType as GQLConnectorType,
+} from "../../typeDefs";
 
-function toGQLItem({ state, ...item }: Item) {
-  let gqlState = (() => {
+function toGQLItem({ state, connectorType, ...item }: Item) {
+  const gqlState = (() => {
     switch (state) {
       case "GREEN":
         return GQLState.Green;
@@ -19,9 +22,20 @@ function toGQLItem({ state, ...item }: Item) {
         return GQLState.Yellow;
     }
   })();
+  const gqlConnectorType = (() => {
+    switch (connectorType) {
+      case "docker":
+        return GQLConnectorType.Docker;
+      case "raw":
+        return GQLConnectorType.Raw;
+      case "website":
+        return GQLConnectorType.Website;
+    }
+  })();
   return {
     ...item,
     state: gqlState,
+    connectorType: gqlConnectorType,
   };
 }
 
@@ -32,9 +46,6 @@ function initialiseItemServer() {
   getServerConfig()
     .pipe(
       map((config) => config.connectors),
-      tap((connectors) =>
-        console.log(connectors)
-      ),
       map((connectors) => {
         if (Array.isArray(connectors)) {
           return connectors.map(getConnector);

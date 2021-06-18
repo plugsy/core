@@ -85,7 +85,7 @@ function useServerTime(initialServerTime: Date | string) {
   useHarmonicIntervalFn(() => {
     setSecondsOut(tempSecondsOut);
   }, 1000);
-  
+
   const normalisedDate = useCallback(
     (date: Date | string) =>
       addMilliseconds(
@@ -132,26 +132,38 @@ export function Home({
               key={`category-${category.name}`}
               name={category.name}
               containers={category.items.map(
-                ({ name, link, icon, state, children, status }) => {
+                ({
+                  name,
+                  link,
+                  icon,
+                  state,
+                  children,
+                  status,
+                  connectorType,
+                }) => {
                   return {
                     key: name,
                     text: name,
                     link: link ?? undefined,
                     iconPack: icon?.split("/")[0],
                     icon: icon?.split("/")[1],
+                    connectorType,
                     state: statesToStatus([
                       state,
                       ...children.map((child) => child.state),
                     ]),
                     status: status ? toTitleCase(status) : undefined,
-                    children: children.map(({ name, icon, state, status }) => ({
-                      key: name,
-                      text: name,
-                      status: status ? toTitleCase(status) : undefined,
-                      iconPack: icon?.split("/")[0],
-                      icon: icon?.split("/")[1],
-                      state: statesToStatus([state]),
-                    })),
+                    children: children.map(
+                      ({ name, icon, state, status, connectorType }) => ({
+                        key: name,
+                        connectorType,
+                        text: name,
+                        status: status ? toTitleCase(status) : undefined,
+                        iconPack: icon?.split("/")[0],
+                        icon: icon?.split("/")[1],
+                        state: statesToStatus([state]),
+                      })
+                    ),
                   };
                 }
               )}

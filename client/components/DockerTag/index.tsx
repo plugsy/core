@@ -1,6 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import { FiExternalLink } from "@react-icons/all-files/fi/FiExternalLink";
 import { FiMoreVertical } from "@react-icons/all-files/fi/FiMoreVertical";
+import { FaDocker } from "@react-icons/all-files/fa/FaDocker";
+import { VscJson } from "@react-icons/all-files/vsc/VscJson";
+import { HiOutlineGlobeAlt } from "@react-icons/all-files/hi/HiOutlineGlobeAlt";
+import { BsQuestion } from "@react-icons/all-files/bs/BsQuestion";
 import styled from "styled-components";
 import { DynamicIcon } from "../icons";
 import { SSRPopover } from "../SSRPopover";
@@ -13,6 +17,7 @@ interface DockerEntity {
   link?: string;
   status?: string;
   state: "GREEN" | "YELLOW" | "RED" | "GREY";
+  connectorType: "DOCKER" | "RAW" | "WEBSITE";
 }
 
 export interface DockerTagProps extends DockerEntity {
@@ -122,11 +127,12 @@ const StatusBar = styled.div<StatusBarProps>`
       ? "yellow"
       : state === "GREY"
       ? "grey"
-      : "red"}; ;
+      : "red"};
 `;
 
 const TagInfo = styled.div`
   display: flex;
+  min-height: 38px;
   align-items: center;
   padding: 0 6px;
 `;
@@ -134,6 +140,14 @@ const TagInfo = styled.div`
 const ExternalLinkContainer = styled.div`
   display: flex;
 `;
+
+const ExternalLinkContainerColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const ExternalLinkContainerColumnSeparator = styled.div``;
 
 const Margins = styled.div`
   margin-top: 6px;
@@ -148,8 +162,20 @@ export const DockerTag: React.FC<DockerTagProps> = ({
   status,
   children,
   state,
+  connectorType,
 }) => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const ConnectorIcon = useMemo(
+    () =>
+      connectorType === "DOCKER"
+        ? FaDocker
+        : connectorType === "RAW"
+        ? VscJson
+        : connectorType === "WEBSITE"
+        ? HiOutlineGlobeAlt
+        : BsQuestion,
+    [connectorType]
+  );
   return (
     <>
       <SSRPopover
@@ -186,12 +212,15 @@ export const DockerTag: React.FC<DockerTagProps> = ({
               </TextContainer>
             </TagInfo>
           </Margins>
-          {link ? (
+          <ExternalLinkContainerColumn>
             <ExternalLinkContainer>
-              <FiExternalLink size={10} />
+              {link ? <FiExternalLink size={10} /> : null}
               {children.length > 0 ? <FiMoreVertical size={10} /> : null}
             </ExternalLinkContainer>
-          ) : null}
+            <ExternalLinkContainerColumnSeparator>
+              <ConnectorIcon size={10} />
+            </ExternalLinkContainerColumnSeparator>
+          </ExternalLinkContainerColumn>
         </Container>
       </SSRPopover>
     </>

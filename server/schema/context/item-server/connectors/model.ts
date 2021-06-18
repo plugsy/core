@@ -1,8 +1,9 @@
 import { Observable } from "rxjs";
+import { ConnectorType } from ".";
 
 export interface Item {
   name: string;
-  connectorType: string;
+  connectorType: ConnectorType;
   category: string | null;
   icon: string | null;
   link: string | null;

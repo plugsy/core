@@ -30,6 +30,12 @@ enum State {
   GREY
 }
 
+enum ConnectorType {
+  DOCKER
+  WEBSITE
+  RAW
+}
+
 type Item {
   name: String!
   category: String
@@ -39,6 +45,7 @@ type Item {
   status: String
   parents: [String!]!
   children: [Item!]!
+  connectorType: ConnectorType!
 }
 
 type Connection {
