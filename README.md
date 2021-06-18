@@ -93,7 +93,7 @@ This file should be mounted at `/config.json` in the container.
 
 config.json
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
@@ -161,7 +161,7 @@ In order to show dependent containers, you need only ensure that the item you wi
 
 Example using the [raw connector](docs/connectors/raw.md):
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [

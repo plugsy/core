@@ -5,7 +5,7 @@
 A docker connector, provides access directly to a docker socket or URL mapping each container to an item on the dashboard using labels
 
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
@@ -21,7 +21,7 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connection options
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [

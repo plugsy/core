@@ -4,7 +4,7 @@
 
 Can use a list of website urls (And other request formats) for Auto Dash to ping and check against a status code or response regex.
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
@@ -28,7 +28,7 @@ Can use a list of website urls (And other request formats) for Auto Dash to ping
 
 ### Full Connector Config
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [

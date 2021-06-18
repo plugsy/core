@@ -4,7 +4,7 @@
 
 Provides items in the dashboard directly from the config itself
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
@@ -26,7 +26,7 @@ Provides items in the dashboard directly from the config itself
 
 ### Full Connector Config
 
-```json
+```jsonc
 {
   "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
