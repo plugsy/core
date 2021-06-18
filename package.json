@@ -52,7 +52,7 @@
     "analyze": "serve .next/analyze",
     "gen:gql": "graphql-codegen",
     "gen:icons": "node icongenerator.js",
-    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --ignoreErrors -o ./server/schema/context/item-server/config/schema.json",
+    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --ignoreErrors --required --strictNullChecks -o ./server/schema/context/item-server/config/schema.json",
     "gen": "yarn gen:gql && yarn gen:icons && yarn gen:json",
     "dev:build": "parcel ./server/index.ts --target node",
     "dev": "yarn gen && concurrently --kill-others-on-fail -n  gql,parcel,node \"yarn gen:gql -w\" \"yarn dev:build\" \"yarn start\""
@@ -65,6 +65,8 @@
     "apollo-link-logger": "^2.0.0",
     "apollo-server-express": "^2.25.1",
     "apollo-server-micro": "^2.25.1",
+    "axios": "^0.21.1",
+    "axios-observable": "^1.1.6",
     "dataloader": "^2.0.0",
     "date-fns": "^2.22.1",
     "dockerode": "^3.3.0",
