@@ -32,17 +32,18 @@ export interface SiteConfig {
   };
   requiredStatusCode?: number | number[];
   requiredBodyRegex?: string;
-  interval?: number;
 }
 
 export interface WebsiteConnectionConfig {
   id?: string;
+  interval?: number;
   sites: SiteConfig[];
 }
 
 export const websiteConnection = ({
   id = "website",
   sites = [],
+  interval = 30000,
 }: WebsiteConnectionConfig) => {
   const requests = sites
     .map(({ requiredBodyRegex, ...config }) => {
@@ -55,7 +56,6 @@ export const websiteConnection = ({
     })
     .map(
       ({
-        interval = 30000,
         requiredStatusCode,
         requiredBodyRegex,
         display: { name, category, icon, link, parents },
@@ -130,7 +130,7 @@ export const websiteConnection = ({
     map((items) => {
       return {
         connected: items.some((item) => item.state === "GREEN"),
-        lastUpdated: null,
+        lastUpdated: new Date(),
         items,
         error: null,
         id,
