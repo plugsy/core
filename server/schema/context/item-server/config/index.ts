@@ -40,20 +40,32 @@ export function getServerConfig() {
             concat(
               of(contents),
               fileWatchObservable(filePath).pipe(
-                switchMap(() => from(getConfigFileContents()))
+                switchMap(() => from(getConfigFileContents())),
+                catchError((error) => {
+                  console.error(error.message);
+                  console.error("You can edit your config file to trigger a reload");
+                  return EMPTY;
+                })
               )
             )
           ),
-          map((buffer) => JSON.parse(buffer.toString("utf-8"))),
+          switchMap(cfg => of(cfg).pipe(map((buffer) => JSON.parse(buffer.toString("utf-8"))),
           map((config) => {
-            schemaValidator.validate(config, schema, { throwAll: true });
+            const result = schemaValidator.validate(config, schema);
+            if (result.errors.length) {
+              result.errors.map(console.error);
+              throw new Error(
+                `There is an error in your config file, make sure you're following the schema correctly (This can be made easier by using the schema in your json file and an IDE)`
+              );
+            }
             return config as ServerConfig;
           }),
           catchError((error) => {
-            console.error(error);
+            console.error(error.message);
             console.error("You can edit your config file to trigger a reload");
             return EMPTY;
-          })
+          })))
+          
         );
       }
       console.warn(`Unable to watch config file. Does it exist?
