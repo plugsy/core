@@ -5,7 +5,7 @@ import schema from "./schema.json";
 import { fileWatchObservable } from "../../../../utils/file-watch-observable";
 import { ConnectorConfig } from "../connectors";
 import { environment } from "../../../../environment";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, debounceTime, map, switchMap } from "rxjs/operators";
 import { BehaviorSubject, concat, EMPTY, from, of } from "rxjs";
 const exists = promisify(_exists);
 const readFile = promisify(_readFile);
@@ -49,6 +49,7 @@ export function getServerConfig() {
               )
             )
           ),
+          debounceTime(1000),
           switchMap(cfg => of(cfg).pipe(map((buffer) => JSON.parse(buffer.toString("utf-8"))),
           map((config) => {
             const result = schemaValidator.validate(config, schema);
