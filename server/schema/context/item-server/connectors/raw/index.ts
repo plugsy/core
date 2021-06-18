@@ -1,9 +1,12 @@
 import { BehaviorSubject } from "rxjs";
 import { Connection, Item } from "../model";
 
+const CONNECTOR_TYPE = "raw";
+export type RAW_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
+
 export interface RawConnectionConfig {
   id?: string;
-  items: Item[];
+  items: Omit<Item, "connectorType">[];
 }
 
 export const rawConnection = ({
@@ -16,7 +19,8 @@ export const rawConnection = ({
     error: null,
     items: items.map(
       ({ category, icon, name, link, parents, state, status }) => {
-        return ({
+        return {
+          connectorType: CONNECTOR_TYPE,
           category: category ?? null,
           icon: icon ?? null,
           name: name ?? null,
@@ -24,7 +28,7 @@ export const rawConnection = ({
           parents: parents ?? [],
           state: state ?? null,
           status: status ?? null,
-        })
+        };
       }
     ),
     lastUpdated: null,

@@ -4,9 +4,12 @@ import { catchError, map, share, switchMap, tap } from "rxjs/operators";
 import { Connection, ConnectionData, Item } from "../model";
 import { getDockerContainers, LabelConfig } from "./docker-containers";
 
+const CONNECTOR_TYPE = "docker";
+export type DOCKER_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
+
 export interface DockerConnectionConfig {
   id?: string;
-  dockerOptions?: DockerOptions;
+  dockerOptions?: Omit<DockerOptions, 'Promise'>;
   interval?: number;
   labelConfig?: Partial<LabelConfig>;
 }
@@ -24,7 +27,7 @@ export const dockerConnection = ({
     await docker.ping();
     return docker;
   }
-  
+
   const latest = new BehaviorSubject<ConnectionData>({
     id,
     connected: false,
@@ -49,6 +52,7 @@ export const dockerConnection = ({
     map((containers): Item[] =>
       containers.map(
         ({ category, icon, link, state, parents, status, name }) => ({
+          connectorType: CONNECTOR_TYPE,
           name,
           state,
           status,

@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 
 export interface Item {
   name: string;
+  connectorType: string;
   category: string | null;
   icon: string | null;
   link: string | null;
