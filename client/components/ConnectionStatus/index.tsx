@@ -53,24 +53,22 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
     0,
     differenceInSeconds(new Date(), lastUpdatedDate)
   );
-  const lastUpdatedStr = lastUpdated
-    ? formatDistanceToNowShort(lastUpdatedDate)
-    : "N/A";
   return (
-      <ConnectionStatusContainer>
-        <ConnectionStatusId>{toTitleCase(id)}</ConnectionStatusId>
-        <StatusBoxContainers>
-          <StatusBoxContainer>
-            <StatusBox
-              title={"Status"}
-              text={connected ? "OK" : "DC'd"}
-              status={connected ? "GREEN" : "RED"}
-            />
-          </StatusBoxContainer>
+    <ConnectionStatusContainer>
+      <ConnectionStatusId>{toTitleCase(id)}</ConnectionStatusId>
+      <StatusBoxContainers>
+        <StatusBoxContainer>
+          <StatusBox
+            title={"Status"}
+            text={connected ? "OK" : "DC'd"}
+            status={connected ? "GREEN" : "RED"}
+          />
+        </StatusBoxContainer>
+        {lastUpdated ? (
           <StatusBoxContainer>
             <StatusBox
               title={"Updated"}
-              text={lastUpdatedStr}
+              text={formatDistanceToNowShort(lastUpdatedDate)}
               status={
                 lastUpdated === undefined
                   ? "GREY"
@@ -82,7 +80,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
               }
             />
           </StatusBoxContainer>
-        </StatusBoxContainers>
-      </ConnectionStatusContainer>
+        ) : null}
+      </StatusBoxContainers>
+    </ConnectionStatusContainer>
   );
 };
