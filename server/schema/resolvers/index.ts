@@ -5,13 +5,12 @@ import {
   ItemResolvers,
   Item as GQLItem,
 } from "../typeDefs";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, timer } from "rxjs";
 import { latestValueFrom as toAsyncIterable } from "rxjs-for-await";
 import {
   Category as GQLCategory,
   Connection as GQLConnection,
 } from "../typeDefs";
-import { DateScalarType } from "../../../lib/apollo/scalars/Date";
 import { map } from "rxjs/operators";
 
 export const Query: QueryResolvers = {
@@ -23,6 +22,9 @@ export const Query: QueryResolvers = {
   },
   connections: async (_, __, { connectionData$ }) => {
     return await firstValueFrom(connectionData$);
+  },
+  serverTime: () => {
+    return new Date();
   },
 };
 
@@ -47,9 +49,13 @@ export const Subscription: SubscriptionResolvers = {
     },
     resolve: (x: GQLConnection[]) => x,
   },
+  serverTime: {
+    subscribe: () => {
+      return toAsyncIterable(timer(0, 5000).pipe(map(() => new Date())));
+    },
+    resolve: (x: Date) => x,
+  },
 };
-
-export const Date = DateScalarType;
 
 export const Item: ItemResolvers = {
   children: async ({ name }, __, { items$ }) => {

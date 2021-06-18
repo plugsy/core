@@ -4,6 +4,7 @@ type Query {
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
+  serverTime: Date!
 }
 
 type Mutation {
@@ -14,6 +15,7 @@ type Subscription {
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
+  serverTime: Date!
 }
 
 type Category {

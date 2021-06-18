@@ -2,6 +2,7 @@ import { SchemaLink } from "@apollo/client/link/schema";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { NextPageContext } from "next";
 import { initContext } from "./context";
+import { DateScalarType } from "../../lib/apollo/scalars/Date";
 
 import * as resolvers from "./resolvers";
 import indexSchema from "./typeDefs/index.server.graphql";
@@ -9,7 +10,10 @@ export const schemas = [indexSchema];
 
 export const schema = makeExecutableSchema({
   typeDefs: schemas,
-  resolvers,
+  resolvers: {
+    ...resolvers,
+    Date: DateScalarType
+  },
 });
 
 export const schemaLink = (ctx?: NextPageContext) => {

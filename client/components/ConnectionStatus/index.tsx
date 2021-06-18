@@ -1,6 +1,6 @@
 import differenceInSeconds from "date-fns/differenceInSeconds";
-import parseISO from "date-fns/parseISO";
-import React from "react";
+import React, { useState } from "react";
+import { useHarmonicIntervalFn } from "react-use";
 import styled from "styled-components";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
 import { StatusBox } from "../StatusBox";
@@ -14,7 +14,7 @@ function toTitleCase(str: string) {
 export interface ConnectionStatusProps {
   id: string;
   connected: boolean;
-  lastUpdated?: string;
+  lastUpdated?: Date;
 }
 
 const StatusBoxContainer = styled.div`
@@ -48,11 +48,12 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   id,
   connected,
 }) => {
-  const lastUpdatedDate = lastUpdated ? parseISO(lastUpdated) : new Date();
-  const lastUpdatedSeconds = Math.max(
-    0,
-    differenceInSeconds(new Date(), lastUpdatedDate)
-  );
+  const [lastUpdatedSeconds, setLastUpdatedSeconds] = useState(0);
+  useHarmonicIntervalFn(() => {
+    setLastUpdatedSeconds(
+      Math.max(0, differenceInSeconds(new Date(), lastUpdated ?? new Date()))
+    );
+  }, 100);
   return (
     <ConnectionStatusContainer>
       <ConnectionStatusId>{toTitleCase(id)}</ConnectionStatusId>
@@ -68,7 +69,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
           <StatusBoxContainer>
             <StatusBox
               title={"Updated"}
-              text={formatDistanceToNowShort(lastUpdatedDate)}
+              text={formatDistanceToNowShort(lastUpdated)}
               status={
                 lastUpdated === undefined
                   ? "GREY"

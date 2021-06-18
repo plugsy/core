@@ -1,5 +1,8 @@
+import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
+import addMilliseconds from "date-fns/addMilliseconds";
+import parseISO from "date-fns/parseISO";
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
 import { State } from "../../../types.graphql";
@@ -12,11 +15,13 @@ import {
   InitQuery,
   FullConnectionFragment,
   useConnectionsSubscription,
+  useServerTimeSubscription,
 } from "./Home.generated.graphql";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
   initialConnections?: FullConnectionFragment[];
+  initialServerTime: string;
 }
 
 const HomeContainer = styled.div`
@@ -56,7 +61,36 @@ function statesToStatus(containerStates: State[]) {
   return "GREY";
 }
 
-export function Home({ initialCategories, initialConnections }: Props) {
+function useServerTime(initialServerTime: Date | string) {
+  const { data: serverTimeData } = useServerTimeSubscription();
+  const [secondsOut, setSecondsOut] = useState(
+    differenceInMilliseconds(
+      new Date(),
+      typeof initialServerTime === "string"
+        ? parseISO(initialServerTime)
+        : initialServerTime
+    )
+  );
+  useEffect(() => {
+    if (serverTimeData?.serverTime)
+      setSecondsOut(
+        differenceInMilliseconds(new Date(), parseISO(serverTimeData?.serverTime))
+      );
+  }, [serverTimeData]);
+  const normalisedDate = useCallback(
+    (date: Date | string) =>
+      addMilliseconds(typeof date === "string" ? parseISO(date) : date, secondsOut),
+    [secondsOut]
+  );
+  return { secondsOut, normalisedDate };
+}
+
+export function Home({
+  initialCategories,
+  initialConnections,
+  initialServerTime,
+}: Props) {
+  const { normalisedDate } = useServerTime(initialServerTime);
   const [categories, setCategories] = useState(initialCategories);
   const [connections, setConnections] = useState(initialConnections);
 
@@ -113,10 +147,13 @@ export function Home({ initialCategories, initialConnections }: Props) {
           ))}
         </CategoriesContainer>
         <ConnectionsContainer>
-          {connections?.map((props) => {
+          {connections?.map(({ lastUpdated, ...props }) => {
             return (
               <Connection key={`connection-${props.id}`}>
-                <ConnectionStatus {...props} />
+                <ConnectionStatus
+                  lastUpdated={lastUpdated ? normalisedDate(lastUpdated) : undefined}
+                  {...props}
+                />
               </Connection>
             );
           })}
@@ -138,6 +175,7 @@ export async function getServerSideProps() {
     props: {
       initialCategories: data?.categories ?? [],
       initialConnections: data?.connections ?? [],
+      initialServerTime: data?.serverTime,
     } as Props,
   };
 }

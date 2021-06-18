@@ -17,7 +17,7 @@ export interface DockerConnectionConfig {
 export const dockerConnection = ({
   id = "docker",
   dockerOptions,
-  interval = 5000,
+  interval = 20000,
   labelConfig,
 }: DockerConnectionConfig) => {
   let docker: Docker | null = null;

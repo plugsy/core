@@ -23,6 +23,7 @@ fragment FullConnection on Connection {
 }
 
 query Init {
+  serverTime
   categories {
     ...FullCategory
   }
@@ -41,4 +42,8 @@ subscription Categories {
   categories {
     ...FullCategory
   }
+}
+
+subscription ServerTime {
+  serverTime
 }
