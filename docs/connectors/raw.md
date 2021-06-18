@@ -6,7 +6,7 @@ Provides items in the dashboard directly from the config itself
 
 ```json
 {
-  "$schema": "./server/schema/context/item-server/config/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json",
   "connectors": [
     {
       "type": "raw",
@@ -28,7 +28,7 @@ Provides items in the dashboard directly from the config itself
 
 ```json
 {
-  "$schema": "./server/schema/context/item-server/config/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json",
   "connectors": [
     {
       "type": "raw",

@@ -87,6 +87,13 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "https:\/\/github\.com\/Inlustra\/auto-docker-dash\/releases\/download\/(.*?)\/schema\.json"
+          replace: "https:\/\/github\.com\/Inlustra\/auto-docker-dash\/releases\/download\/v${{ steps.extractver.outputs.version }}\/schema\.json"
+
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: peter-evans/create-pull-request@v3
