@@ -1,10 +1,10 @@
+# Auto Dash
 
-# Auto Docker Dash
+A simple dashboard used to show the status of various connected pieces of software.
 
-A simple dashboard to show you the status of your current docker stack.
+The video below showcases a single docker socket connection (But it does much more than docker!)
 
 https://user-images.githubusercontent.com/2565465/122217617-ddc0db80-cead-11eb-9adb-1365638158a2.mov
-
 
 ## Why?
 
@@ -13,25 +13,33 @@ I've been toying with making myself a proper home dashboard and I think think th
 
 _I also wanted to play with GraphQL subscriptions and observables_
 
+And this has since grown into something that can give an up to date status on various different connectors.
+
 ## Features
 
-- List all the containers with the given label
-- Display the status of the containers
-  - Will also show the status of children containers, see [children](#children)
-- Ability to add a link to each of the containers
-- Websocket connections for updates every 5 seconds
-  - Currently relies on the system clocks of both machines not being out (Will fix in the future)
-
-## Getting started
-
-### Step 1          
-Run the container!
+- Links for every item on the dashboard!
+- Websocket connections for speedy updates
+- Any icon supported in react-icons see [icons](#icons)
+- Show children items on your dashboard- Will also show the status of children containers
+  - Got a docker container that relies on a website being available? Why not show both!?
+  - see [children](#children)
+- Docker
+  - List all the containers with the given label
+  - Display the status of the containers
+- Websites
+  - Show the status and connectivity of a given website along with a link
+  - Variable update interval
+- Raw
+  - Have some links that don't have any status attached?
+  - Use the included file configuration and show any ol' link that you'd like.
 
 ## Usage
 
-#### Example with docker-compose: 
-```
----
+#### Simplest usage using only a docker socket
+
+docker-compose.yml:
+
+```yml
 version: "2.1"
 services:
 
@@ -44,7 +52,7 @@ services:
       - 3000:3000
     restart: unless-stopped
 
-    
+
   vikunjadb:
     image: mariadb:10
     labels:
@@ -77,16 +85,17 @@ services:
 
 ## Configuration
 
-There is now a configuration file that can be optionally added in order to include various connectors (Such as raw files).
+There is now a configuration file that can be optionally added in order to include various connectors (Such as website connections or other arbitrary links). See [connectors](docs/connectors.md)
 
-This file should be mounted at `/config.json` in the container. 
+This file should be mounted at `/config.json` in the container.
 
-**Note**: Including the $schema in the file will help with auto complete in your preferred IDE, be sure to grab the link from the Github releases page. 
+**Note**: Including the `$schema` field in the JSON file will help with auto complete in your preferred IDE.
 
-Example file:
-```
+config.json
+
+```json
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json", 
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -116,19 +125,96 @@ Example file:
 }
 ```
 
+docker-compose.yml:
+```yml
+version: "2.1"
+services:
+
+  autodockerdash:
+    image: inlustra/autodockerdash
+    container_name: autodockerdash
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config.json:/config.json
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+```
 
 #### Icons
 
 You can use any icons available in [react-icons](https://react-icons.github.io/react-icons/)
-I recommend keeping the amount of icon packs used to a minimum to ensure a speedy delivery of 
+I recommend keeping the amount of icon packs used to a minimum to ensure a speedy delivery of
 your dashboard
 
-Example: 
+Example:
 `dockerDash.icon: 'fi/FiPenTool'` is to load the `FiPenTool` icon in the [feather pack](https://react-icons.github.io/react-icons/icons?name=fi)
 `dockerDash.icon: 'md/MdAlarm'` is to load the `MdAlarm` icon in the [Material Design pack](https://react-icons.github.io/react-icons/icons?name=md)
 
 You can get the name of the pack looking at the url for the individual pack.
 `https://react-icons.github.io/react-icons/icons?name=fi`
+
+#### Children
+
+In order to show dependent containers, you need only ensure that the item you wish to show has a parents label pointing at the same name as another item.
+
+
+Example using the [raw connector](docs/connectors/raw.md):
+
+```json
+{
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.0.0/schema.json",
+  "connectors": [
+    {
+      "type": "docker",
+      "config": {}
+    },
+    {
+      "type": "raw",
+      "config": {
+        "id": "file",
+        "items": [
+          {
+            "category": "Other",
+            "name": "Beer Tab",
+            "state": "GREEN",
+            "icon": "fi/FiBeer"
+          },
+          {
+            "name": "Beer Tab Dependency",
+            "state": "GREEN",
+            "icon": "fi/FiBeer",
+            "parents": ["Beer Tab"]
+          },
+        ]
+      }
+    }
+  ]
+}
+```
+
+An example of the same logic being applied using the [docker connector](docs/connectors/docker.md) docker-compose.yml can be shown below:
+
+```yml
+  vikunjaapi:
+    container_name: vikunjaapi
+    image: vikunja/api
+    restart: unless-stopped
+    labels:
+      dockerDash.name: 'API'
+      dockerDash.parents: 'Todo'
+      dockerDash.icon: 'fi/FiServer'
+
+  vikunjafrontend:
+    image: vikunja/frontend
+    container_name: vikunjafrontend
+    restart: unless-stopped
+    labels:
+      dockerDash.name: 'Todo'
+      dockerDash.category: 'Home'
+      dockerDash.icon: 'fi/FiPenTool'
+      dockerDash.link: https://todo.thenairn.com
+```
 
 
 ## Development
@@ -137,14 +223,13 @@ Simple enough:
 
 `docker-compose up --build`
 
-### Notes: 
+### Notes:
 
 - The development build will not include all of the icons, and will instead generate a static icon instead.
   - This is to reduce the build time. Webpack loading 18,000 dynamic icons is looooooong, any feedback on how to speed that up is appreciated!
 - Uses a custom Next.js server built with Parcel
   - This is in order for us to support websockets as Next.js doesn't by default.
 
-
-
 ### CI:
+
 Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
