@@ -6,7 +6,7 @@ Can use a list of website urls (And other request formats) for Auto Dash to ping
 
 ```json
 {
-  "$schema": "https:\/\/github\.com\/Inlustra\/auto-docker-dash\/releases\/download\/v2.1.0\/schema\.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
     {
       "type": "website",
@@ -30,7 +30,7 @@ Can use a list of website urls (And other request formats) for Auto Dash to ping
 
 ```json
 {
-  "$schema": "https:\/\/github\.com\/Inlustra\/auto-docker-dash\/releases\/download\/v2.1.0\/schema\.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
   "connectors": [
     {
       "type": "website",
