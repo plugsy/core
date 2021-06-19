@@ -65,7 +65,7 @@ export async function getDockerContainers(
       category: container.Labels[labelConfig.categoryLabel] ?? null,
       icon: container.Labels[labelConfig.iconLabel] ?? null,
       link: container.Labels[labelConfig.linkLabel] ?? null,
-      parents: container.Labels[labelConfig.parentsLabel]?.split(",") ?? null,
+      parents: container.Labels[labelConfig.parentsLabel]?.split(",") ?? [],
     };
   });
 
