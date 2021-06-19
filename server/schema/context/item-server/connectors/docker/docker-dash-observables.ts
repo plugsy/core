@@ -2,16 +2,21 @@ import Docker, { DockerOptions } from "dockerode";
 import { BehaviorSubject, defer, ReplaySubject, timer } from "rxjs";
 import { catchError, map, share, switchMap, tap } from "rxjs/operators";
 import { Connection, ConnectionData, Item } from "../model";
-import { getDockerContainers, LabelConfig } from "./docker-containers";
+import {
+  ContainerMap,
+  getDockerContainers,
+  LabelConfig,
+} from "./docker-containers";
 
 const CONNECTOR_TYPE = "docker";
 export type DOCKER_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
 
 export interface DockerConnectionConfig {
   id?: string;
-  dockerOptions?: Omit<DockerOptions, 'Promise'>;
+  dockerOptions?: Omit<DockerOptions, "Promise">;
   interval?: number;
   labelConfig?: Partial<LabelConfig>;
+  containerMap?: ContainerMap;
 }
 
 export const dockerConnection = ({
@@ -19,6 +24,7 @@ export const dockerConnection = ({
   dockerOptions,
   interval = 20000,
   labelConfig,
+  containerMap = {},
 }: DockerConnectionConfig) => {
   let docker: Docker | null = null;
 
@@ -41,13 +47,17 @@ export const dockerConnection = ({
       getDocker(dockerOptions ?? { socketPath: "/var/run/docker.sock" })
     ),
     switchMap((docker) =>
-      getDockerContainers(docker, {
-        nameLabel: labelConfig?.nameLabel ?? "dockerDash.name",
-        categoryLabel: labelConfig?.categoryLabel ?? "dockerDash.category",
-        iconLabel: labelConfig?.iconLabel ?? "dockerDash.icon",
-        linkLabel: labelConfig?.linkLabel ?? "dockerDash.link",
-        parentsLabel: labelConfig?.parentsLabel ?? "dockerDash.parents",
-      })
+      getDockerContainers(
+        docker,
+        {
+          nameLabel: labelConfig?.nameLabel ?? "dockerDash.name",
+          categoryLabel: labelConfig?.categoryLabel ?? "dockerDash.category",
+          iconLabel: labelConfig?.iconLabel ?? "dockerDash.icon",
+          linkLabel: labelConfig?.linkLabel ?? "dockerDash.link",
+          parentsLabel: labelConfig?.parentsLabel ?? "dockerDash.parents",
+        },
+        containerMap
+      )
     ),
     map((containers): Item[] =>
       containers.map(
@@ -57,9 +67,9 @@ export const dockerConnection = ({
           state,
           status,
           category,
+          parents,
           icon: icon ?? null,
           link: link ?? null,
-          parents: parents?.split(",") ?? [],
         })
       )
     ),
