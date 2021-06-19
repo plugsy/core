@@ -10,7 +10,7 @@ import { DynamicIcon } from "../icons";
 import { SSRPopover } from "../SSRPopover";
 import { ArrowContainer } from "react-tiny-popover";
 
-interface DockerEntity {
+interface ItemData {
   icon?: string;
   iconPack?: string;
   text?: string;
@@ -20,8 +20,8 @@ interface DockerEntity {
   connectorType: "DOCKER" | "RAW" | "WEBSITE";
 }
 
-export interface DockerTagProps extends DockerEntity {
-  children: DockerEntity[];
+export interface ItemProps extends ItemData {
+  children: ItemData[];
 }
 
 const PopoverContainer = styled.div`
@@ -50,7 +50,7 @@ const TextContainer = styled.div`
   flex-direction: column;
 `;
 
-const Popover: React.FC<{ entities: DockerEntity[] }> = ({ entities }) => {
+const Popover: React.FC<{ entities: ItemData[] }> = ({ entities }) => {
   return (
     <PopoverContainer>
       {entities.map(({ text, icon, status, iconPack, state }, i) => (
@@ -114,7 +114,7 @@ const Muted = styled(Text)`
 `;
 
 interface StatusBarProps {
-  state: DockerTagProps["state"];
+  state: ItemProps["state"];
 }
 
 const StatusBar = styled.div<StatusBarProps>`
@@ -154,7 +154,7 @@ const Margins = styled.div`
   margin-bottom: 6px;
 `;
 
-export const DockerTag: React.FC<DockerTagProps> = ({
+export const Item: React.FC<ItemProps> = ({
   icon,
   iconPack,
   text,

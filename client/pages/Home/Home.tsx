@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { apolloClient } from "../../../lib/apollo";
 import { State } from "../../../types.graphql";
 import { ConnectionStatus } from "../../components/ConnectionStatus";
-import { DockerCategory } from "../../components/DockerCategory";
+import { Category } from "../../components/Category";
 import {
   useCategoriesSubscription,
   FullCategoryFragment,
@@ -128,7 +128,7 @@ export function Home({
       <HomeContainer>
         <CategoriesContainer>
           {categories?.map((category) => (
-            <DockerCategory
+            <Category
               key={`category-${category.name}`}
               name={category.name}
               containers={category.items.map(
