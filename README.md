@@ -95,7 +95,7 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -163,7 +163,7 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
