@@ -67,9 +67,11 @@ function useServerTime(initialServerTime: Date | string) {
   const [secondsOut, setSecondsOut] = useState(
     differenceInMilliseconds(
       new Date(),
-      typeof initialServerTime === "string"
-        ? parseISO(initialServerTime)
-        : initialServerTime
+      initialServerTime
+        ? typeof initialServerTime === "string"
+          ? parseISO(initialServerTime)
+          : initialServerTime
+        : new Date()
     )
   );
   const [tempSecondsOut, setTempSecondsOut] = useState(secondsOut);
@@ -87,11 +89,12 @@ function useServerTime(initialServerTime: Date | string) {
   }, 1000);
 
   const normalisedDate = useCallback(
-    (date: Date | string) =>
-      addMilliseconds(
+    (date: Date | string) => {
+      return addMilliseconds(
         typeof date === "string" ? parseISO(date) : date,
         secondsOut
-      ),
+      );
+    },
     [secondsOut]
   );
   return { secondsOut, normalisedDate };
@@ -194,14 +197,16 @@ export async function getServerSideProps() {
     query: InitDocument,
     fetchPolicy: "no-cache",
   });
+
   if (error) {
     console.log(error);
   }
+
   return {
     props: {
       initialCategories: data?.categories ?? [],
       initialConnections: data?.connections ?? [],
-      initialServerTime: data?.serverTime,
+      initialServerTime: data?.serverTime ?? null,
     } as Props,
   };
 }
