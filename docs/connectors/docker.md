@@ -6,7 +6,7 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -95,7 +95,7 @@ services:
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -130,7 +130,7 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.1.0/schema.json",
+  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
