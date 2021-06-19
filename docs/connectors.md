@@ -51,7 +51,7 @@ Can use a list of website urls (And other request formats) for Auto Dash to ping
           {
             "name": "Home Assistant",
             "category": "Home",
-            "link": "https://home.thenairn.com"
+            "link": https://my.home-assistant.io
           }
         ]
       }

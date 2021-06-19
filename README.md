@@ -80,7 +80,7 @@ services:
       dockerDash.name: 'Todo'
       dockerDash.category: 'Home'
       dockerDash.icon: 'fi/FiPenTool'
-      dockerDash.link: https://todo.thenairn.com
+      dockerDash.link: https://my.vikunja.com
 ```
 
 ## Configuration
@@ -213,7 +213,7 @@ An example of the same logic being applied using the [docker connector](docs/con
       dockerDash.name: 'Todo'
       dockerDash.category: 'Home'
       dockerDash.icon: 'fi/FiPenTool'
-      dockerDash.link: https://todo.thenairn.com
+      dockerDash.link: https://my.vikunja.com
 ```
 
 
