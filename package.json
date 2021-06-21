@@ -1,10 +1,10 @@
 {
-  "name": "@planel/core",
+  "name": "@plugsy/core",
   "version": "2.2.0",
   "private": false,
   "license": "MIT",
   "config": {
-    "imageRepo": "planel/core"
+    "imageRepo": "plugsy/core"
   },
   "release": {
     "branches": [

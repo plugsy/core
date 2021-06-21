@@ -6,7 +6,7 @@ Provides items in the dashboard directly from the config itself
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "raw",
@@ -28,7 +28,7 @@ Provides items in the dashboard directly from the config itself
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "raw",

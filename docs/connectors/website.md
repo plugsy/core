@@ -2,11 +2,11 @@
 
 ### Basic Example
 
-Can use a list of website urls (And other request formats) for Planel to ping and check against a status code or response regex.
+Can use a list of website urls (And other request formats) for Plugsy to ping and check against a status code or response regex.
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "website",
@@ -30,7 +30,7 @@ Can use a list of website urls (And other request formats) for Planel to ping an
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "website",

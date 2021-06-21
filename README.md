@@ -1,6 +1,6 @@
-# Planel 
+# Plugsy 
 
-![Planel Logo](docs/responsive-color-logo.svg)
+![Plugsy Logo](docs/responsive-color-logo.svg)
 
 A simple dashboard used to show the status of various connected pieces of software.
 
@@ -45,9 +45,9 @@ docker-compose.yml:
 version: "2.1"
 services:
 
-  planel:
-    image: planel/core
-    container_name: planel
+  plugsy:
+    image: plugsy/core
+    container_name: plugsy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -97,7 +97,7 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -132,9 +132,9 @@ docker-compose.yml:
 version: "2.1"
 services:
 
-  planel:
-    image: planel/core
-    container_name: planel
+  plugsy:
+    image: plugsy/core
+    container_name: plugsy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config.json:/config.json
@@ -165,7 +165,7 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",

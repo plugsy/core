@@ -126,8 +126,8 @@ export function Home({
   return (
     <>
       <Head>
-        <title>Planel</title>
-        <meta property="og:title" content="Planel" key="title" />
+        <title>Plugsy</title>
+        <meta property="og:title" content="Plugsy" key="title" />
       </Head>
       <Favicon />
       <HomeContainer>

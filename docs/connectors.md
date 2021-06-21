@@ -1,6 +1,6 @@
 # Connectors
 
-Planel support various connectors, more connectors can be requested through the issue type.
+Plugsy support various connectors, more connectors can be requested through the issue type.
 
 ## Docker
 
@@ -16,7 +16,7 @@ Provides items in the dashboard directly from the config itself
 
 ## Website
 
-Can use a list of website urls (And other request formats) for Planel to ping and check against a status code or response regex.
+Can use a list of website urls (And other request formats) for Plugsy to ping and check against a status code or response regex.
 
 [Connector Docs](connectors/website.md)
 
@@ -24,7 +24,7 @@ Can use a list of website urls (And other request formats) for Planel to ping an
 
 ```
 {
-  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
