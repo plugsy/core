@@ -6,7 +6,7 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -22,9 +22,9 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 ---
 version: "2.1"
 services:
-  autodockerdash:
-    image: inlustra/autodockerdash
-    container_name: autodockerdash
+  planel:
+    image: planel/core
+    container_name: planel
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -67,9 +67,9 @@ services:
 ---
 version: "2.1"
 services:
-  autodockerdash:
-    image: inlustra/autodockerdash
-    container_name: autodockerdash
+  planel:
+    image: planel/core
+    container_name: planel
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -95,7 +95,7 @@ services:
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -130,7 +130,7 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",

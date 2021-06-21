@@ -18,6 +18,7 @@ import {
   useServerTimeSubscription,
 } from "./Home.generated.graphql";
 import { useHarmonicIntervalFn } from "react-use";
+import { Favicon } from "../../components/Favicon";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
@@ -125,9 +126,10 @@ export function Home({
   return (
     <>
       <Head>
-        <title>Auto Docker Dash</title>
-        <meta property="og:title" content="Auto Docker Dash" key="title" />
+        <title>Planel</title>
+        <meta property="og:title" content="Planel" key="title" />
       </Head>
+      <Favicon />
       <HomeContainer>
         <CategoriesContainer>
           {categories?.map((category) => (

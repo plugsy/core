@@ -1,10 +1,10 @@
 {
-  "name": "auto-docker-dash",
+  "name": "@planel/core",
   "version": "2.2.0",
   "private": false,
   "license": "MIT",
   "config": {
-    "imageRepo": "inlustra/autodockerdash"
+    "imageRepo": "planel/core"
   },
   "release": {
     "branches": [

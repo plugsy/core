@@ -1,23 +1,40 @@
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
       "config": {}
     },
     {
-      "type": "raw",
+      "type": "website",
       "config": {
-        "id": "file",
-        "items": [
+        "sites": [
           {
-            "category": "Links",
-            "name": "Test Item",
-            "state": "GREY"
+            "request": "https://home.thenairn.com",
+            "display": {
+              "name": "Home Assistant",
+              "category": "Home",
+              "icon": "si/SiHomeassistant",
+              "link": "https://home.thenairn.com"
+            }
           },
           {
-            "name": "test item 2",
-            "state": "GREY"
+            "request": "https://unifi.thenairn.com",
+            "display": {
+              "name": "Unifi",
+              "category": "Home",
+              "icon": "bi/BiNetworkChart",
+              "link": "https://unifi.thenairn.com"
+            }
+          },
+          {
+            "request": "https://unraid.thenairn.com",
+            "display": {
+              "name": "Unraid",
+              "category": "Home",
+              "icon": "fi/FiServer",
+              "link": "https://unraid.thenairn.com"
+            }
           }
         ]
       }

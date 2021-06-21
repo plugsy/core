@@ -4,6 +4,7 @@ import express, { Express } from "express";
 
 import { ApolloServer } from "apollo-server-express";
 import { serverOptions } from "./schema";
+import { getItemServer } from "./schema/context/item-server";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -20,6 +21,8 @@ async function startAPI(httpServer: Server, expressServer: Express) {
       subscriptionEndpoint: "/graphql",
     },
   });
+
+  getItemServer()
 
   apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
   apolloServer.installSubscriptionHandlers(httpServer);

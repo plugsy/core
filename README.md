@@ -1,4 +1,6 @@
-# Auto Dash
+# Planel 
+
+![Planel Logo](docs/responsive-color-logo.svg)
 
 A simple dashboard used to show the status of various connected pieces of software.
 
@@ -43,9 +45,9 @@ docker-compose.yml:
 version: "2.1"
 services:
 
-  autodockerdash:
-    image: inlustra/autodockerdash
-    container_name: autodockerdash
+  planel:
+    image: planel/core
+    container_name: planel
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -95,7 +97,7 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",
@@ -130,9 +132,9 @@ docker-compose.yml:
 version: "2.1"
 services:
 
-  autodockerdash:
-    image: inlustra/autodockerdash
-    container_name: autodockerdash
+  planel:
+    image: planel/core
+    container_name: planel
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config.json:/config.json
@@ -163,7 +165,7 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/Inlustra/auto-docker-dash/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/planel/core/releases/download/v2.2.0/schema.json",
   "connectors": [
     {
       "type": "docker",

@@ -74,7 +74,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: inlustra/autodockerdash:${{ steps.extractver.outputs.version }},inlustra/autodockerdash:latest
+          tags: planel/core:${{ steps.extractver.outputs.version }},planel/core:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -91,8 +91,8 @@ jobs:
       - name: Find and Replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          find: "https:\\/\\/github\\.com\\/Inlustra\\/auto-docker-dash\\/releases\\/download\\/(.*?)\\/schema\\.json"
-          replace: "https://github.com/Inlustra/auto-docker-dash/releases/download/v${{ steps.extractver.outputs.version }}/schema.json"
+          find: "https:\\/\\/github\\.com\\/planel\\/core\\/releases\\/download\\/(.*?)\\/schema\\.json"
+          replace: "https://github.com/planel/core/releases/download/v${{ steps.extractver.outputs.version }}/schema.json"
 
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version

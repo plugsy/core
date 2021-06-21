@@ -1,6 +1,6 @@
-import { timer, of, combineLatest } from "rxjs";
+import { timer, of, combineLatest, ReplaySubject } from "rxjs";
 import { Axios } from "axios-observable";
-import { catchError, exhaustMap, map, switchMap } from "rxjs/operators";
+import { catchError, exhaustMap, map, share, switchMap } from "rxjs/operators";
 import { ConnectionData, Item } from "../model";
 import { AxiosRequestConfig } from "axios";
 
@@ -135,6 +135,13 @@ export const websiteConnection = ({
         error: null,
         id,
       } as ConnectionData;
+    }),
+
+    share({
+      connector: () => new ReplaySubject(1),
+      resetOnComplete: false,
+      resetOnError: false,
+      resetOnRefCountZero: true,
     })
   );
 };

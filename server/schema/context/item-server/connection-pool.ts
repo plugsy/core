@@ -1,5 +1,9 @@
 import { BehaviorSubject, combineLatest, ReplaySubject } from "rxjs";
-import { map, share, switchMap } from "rxjs/operators";
+import {
+  map,
+  share,
+  switchMap,
+} from "rxjs/operators";
 import type { Connection, Item } from "./connectors/model";
 
 export function initialiseConnectionPool() {
@@ -8,16 +12,9 @@ export function initialiseConnectionPool() {
   const setConnections = (connections: Connection[]) => {
     connections$.next(connections);
   };
+
   const connectionData$ = connections$.pipe(
-    switchMap((connections) => combineLatest(connections))
-  );
-  const items$ = connectionData$.pipe(
-    map((connectionData) =>
-      connectionData.reduce<Item[]>(
-        (items, data) => [...items, ...data.items],
-        []
-      )
-    ),
+    switchMap((connections) => combineLatest(connections)),
     share({
       connector: () => new ReplaySubject(1),
       resetOnComplete: false,
@@ -26,10 +23,20 @@ export function initialiseConnectionPool() {
     })
   );
 
+  const items$ = connectionData$.pipe(
+    map((connectionData) =>
+      connectionData.reduce<Item[]>(
+        (items, data) => [...items, ...data.items],
+        []
+      )
+    )
+  );
+
   return {
     setConnections,
     items$,
     connections$,
+    // connectionUpdates$,
     connectionData$,
   };
 }
