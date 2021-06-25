@@ -5,19 +5,13 @@ export interface FaviconProps {
 }
 
 export const Favicon: React.FC<FaviconProps> = ({ state = "GREEN" }) => {
+  const href =
+    state === "GREEN" ? "/favicon-success.svg" : "/favicon-error.svg";
   return (
     <Head>
-      <link
-        rel="icon"
-        type="image/svg+xml"
-        href={state === "GREEN" ? '/favicon-success.svg' : '/favicon-error.svg'}
-      />
-      <link
-        rel="mask-icon"
-        type="image/svg+xml"
-        href={state === "GREEN" ? '/favicon-success.svg' : '/favicon-error.svg'}
-      />
-      <link rel="alternate icon" href={'/favicon.ico'}/>
+      <link rel="icon" type="image/svg+xml" href={href} />
+      <link rel="mask-icon" type="image/svg+xml" href={href} />
+      <link rel="alternate icon" href={"/favicon.ico"} />
     </Head>
   );
 };

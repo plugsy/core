@@ -1,7 +1,6 @@
 import { InMemoryCache, ApolloClient, ApolloLink } from "@apollo/client";
 import ApolloLogger from "apollo-link-logger";
 import { IncomingMessage, ServerResponse } from "http";
-import { createIsomorphLink } from "./links";
 import { DateScalarType } from "./scalars/Date";
 
 export type ResolverContext = {
@@ -43,8 +42,3 @@ export const createApolloClient = (opts?: {
 
   return client;
 };
-
-export const apolloClient = createApolloClient({
-  ssrMode: typeof window === "undefined",
-  links: [createIsomorphLink()],
-});

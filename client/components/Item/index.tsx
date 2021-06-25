@@ -11,8 +11,8 @@ import { SSRPopover } from "../SSRPopover";
 import { ArrowContainer } from "react-tiny-popover";
 
 interface ItemData {
-  icon?: string;
-  iconPack?: string;
+  iconName?: string | null;
+  iconPack?: string | null;
   text?: string;
   link?: string;
   status?: string;
@@ -53,14 +53,14 @@ const TextContainer = styled.div`
 const Popover: React.FC<{ entities: ItemData[] }> = ({ entities }) => {
   return (
     <PopoverContainer>
-      {entities.map(({ text, icon, status, iconPack, state }, i) => (
+      {entities.map(({ text, iconName, status, iconPack, state }, i) => (
         <Fragment key={`child-${text}`}>
           <PopoverEntity>
             <StatusBar state={state} />
             <TagInfo>
-              {icon && iconPack ? (
+              {iconName && iconPack ? (
                 <Icon>
-                  <DynamicIcon icon={icon} iconPack={iconPack} />
+                  <DynamicIcon icon={iconName} iconPack={iconPack} />
                 </Icon>
               ) : null}
               <TextContainer>
@@ -155,7 +155,7 @@ const Margins = styled.div`
 `;
 
 export const Item: React.FC<ItemProps> = ({
-  icon,
+  iconName,
   iconPack,
   text,
   link,
@@ -201,9 +201,9 @@ export const Item: React.FC<ItemProps> = ({
           <StatusBar state={state} />
           <Margins>
             <TagInfo>
-              {icon && iconPack ? (
+              {iconName && iconPack ? (
                 <Icon>
-                  <DynamicIcon icon={icon} iconPack={iconPack} />
+                  <DynamicIcon icon={iconName} iconPack={iconPack} />
                 </Icon>
               ) : null}
               <TextContainer>

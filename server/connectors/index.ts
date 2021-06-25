@@ -7,6 +7,8 @@ import {
   WebsiteConnectionConfig,
 } from "./website";
 
+import { Logger } from "winston";
+
 export type ConnectorType =
   | DOCKER_CONNECTOR_TYPE
   | RAW_CONNECTOR_TYPE
@@ -32,13 +34,13 @@ export type ConnectorConfig =
   | RawConnectorConfig
   | WebsiteConnectorConfig;
 
-export function getConnector(connector: ConnectorConfig) {
+export function getConnector(connector: ConnectorConfig, logger: Logger) {
   switch (connector.type) {
-    case "docker":
-      return dockerConnection(connector.config);
-    case "raw":
-      return rawConnection(connector.config);
-    case "website":
-      return websiteConnection(connector.config);
+    case "DOCKER":
+      return dockerConnection(connector.config, logger);
+    case "RAW":
+      return rawConnection(connector.config, logger);
+    case "WEBSITE":
+      return websiteConnection(connector.config, logger);
   }
 }

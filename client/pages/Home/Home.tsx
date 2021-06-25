@@ -4,7 +4,7 @@ import parseISO from "date-fns/parseISO";
 import Head from "next/head";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { apolloClient } from "../../../lib/apollo";
+import { createApolloClient } from "../../../lib/apollo";
 import { State } from "../../../types.graphql";
 import { ConnectionStatus } from "../../components/ConnectionStatus";
 import { Category } from "../../components/Category";
@@ -19,6 +19,9 @@ import {
 } from "./Home.generated.graphql";
 import { useHarmonicIntervalFn } from "react-use";
 import { Favicon } from "../../components/Favicon";
+import { createIsomorphLink } from "../../../lib/apollo/links";
+import { GetServerSideProps } from "next";
+import absoluteUrl from "next-absolute-url";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
@@ -140,7 +143,8 @@ export function Home({
                 ({
                   name,
                   link,
-                  icon,
+                  iconName,
+                  iconPack,
                   state,
                   children,
                   status,
@@ -150,8 +154,8 @@ export function Home({
                     key: name,
                     text: name,
                     link: link ?? undefined,
-                    iconPack: icon?.split("/")[0],
-                    icon: icon?.split("/")[1],
+                    iconPack,
+                    iconName,
                     connectorType,
                     state: statesToStatus([
                       state,
@@ -159,13 +163,20 @@ export function Home({
                     ]),
                     status: status ? toTitleCase(status) : undefined,
                     children: children.map(
-                      ({ name, icon, state, status, connectorType }) => ({
+                      ({
+                        name,
+                        iconName,
+                        iconPack,
+                        state,
+                        status,
+                        connectorType,
+                      }) => ({
                         key: name,
                         connectorType,
+                        iconName,
+                        iconPack,
                         text: name,
                         status: status ? toTitleCase(status) : undefined,
-                        iconPack: icon?.split("/")[0],
-                        icon: icon?.split("/")[1],
                         state: statesToStatus([state]),
                       })
                     ),
@@ -194,7 +205,11 @@ export function Home({
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { origin } = absoluteUrl(req);
+  const apolloClient = createApolloClient({
+    links: [createIsomorphLink(origin)],
+  });
   const { data, error } = await apolloClient.query<InitQuery>({
     query: InitDocument,
     fetchPolicy: "no-cache",
@@ -211,4 +226,4 @@ export async function getServerSideProps() {
       initialServerTime: data?.serverTime ?? null,
     } as Props,
   };
-}
+};

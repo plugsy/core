@@ -1,4 +1,3 @@
-import { Observable } from "rxjs";
 import { ConnectorType } from ".";
 
 export interface Item {
@@ -19,7 +18,3 @@ export interface ConnectionData {
   items: Item[];
   error: string | null;
 }
-
-export type Connection = Observable<ConnectionData>;
-export type Connector = (data: any) => Connection;
-export type ConnectorMap = { [key: string]: Connector };

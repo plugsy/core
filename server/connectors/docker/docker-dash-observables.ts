@@ -1,14 +1,15 @@
 import Docker, { DockerOptions } from "dockerode";
-import { BehaviorSubject, defer, ReplaySubject, timer } from "rxjs";
+import { BehaviorSubject, defer, Observable, ReplaySubject, timer } from "rxjs";
 import { catchError, map, share, switchMap, tap } from "rxjs/operators";
-import { Connection, ConnectionData, Item } from "../model";
+import { ConnectionData, Item } from "../model";
+import { Logger } from "winston";
 import {
   ContainerMap,
   getDockerContainers,
   LabelConfig,
 } from "./docker-containers";
 
-const CONNECTOR_TYPE = "docker";
+const CONNECTOR_TYPE = "DOCKER";
 export type DOCKER_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
 
 export interface DockerConnectionConfig {
@@ -19,20 +20,22 @@ export interface DockerConnectionConfig {
   containerMap?: ContainerMap;
 }
 
-export const dockerConnection = ({
-  id = "docker",
-  dockerOptions,
-  interval = 20000,
-  labelConfig,
-  containerMap = {},
-}: DockerConnectionConfig) => {
+export const dockerConnection = (
+  {
+    id = CONNECTOR_TYPE,
+    dockerOptions,
+    interval = 20000,
+    labelConfig,
+    containerMap = {},
+  }: DockerConnectionConfig,
+  logger: Logger
+) => {
+  logger = logger.child({
+    component: "dockerConnection",
+    id,
+  });
+  logger.verbose("init");
   let docker: Docker | null = null;
-
-  async function getDocker(config: DockerOptions): Promise<Docker> {
-    docker = docker ?? new Docker(config);
-    await docker.ping();
-    return docker;
-  }
 
   const latest = new BehaviorSubject<ConnectionData>({
     id,
@@ -42,10 +45,20 @@ export const dockerConnection = ({
     error: null,
   });
 
-  const connection: Connection = defer(() => timer(0, interval)).pipe(
-    switchMap(() =>
-      getDocker(dockerOptions ?? { socketPath: "/var/run/docker.sock" })
-    ),
+  const connection: Observable<ConnectionData> = defer(() =>
+    timer(0, interval)
+  ).pipe(
+    switchMap(async () => {
+      if (!docker) {
+        logger.verbose("createDockerInstance");
+        docker = new Docker(
+          dockerOptions ?? { socketPath: "/var/run/docker.sock" }
+        );
+      }
+      logger.verbose("ping");
+      await docker.ping();
+      return docker;
+    }),
     switchMap((docker) =>
       getDockerContainers(
         docker,
@@ -56,8 +69,14 @@ export const dockerConnection = ({
           linkLabel: labelConfig?.linkLabel ?? "dockerDash.link",
           parentsLabel: labelConfig?.parentsLabel ?? "dockerDash.parents",
         },
-        containerMap
+        containerMap,
+        logger
       )
+    ),
+    tap((containers) =>
+      logger.verbose("foundContainers", {
+        count: containers.length,
+      })
     ),
     map((containers): Item[] =>
       containers.map(
@@ -83,17 +102,24 @@ export const dockerConnection = ({
       })
     ),
     tap((data) => latest.next(data)),
-    catchError((err) =>
-      latest.pipe(
+    catchError((err) => {
+      const errorMessage = err?.message ?? err.toString();
+      logger.error("fail", {
+        error: errorMessage,
+      });
+      return latest.pipe(
         map(
           (data): ConnectionData => ({
             ...data,
             connected: false,
-            error: err.toString() as string,
+            error: errorMessage,
           })
         )
-      )
-    ),
+      );
+    }),
+    tap({
+      complete: () => logger.debug("complete"),
+    }),
     share({
       connector: () => new ReplaySubject(1),
       resetOnComplete: false,

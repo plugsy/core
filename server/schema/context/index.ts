@@ -3,35 +3,54 @@ import { Operation } from "apollo-server-micro";
 import { NextPageContext } from "next";
 import { BehaviorSubject } from "rxjs";
 import { filter, takeUntil } from "rxjs/operators";
-import { getItemServer } from "./item-server";
+import type { ConnectionPool } from "../../connection-pool";
+import type { ItemServer } from "../../item-server";
+import { Logger } from "winston";
+import { nanoid } from "nanoid";
 
-export const initContext =
-  (_: NextPageContext | undefined) =>
-  (ctx: { operation: Operation } & ExpressContext) => {
+export interface ContextDependencies {
+  ctx?: NextPageContext;
+  itemServer: ItemServer;
+  connectionPool: ConnectionPool;
+  logger: Logger;
+}
+
+export const initContext = ({
+  logger,
+  itemServer,
+  connectionPool,
+}: ContextDependencies) => {
+  logger = logger.child({ component: "initContext" });
+  return (ctx: { operation: Operation } & ExpressContext) => {
+    const requestLogger = logger.child({ request: nanoid(8) });
+    logger.verbose("initContext");
     try {
       const { res, req, operation } = ctx;
       const isClosed$ = new BehaviorSubject(false);
       req?.on("close", () => {
+        requestLogger.verbose("requestClose");
         isClosed$.next(true);
       });
       const onClose$ = isClosed$.pipe(filter((isClosed) => isClosed));
       const takeUntilClosed = <T extends any>() => takeUntil<T>(onClose$);
-      const { categories$, connectionData$, items$ } = getItemServer();
-
       return {
         res,
         req,
+        requestLogger,
         operation,
         takeUntilClosed,
-        categories$,
-        connectionData$,
-        items$,
+        itemServer,
+        connectionPool,
         isClosed$,
       };
     } catch (error) {
-      console.error("Unable to init context", error);
+      logger.error("initContext.fail", {
+        error: error?.message ?? error.toString(),
+        message: "Unable to init context",
+      });
       throw error;
     }
   };
+};
 
 export type Context = ReturnType<ReturnType<typeof initContext>>;

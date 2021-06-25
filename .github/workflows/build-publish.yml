@@ -92,7 +92,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "https:\\/\\/github\\.com\\/plugsy\\/core\\/releases\\/download\\/(.*?)\\/schema\\.json"
-          replace: "https://github.com/plugsy/core/releases/download/v${{ steps.extractver.outputs.version }}/schema.json"
+          replace: "https://github.com/plugsy/core/releases/download/v${{ steps.extractver.outputs.version }}/config-schema.json"
 
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version

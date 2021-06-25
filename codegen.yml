@@ -1,13 +1,32 @@
 schema: "**/*.server.graphql"
 generates:
+  server/agent/agent.generated.graphql.ts:
+    documents: "server/agent/*.graphql"
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-graphql-request
+      - typescript-operations
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      rawRequest: true
+
   ./types.graphql.ts:
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
     plugins:
       - add:
           content: "/* eslint-disable */"
       - typescript
   ./:
-    documents: "**/*.graphql"
+    documents: "client/**/*.graphql"
     preset: near-operation-file
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
     presetConfig:
       extension: .generated.graphql.ts
       baseTypesPath: types.graphql.ts
@@ -28,8 +47,11 @@ generates:
       - typescript-operations
       - typed-document-node
     config:
+      enumsAsTypes: true
+      avoidOptionals: true
       contextType: ../context#Context
       useIndexSignature: true
       defaultMapper: DeepPartial<{T}>
-      scalars: 
+      scalars:
         Date: Date
+        Void: void

@@ -12,40 +12,52 @@ import {
   Connection as GQLConnection,
 } from "../typeDefs";
 import { map } from "rxjs/operators";
+import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
+import addMilliseconds from "date-fns/addMilliseconds";
 
 export const Query: QueryResolvers = {
-  categories: async (_, __, { categories$ }) => {
-    return await firstValueFrom(categories$);
+  categories: async (_, __, { itemServer }) => {
+    return await firstValueFrom(itemServer.categories$);
   },
-  items: async (_, __, { items$ }) => {
-    return await firstValueFrom(items$);
+  items: async (_, __, { itemServer }) => {
+    return await firstValueFrom(itemServer.items$);
   },
-  connections: async (_, __, { connectionData$ }) => {
-    return await firstValueFrom(connectionData$);
+  connections: async (_, __, { itemServer }) => {
+    return await firstValueFrom(itemServer.connectionData$);
   },
   serverTime: () => {
     return new Date();
   },
 };
 
-export const Mutation: MutationResolvers = {};
+export const Mutation: MutationResolvers = {
+  agentUpdate: async (_, { localTime, connectionData }, { connectionPool }) => {
+    const msOut = differenceInMilliseconds(new Date(), localTime);
+    connectionData
+      .map(({ lastUpdated, ...data }) => ({
+        ...data,
+        lastUpdated: lastUpdated ? addMilliseconds(lastUpdated, msOut) : null,
+      }))
+      .forEach(connectionPool.updateExternalConnection);
+  },
+};
 
 export const Subscription: SubscriptionResolvers = {
   categories: {
-    subscribe: (_, __, { categories$ }) => {
-      return toAsyncIterable(categories$);
+    subscribe: (_, __, { itemServer }) => {
+      return toAsyncIterable(itemServer.categories$);
     },
     resolve: (x: GQLCategory[]) => x,
   },
   items: {
-    subscribe: (_, __, { items$ }) => {
-      return toAsyncIterable(items$);
+    subscribe: (_, __, { itemServer }) => {
+      return toAsyncIterable(itemServer.items$);
     },
     resolve: (x: GQLItem[]) => x,
   },
   connections: {
-    subscribe: (_, __, { connectionData$ }) => {
-      return toAsyncIterable(connectionData$);
+    subscribe: (_, __, { itemServer }) => {
+      return toAsyncIterable(itemServer.connectionData$);
     },
     resolve: (x: GQLConnection[]) => x,
   },
@@ -57,11 +69,13 @@ export const Subscription: SubscriptionResolvers = {
   },
 };
 
-export const Item: ItemResolvers = {
-  children: async ({ name }, __, { items$ }) => {
+export const Item: Partial<ItemResolvers> = {
+  iconName: ({ icon }) => icon?.split("/")[0] ?? null,
+  iconPack: ({ icon }) => icon?.split("/")[1] ?? null,
+  children: async ({ name }, __, { itemServer }) => {
     if (!name) return [];
     return await firstValueFrom(
-      items$.pipe(
+      itemServer.items$.pipe(
         map((items) => {
           return items.filter(({ parents }) =>
             parents.some(

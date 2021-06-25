@@ -6,10 +6,10 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {}
     }
   ]
@@ -95,10 +95,10 @@ services:
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {
         "containerMap": {
           "vikunjafrontend": {
@@ -130,10 +130,10 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {
         "id": "", // Optional defaults to "docker"
         "dockerOptions": {

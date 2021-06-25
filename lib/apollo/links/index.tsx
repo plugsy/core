@@ -1,17 +1,16 @@
-import { NextPageContext } from "next";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { split } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-export function createIsomorphLink(opts?: {
-  headers: { [key: string]: string | undefined };
-  ctx?: NextPageContext;
-}) {
+export function createIsomorphLink(origin?: string) {
+  const { HttpLink } = require("@apollo/client");
+  const httpLink = new HttpLink({
+    uri: `${origin ?? ""}/graphql`,
+    credentials: "include",
+  });
   if (typeof window === "undefined") {
-    const { schemaLink } = require("../../../server/schema");
-    return schemaLink(opts?.ctx);
+    return httpLink;
   } else {
-    const { HttpLink } = require("@apollo/client");
     let scheme = location.protocol === "https:" ? "wss" : "ws";
     const wsLink = new WebSocketLink({
       uri: `${scheme}://${location.host}/graphql`,
@@ -21,12 +20,6 @@ export function createIsomorphLink(opts?: {
         timeout: 300000,
         minTimeout: 30000,
       },
-    });
-
-    const httpLink = new HttpLink({
-      uri: "/graphql",
-      credentials: "include",
-      ...opts,
     });
 
     return split(

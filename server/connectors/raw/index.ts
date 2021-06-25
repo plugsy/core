@@ -1,7 +1,8 @@
-import { BehaviorSubject } from "rxjs";
-import { Connection } from "../model";
+import { BehaviorSubject, Observable } from "rxjs";
+import { ConnectionData } from "../model";
+import { Logger } from "winston";
 
-const CONNECTOR_TYPE = "raw";
+const CONNECTOR_TYPE = "RAW";
 export type RAW_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
 
 export interface RawConnectionConfig {
@@ -17,10 +18,11 @@ export interface RawConnectionConfig {
   }[];
 }
 
-export const rawConnection = ({
-  id = "raw",
-  items,
-}: RawConnectionConfig): Connection => {
+export const rawConnection = (
+  { id = "raw", items }: RawConnectionConfig,
+  logger: Logger
+): Observable<ConnectionData> => {
+  logger.child({ component: "rawConnection", id }).verbose("init", { id });
   return new BehaviorSubject({
     connected: true,
     id,

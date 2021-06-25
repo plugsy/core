@@ -1,14 +1,11 @@
 scalar Date
+scalar Void
 
 type Query {
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
   serverTime: Date!
-}
-
-type Mutation {
-  connected: Boolean!
 }
 
 type Subscription {
@@ -40,6 +37,8 @@ type Item {
   name: String!
   category: String
   icon: String
+  iconName: String
+  iconPack: String
   link: String
   state: State!
   status: String
@@ -54,4 +53,28 @@ type Connection {
   lastUpdated: Date
   error: String
   items: [Item!]!
+}
+
+input AgentUpdateConnectionItem {
+  name: String!
+  category: String
+  icon: String
+  link: String
+  state: State!
+  status: String
+  parents: [String!]!
+  connectorType: ConnectorType!
+}
+
+input AgentUpdateConnectionData {
+  id: String!
+  connected: Boolean!
+  lastUpdated: Date
+  error: String
+  items: [AgentUpdateConnectionItem!]!
+}
+
+
+type Mutation {
+  agentUpdate(localTime: Date!, connectionData: [AgentUpdateConnectionData!]!): Void
 }

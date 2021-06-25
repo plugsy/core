@@ -1,10 +1,17 @@
 import { timer, of, combineLatest, ReplaySubject } from "rxjs";
 import { Axios } from "axios-observable";
-import { catchError, exhaustMap, map, share, switchMap } from "rxjs/operators";
+import {
+  catchError,
+  exhaustMap,
+  map,
+  share,
+  switchMap,
+  tap,
+} from "rxjs/operators";
 import { ConnectionData, Item } from "../model";
 import { AxiosRequestConfig } from "axios";
-
-const CONNECTOR_TYPE = "website";
+import { Logger } from "winston";
+const CONNECTOR_TYPE = "WEBSITE";
 export type WEBSITE_CONNECTOR_TYPE = typeof CONNECTOR_TYPE;
 
 interface SiteRequest
@@ -40,11 +47,19 @@ export interface WebsiteConnectionConfig {
   sites: SiteConfig[];
 }
 
-export const websiteConnection = ({
-  id = "website",
-  sites = [],
-  interval = 30000,
-}: WebsiteConnectionConfig) => {
+export const websiteConnection = (
+  {
+    id = CONNECTOR_TYPE,
+    sites = [],
+    interval = 30000,
+  }: WebsiteConnectionConfig,
+  logger: Logger
+) => {
+  logger = logger.child({
+    id,
+    component: "websiteConnection",
+  });
+  logger.verbose("init");
   const requests = sites
     .map(({ requiredBodyRegex, ...config }) => {
       return {
@@ -60,11 +75,16 @@ export const websiteConnection = ({
         requiredBodyRegex,
         display: { name, category, icon, link, parents },
         request,
-      }) =>
-        timer(0, Math.max(interval, 1000)).pipe(
+      }) => {
+        logger.verbose("createTimer", { id, interval });
+        return timer(0, Math.max(interval, 1000)).pipe(
+          tap({
+            complete: () => logger.verbose("complete"),
+          }),
           switchMap((i) => {
             return of(i).pipe(
               exhaustMap(() => {
+                logger.verbose("createRequest");
                 const validateStatus = (status: number) => {
                   if (requiredStatusCode) {
                     const requiredStatuses = Array.isArray(requiredStatusCode)
@@ -87,10 +107,14 @@ export const websiteConnection = ({
                   responseType: "text",
                 });
               }),
+              tap(() => logger.verbose("responseReceived")),
               map((response) => {
                 if (requiredBodyRegex) {
                   const body = response.data as string;
                   if (!requiredBodyRegex.test(body)) {
+                    logger.error("fail", {
+                      error: `Could not match required body for website ${requiredBodyRegex.source}.`,
+                    });
                     throw new Error(
                       `Could not match required body for website ${requiredBodyRegex.source}.`
                     );
@@ -109,7 +133,9 @@ export const websiteConnection = ({
                 return item;
               }),
               catchError((error) => {
-                console.error(error.message);
+                logger.error("fail", {
+                  error: error?.message ?? error.toString(),
+                });
                 const item: Item = {
                   name,
                   category: category ?? null,
@@ -124,10 +150,15 @@ export const websiteConnection = ({
               })
             );
           })
-        )
+        );
+      }
     );
   return combineLatest(requests).pipe(
     map((items) => {
+      logger.verbose("aggregateRequests", {
+        id,
+        count: items.length,
+      });
       return {
         connected: items.some((item) => item.state === "GREEN"),
         lastUpdated: new Date(),
@@ -136,7 +167,6 @@ export const websiteConnection = ({
         id,
       } as ConnectionData;
     }),
-
     share({
       connector: () => new ReplaySubject(1),
       resetOnComplete: false,

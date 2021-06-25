@@ -1,4 +1,5 @@
 export const environment = () => ({
+  loggingLevel: process.env.LOGGER_LEVEL ?? "info",
   localConfigFile:
     process.env.DOCKER_DASH_LOCAL_CONFIG_FILE ??
     process.env.NODE_ENV === "production"

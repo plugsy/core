@@ -1,12 +1,12 @@
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {}
     },
     {
-      "type": "website",
+      "type": "WEBSITE",
       "config": {
         "sites": [
           {

@@ -97,14 +97,14 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {}
     },
     {
-      "type": "raw",
+      "type": "RAW",
       "config": {
         "id": "file",
         "items": [
@@ -165,14 +165,14 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {}
     },
     {
-      "type": "raw",
+      "type": "RAW",
       "config": {
         "id": "file",
         "items": [

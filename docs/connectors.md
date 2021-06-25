@@ -24,14 +24,14 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
 
 ```
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
   "connectors": [
     {
-      "type": "docker",
+      "type": "DOCKER",
       "config": {}
     },
     {
-      "type": "website",
+      "type": "WEBSITE",
       "config": {
         "sites": [
           {
@@ -45,7 +45,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
       }
     },
     {
-      "type": "raw",
+      "type": "RAW",
       "config": {
         "items": [
           {

@@ -1,4 +1,5 @@
 import Docker from "dockerode";
+import { Logger } from "winston";
 
 export type ContainerMap = {
   [key: string]: {
@@ -30,7 +31,7 @@ export async function getRunningDockerContainerCount(docker: Docker) {
   return (await docker.listContainers()).length;
 }
 
-const dockerStateToStatus = (state: string) => {
+const dockerStateToStatus = (state: string, logger: Logger) => {
   switch (state) {
     case "created":
     case "paused":
@@ -45,7 +46,10 @@ const dockerStateToStatus = (state: string) => {
     case "running":
       return "GREEN";
     default:
-      console.warn("Un-mapped docker state found: ", state);
+      logger.warn("dockerStateToStatus.unknownDockerState", {
+        state,
+        message: `Unknown docker state found: ${state}`,
+      });
       return "GREY";
   }
 };
@@ -53,13 +57,20 @@ const dockerStateToStatus = (state: string) => {
 export async function getDockerContainers(
   docker: Docker,
   labelConfig: LabelConfig,
-  containerMap: ContainerMap
+  containerMap: ContainerMap,
+  logger: Logger
 ) {
+  logger = logger.child({ component: "getDockerContainers" });
+  logger.verbose("getDockerContainers");
   const containers = await docker.listContainers({ all: true });
+
+  logger.silly("containers", {
+    containers,
+  });
 
   const labeledContainers = containers.map((container): DockerContainer => {
     return {
-      state: dockerStateToStatus(container.State),
+      state: dockerStateToStatus(container.State, logger),
       status: container.State,
       name: container.Labels[labelConfig.nameLabel] ?? null,
       category: container.Labels[labelConfig.categoryLabel] ?? null,
@@ -67,6 +78,10 @@ export async function getDockerContainers(
       link: container.Labels[labelConfig.linkLabel] ?? null,
       parents: container.Labels[labelConfig.parentsLabel]?.split(",") ?? [],
     };
+  });
+
+  logger.silly("labeledContainers", {
+    containers: labeledContainers,
   });
 
   const mappedContainers = Object.entries(containerMap).reduce<
@@ -85,12 +100,15 @@ export async function getDockerContainers(
           icon: item.icon ?? null,
           link: item.link ?? null,
           parents: item.parents ?? [],
-          state: dockerStateToStatus(container.State),
+          state: dockerStateToStatus(container.State, logger),
           status: container.State,
         },
       ];
     } else {
-      console.debug(`Couldn't find mapped docker container: ${key}`);
+      logger.warn("missingMappedContainer", {
+        key,
+        message: `Couldn't find mapped docker container: ${key}`,
+      });
     }
 
     return prev;
