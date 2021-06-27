@@ -235,3 +235,13 @@ Simple enough:
 ### CI
 
 Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
+
+# FAQ
+
+#### I can see the status of the connector, but I can't see my containers? 
+
+Ensure that a both a category and a name are defined, 
+if you're using the default docker configuration and labels, 
+that will require both the `dockerDash.category` and `dockerDash.name` labels on your container.
+
+**Category is required**, you can only omit category when you want the container to appear as a child of another item on the dashboard.
