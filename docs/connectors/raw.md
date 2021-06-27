@@ -6,7 +6,7 @@ Provides items in the dashboard directly from the config itself
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.0/config-schema.json",
   "connectors": [
     {
       "type": "RAW",
@@ -28,7 +28,7 @@ Provides items in the dashboard directly from the config itself
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.0/config-schema.json",
   "connectors": [
     {
       "type": "RAW",

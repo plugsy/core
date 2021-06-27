@@ -97,7 +97,7 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.0/config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -165,7 +165,7 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v2.2.0/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.0/config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -225,13 +225,13 @@ Simple enough:
 
 `docker-compose up --build`
 
-### Notes:
+### Notes
 
 - The development build will not include all of the icons, and will instead generate a static icon instead.
   - This is to reduce the build time. Webpack loading 18,000 dynamic icons is looooooong, any feedback on how to speed that up is appreciated!
 - Uses a custom Next.js server built with Parcel
   - This is in order for us to support websockets as Next.js doesn't by default.
 
-### CI:
+### CI
 
 Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
