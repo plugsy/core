@@ -34,6 +34,9 @@ And this has since grown into something that can give an up to date status on va
 - Raw
   - Have some links that don't have any status attached?
   - Use the included file configuration and show any ol' link that you'd like.
+- *Agent Mode (New in V3)*: Use multiple plugsy containers to gather local states and push to a different instance to aggregate the statuses
+  - Particularly useful if you have docker instances hosted on different machines or behind firewalls etc
+  - See [Agent Mode](/docs/agent-mode.md)
 
 ## Usage
 
