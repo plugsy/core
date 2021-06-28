@@ -7,7 +7,7 @@ import { ApolloServer } from "apollo-server-express";
 import { Logger, createLogger, transports, format } from "winston";
 import { ContextDependencies, serverOptions } from "./schema";
 import { getServerConfig } from "./config";
-import { map, share, tap } from "rxjs/operators";
+import { filter, map, share, tap } from "rxjs/operators";
 import { getConnector } from "./connectors";
 import { createConnectionPool } from "./connection-pool";
 import { createItemServer } from "./item-server";
@@ -53,7 +53,12 @@ function watchConfig(filePath: string, logger: Logger) {
     )
   );
   const agentConfig$ = config$.pipe(map((config) => config.agent));
+  const loggingLevel$ = config$.pipe(
+    map((config) => config.loggingLevel),
+    filter(Boolean)
+  );
   return {
+    loggingLevel$,
     connectors$,
     agentConfig$,
   };
@@ -124,7 +129,14 @@ async function startServer() {
     ],
   });
   logger.verbose("watchConfig");
-  const { connectors$, agentConfig$ } = watchConfig(localConfigFile, logger);
+  const { connectors$, agentConfig$, loggingLevel$ } = watchConfig(
+    localConfigFile,
+    logger
+  );
+
+  const loggingLevelSubscription = loggingLevel$.subscribe(
+    (level) => (logger.level = level)
+  );
 
   logger.verbose("createConnectionPool");
   const connectionPool = createConnectionPool(logger);
@@ -164,6 +176,7 @@ async function startServer() {
     tryQuietly(frontend.close);
     tryQuietly(connectorSubscription.unsubscribe);
     tryQuietly(agentSubscription.unsubscribe);
+    tryQuietly(loggingLevelSubscription.unsubscribe);
     tryQuietly(api.stop);
     tryQuietly(() => httpServer.close(() => logger.info("HTTP Server Closed")));
     logger.crit("Server Stopped");

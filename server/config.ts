@@ -14,6 +14,7 @@ const readFile = promisify(_readFile);
 
 
 export interface ServerConfig {
+  loggingLevel?: string;
   agent?: AgentConfig;
   connectors: ConnectorConfig[] | ConnectorConfig;
 }
