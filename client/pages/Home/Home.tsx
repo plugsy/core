@@ -21,7 +21,6 @@ import { useHarmonicIntervalFn } from "react-use";
 import { Favicon } from "../../components/Favicon";
 import { createIsomorphLink } from "../../../lib/apollo/links";
 import { GetServerSideProps } from "next";
-import absoluteUrl from "next-absolute-url";
 import { getOrigin } from "../../../lib/get-origin";
 
 interface Props {

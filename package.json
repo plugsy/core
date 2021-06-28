@@ -77,7 +77,6 @@
     "jsonschema": "^1.4.0",
     "nanoid": "^3.1.23",
     "next": ">=9.0.0",
-    "next-absolute-url": "^1.2.2",
     "next-transpile-modules": "^7.3.0",
     "raw-loader": "^4.0.2",
     "react": "17.0.2",

@@ -6,7 +6,6 @@ import { NormalizeCSS } from "../client/styles/normalize-css";
 import React, { useMemo } from "react";
 import { Fonts, GlobalFontStyles } from "../client/styles/fonts";
 import { createIsomorphLink } from "../lib/apollo/links";
-import absoluteUrl from "next-absolute-url";
 import { getOrigin } from "../lib/get-origin";
 
 interface MyAppProps extends AppProps {
