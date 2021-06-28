@@ -7,6 +7,7 @@ import React, { useMemo } from "react";
 import { Fonts, GlobalFontStyles } from "../client/styles/fonts";
 import { createIsomorphLink } from "../lib/apollo/links";
 import absoluteUrl from "next-absolute-url";
+import { getOrigin } from "../lib/get-origin";
 
 interface MyAppProps extends AppProps {
   origin: string;
@@ -33,8 +34,9 @@ function MyApp(opts: MyAppProps) {
 }
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  const { origin } = absoluteUrl(appContext.ctx.req);
+  const req = appContext.ctx.req;
   const appProps = await App.getInitialProps(appContext);
+  const origin = getOrigin(req);
   return {
     ...appProps,
     origin,

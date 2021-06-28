@@ -22,6 +22,7 @@ import { Favicon } from "../../components/Favicon";
 import { createIsomorphLink } from "../../../lib/apollo/links";
 import { GetServerSideProps } from "next";
 import absoluteUrl from "next-absolute-url";
+import { getOrigin } from "../../../lib/get-origin";
 
 interface Props {
   initialCategories?: FullCategoryFragment[];
@@ -206,7 +207,7 @@ export function Home({
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { origin } = absoluteUrl(req);
+  const origin = getOrigin(req);
   const apolloClient = createApolloClient({
     links: [createIsomorphLink(origin)],
   });
