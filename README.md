@@ -6,7 +6,7 @@ A simple dashboard used to show the status of various connected pieces of softwa
 
 The video below showcases a single docker socket connection (But it does much more than docker!)
 
-https://user-images.githubusercontent.com/2565465/122217617-ddc0db80-cead-11eb-9adb-1365638158a2.mov
+https://user-images.githubusercontent.com/2565465/123544521-efc73780-d753-11eb-9d79-ca176320fe2e.mov
 
 ## Why?
 
