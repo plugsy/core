@@ -3,7 +3,7 @@ const fs = require("fs");
 const TO_FOLDER = `./client/components/icons`;
 
 const location = `./node_modules/`;
-const package = "@react-icons/all-files";
+const pkg = "@react-icons/all-files";
 
 try {
   console.warn("CLEANING ICON FILES...");
@@ -79,19 +79,20 @@ const iconPacks = iconPackNames.map((dir) => {
       (acc, file) => {
         const fileName = file.split(".d.ts")[0];
         return `${acc}
-  ${fileName}: dynamic(() => import("${package}/${dir}/${fileName}").then(mod => mod.${fileName})),`;
+  ${fileName}: dynamic(() => import("${pkg}/${dir}/${fileName}").then(mod => mod.${fileName})),`;
       },
       `
 import type { IconBaseProps } from "@react-icons/all-files";
 import dynamic from "next/dynamic";
 import React, { ComponentType } from "react";
+import { FiAlertTriangle } from "@react-icons/all-files/fi/FiAlertTriangle";
 
 export interface IconPackProps extends IconBaseProps {
   icon: string;
 }
 
 export const IconPack: React.FC<IconPackProps> = ({ icon, ...props }) => {
-  const Icon = dynamicIcons[icon];
+  const Icon = dynamicIcons[icon] ?? ((props: IconPackProps) => <FiAlertTriangle {...props} />);
   return <Icon {...props} />;
 };
 
@@ -120,6 +121,7 @@ const indexFileContent =
     },
     `import dynamic from "next/dynamic";
 import type { IconBaseProps } from "@react-icons/all-files";
+import { FiAlertTriangle } from "@react-icons/all-files/fi/FiAlertTriangle";
 
 import React from "react";
 
@@ -129,7 +131,7 @@ export interface DynamicIconProps extends IconBaseProps {
 }
 
 export const DynamicIcon: React.FC<DynamicIconProps> = ({ iconPack, ...props }) => {
-  const IconPack = dynamicIconPacks[iconPack];
+  const IconPack = dynamicIconPacks[iconPack] ?? ((props: DynamicIconProps) => <FiAlertTriangle {...props} />);
   return <IconPack {...props} />;
 };
 
