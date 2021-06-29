@@ -27,8 +27,6 @@ module.exports = withPlugins([
   withGraphQL,
   withBundleAnalyzer,
   {
-    future: {
-      webpack5: true,
-    },
+    webpack5: true,
   },
 ]);
