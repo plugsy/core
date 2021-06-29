@@ -21,7 +21,7 @@ Simply add the agent section to your configuration file with the location of you
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.2/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
   "agent": {
     "endpoint": "http://localhost:3000/graphql"
   }

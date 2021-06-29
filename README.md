@@ -100,7 +100,7 @@ config.json
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.2/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -168,7 +168,7 @@ Example using the [raw connector](docs/connectors/raw.md):
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.2/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
