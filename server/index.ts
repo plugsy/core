@@ -172,14 +172,17 @@ async function startServer() {
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 
   async function closeServer() {
-    logger.crit("Stopping Server");
-    tryQuietly(frontend.close);
-    tryQuietly(connectorSubscription.unsubscribe);
-    tryQuietly(agentSubscription.unsubscribe);
-    tryQuietly(loggingLevelSubscription.unsubscribe);
-    tryQuietly(api.stop);
-    tryQuietly(() => httpServer.close(() => logger.info("HTTP Server Closed")));
-    logger.crit("Server Stopped");
+    logger.info("Stopping Server");
+    await tryQuietly(frontend.close);
+    await tryQuietly(connectorSubscription.unsubscribe);
+    await tryQuietly(agentSubscription.unsubscribe);
+    await tryQuietly(loggingLevelSubscription.unsubscribe);
+    await tryQuietly(api.stop);
+    await tryQuietly(() =>
+      httpServer.close(() => logger.info("HTTP Server Closed"))
+    );
+    logger.info("Server Stopped");
+    process.exit(0);
   }
 
   process.on("SIGTERM", closeServer);
