@@ -47,6 +47,10 @@ jobs:
         id: extractver
         run: echo "::set-output name=version::$(yarn run --silent get-version)"
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@master
+        with:
+          platforms: all
       # This is the a separate action that sets up buildx runner
       - name: Set up Docker Buildx
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
@@ -74,6 +78,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: plugsy/core:${{ steps.extractver.outputs.version }},plugsy/core:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
