@@ -15,8 +15,7 @@ import { environment } from "./environment";
 import { agent } from "./agent";
 import { ReplaySubject } from "rxjs";
 
-const port = parseInt(process.env.PORT || "3000", 10);
-const dev = process.env.NODE_ENV !== "production";
+const { port, dev } = environment();
 
 async function tryQuietly(fn: () => any | Promise<any>) {
   return async () => {
