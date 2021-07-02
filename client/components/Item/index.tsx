@@ -247,6 +247,7 @@ export const Item: React.FC<ItemProps> = ({
         )}
       >
         <Container
+          target="_blank"
           href={link}
           onMouseOver={() => setPopoverOpen(children.length > 0)}
           onMouseLeave={() => setPopoverOpen(false)}
