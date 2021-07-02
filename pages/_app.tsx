@@ -1,7 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
 import App, { AppProps, AppContext } from "next/app";
 import { createApolloClient } from "../lib/apollo";
-import { ThemeProvider } from "styled-components";
 import { NormalizeCSS } from "../client/styles/normalize-css";
 import React, { useMemo } from "react";
 import { Fonts, GlobalFontStyles } from "../client/styles/fonts";
@@ -23,11 +22,9 @@ function MyApp(opts: MyAppProps) {
       <NormalizeCSS />
       <GlobalFontStyles />
       <Fonts />
-      <ThemeProvider theme={{ components: {} }}>
-        <ApolloProvider client={apolloClient}>
-          <opts.Component {...opts.pageProps} />
-        </ApolloProvider>
-      </ThemeProvider>
+      <ApolloProvider client={apolloClient}>
+        <opts.Component {...opts.pageProps} />
+      </ApolloProvider>
     </>
   );
 }

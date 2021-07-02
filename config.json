@@ -1,10 +1,12 @@
 {
   "$schema": "./server/config-schema.json",
-  "loggingLevel": "silly",
+  "loggingLevel": "verbose",
   "theme": {
-    "components": {
-      "Category": {
-        
+    "pages": {
+      "Home": {
+        "HomeContainer": {
+          "maxWidth": 1500
+        }
       }
     }
   },
@@ -18,30 +20,30 @@
       "config": {
         "sites": [
           {
-            "request": "https://home.thenairn.com",
+            "request": "localhost:8148",
             "display": {
               "name": "Home Assistant",
               "category": "Home",
               "icon": "si/SiHomeassistant",
-              "link": "https://home.thenairn.com"
+              "link": "https://my.homeassistant.com"
             }
           },
           {
-            "request": "https://unifi.thenairn.com",
+            "request": "localhost:1294",
             "display": {
               "name": "Unifi",
               "category": "Home",
               "icon": "bi/BiNetworkChart",
-              "link": "https://unifi.thenairn.com"
+              "link": "https://my.unifi.com"
             }
           },
           {
-            "request": "https://unraid.thenairn.com",
+            "request": "https://localhost:9345",
             "display": {
               "name": "Unraid",
               "category": "Home",
               "icon": "fi/FiServer",
-              "link": "https://unraid.thenairn.com"
+              "link": "https://my.unraid.com"
             }
           }
         ]

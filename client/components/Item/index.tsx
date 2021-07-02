@@ -9,7 +9,8 @@ import styled from "styled-components";
 import { DynamicIcon } from "../icons";
 import { SSRPopover } from "../SSRPopover";
 import { ArrowContainer } from "react-tiny-popover";
-import { getTheme } from "../theme";
+import { getColor, getComponentTheme, Theme } from "../../theme";
+import { useTheme } from "styled-components";
 
 export type ItemThemable =
   | "PopoverContainer"
@@ -29,7 +30,8 @@ export type ItemThemable =
   | "Margins"
   | "ExternalLinkContainerColumnSeparator";
 
-const getItemTheme = (component: ItemThemable) => getTheme("Item", component);
+const getItemTheme = (component: ItemThemable) =>
+  getComponentTheme("Item", component);
 
 interface ItemData {
   iconName?: string | null;
@@ -162,14 +164,7 @@ interface StatusBarProps {
 const StatusBar = styled.div<StatusBarProps>`
   width: 6px;
   border-radius: 6px;
-  background: ${({ state }) =>
-    state === "GREEN"
-      ? "green"
-      : state === "YELLOW"
-      ? "yellow"
-      : state === "GREY"
-      ? "grey"
-      : "red"};
+  background: ${({ state }) => getColor(state)};
 
   ${getItemTheme("StatusBar")}
 `;
@@ -230,6 +225,10 @@ export const Item: React.FC<ItemProps> = ({
         : BsQuestion,
     [connectorType]
   );
+  const theme = useTheme() as Theme;
+
+  const arrowColor =
+    theme?.components?.Item?.PopoverContainer?.background ?? "white";
   return (
     <>
       <SSRPopover
@@ -240,7 +239,7 @@ export const Item: React.FC<ItemProps> = ({
             position={position}
             childRect={childRect}
             popoverRect={popoverRect}
-            arrowColor="white"
+            arrowColor={arrowColor.toString()}
             arrowSize={10}
           >
             <Popover entities={children} />
@@ -249,7 +248,7 @@ export const Item: React.FC<ItemProps> = ({
       >
         <Container
           href={link}
-          onMouseOver={() => setPopoverOpen(true)}
+          onMouseOver={() => setPopoverOpen(children.length > 0)}
           onMouseLeave={() => setPopoverOpen(false)}
         >
           <StatusBar state={state} />

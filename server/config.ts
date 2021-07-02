@@ -9,16 +9,15 @@ import { environment } from "./environment";
 import { catchError, debounceTime, map, switchMap, tap } from "rxjs/operators";
 import { BehaviorSubject, concat, EMPTY, from, of } from "rxjs";
 import { Logger } from "winston";
-import type { Theme } from "../client/components/theme";
+import type { ThemeConfig } from "../client/theme";
 const exists = promisify(_exists);
 const readFile = promisify(_readFile);
-
 
 export interface ServerConfig {
   loggingLevel?: string;
   agent?: AgentConfig;
   connectors: ConnectorConfig[] | ConnectorConfig;
-  theme?: Theme;
+  theme?: ThemeConfig;
 }
 
 async function getConfigFileContents() {

@@ -4,7 +4,7 @@ import { useHarmonicIntervalFn } from "react-use";
 import styled from "styled-components";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
 import { StatusBox } from "../StatusBox";
-import { getTheme } from "../theme";
+import { getComponentTheme } from "../../theme";
 
 export type ConnectionStatusThemable =
   | "StatusBoxContainer"
@@ -13,7 +13,7 @@ export type ConnectionStatusThemable =
   | "ConnectionStatusId";
 
 const getConnectionStatusTheme = (component: ConnectionStatusThemable) =>
-  getTheme("ConnectionStatus", component);
+  getComponentTheme("ConnectionStatus", component);
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt) {

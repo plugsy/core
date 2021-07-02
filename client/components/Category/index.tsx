@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Item, ItemProps } from "../Item";
-import { getTheme } from "../theme";
+import { getComponentTheme } from "../../theme";
 
 export type CategoryThemeable = "Title" | "Container" | "Containers";
 
 const getCategoryTheme = (component: CategoryThemeable) =>
-  getTheme("Category", component);
+  getComponentTheme("Category", component);
 
 export interface CategoryTheme {
   Title: string;

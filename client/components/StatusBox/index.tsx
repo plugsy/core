@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { getTheme } from "../theme";
+import { getColor, getComponentTheme } from "../../theme";
 
 export type StatusBoxThemeables =
   | "Title"
@@ -11,7 +11,7 @@ export type StatusBoxThemeables =
   | "StatusBar";
 
 const getStatusBoxTheme = (component: StatusBoxThemeables) =>
-  getTheme("StatusBox", component);
+  getComponentTheme("StatusBox", component);
 
 export interface StatusBoxProps {
   title: string;
@@ -68,14 +68,7 @@ interface StatusBarProps {
 const StatusBar = styled.div<StatusBarProps>`
   height: 6px;
   border-radius: 6px;
-  background: ${({ status }) =>
-    status === "GREEN"
-      ? "green"
-      : status === "YELLOW"
-      ? "yellow"
-      : status === "GREY"
-      ? "grey"
-      : "red"};
+  background: ${({ status }) => getColor(status)};
 
   ${getStatusBoxTheme("StatusBar")}
 `;

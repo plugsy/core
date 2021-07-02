@@ -27,6 +27,7 @@ fragment FullConnection on Connection {
 }
 
 query Init {
+  theme
   serverTime
   categories {
     ...FullCategory
@@ -50,4 +51,8 @@ subscription Categories {
 
 subscription ServerTime {
   serverTime
+}
+
+subscription Theme {
+  theme
 }
