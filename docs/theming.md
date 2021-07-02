@@ -20,7 +20,7 @@ Good for use on a TV
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v4.0.0/config-schema.json",
   "loggingLevel": "verbose",
   "theme": {
     "pages": {
@@ -46,7 +46,7 @@ This can be used as a base for a dark mode.
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v4.0.0/config-schema.json",
   "theme": {
     "colors": {
       "GREEN": "#50fa7b",
