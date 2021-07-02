@@ -13,6 +13,7 @@ export const schema = makeExecutableSchema({
   resolvers: {
     ...resolvers,
     Void: scalarResolvers.Void,
+    JSONObject: scalarResolvers.JSONObject,
     Date: DateScalarType,
   },
 });

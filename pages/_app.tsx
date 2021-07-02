@@ -23,7 +23,7 @@ function MyApp(opts: MyAppProps) {
       <NormalizeCSS />
       <GlobalFontStyles />
       <Fonts />
-      <ThemeProvider theme={{}}>
+      <ThemeProvider theme={{ components: {} }}>
         <ApolloProvider client={apolloClient}>
           <opts.Component {...opts.pageProps} />
         </ApolloProvider>

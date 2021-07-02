@@ -1,27 +1,40 @@
 import React from "react";
 import styled from "styled-components";
 import { Item, ItemProps } from "../Item";
+import { getTheme } from "../theme";
+
+export type CategoryThemeable = "Title" | "Container" | "Containers";
+
+const getCategoryTheme = (component: CategoryThemeable) =>
+  getTheme("Category", component);
+
+export interface CategoryTheme {
+  Title: string;
+  Icon: string;
+  Text: string;
+  Container: string;
+  Containers: string;
+}
 
 export interface CategoryProps {
   name: string;
   containers: ItemProps[];
 }
 
+const Title = styled.h2`
+  ${getCategoryTheme("Title")}
+`;
 
-export const Title = styled.h2``;
-
-export const Icon = styled.div``;
-
-export const Text = styled.p``;
-
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 32px;
   margin-right: 32px;
+
+  ${getCategoryTheme("Container")}
 `;
 
-export const Containers = styled.div`
+const Containers = styled.div`
   display: inline-flex;
   flex-wrap: wrap;
   margin: -24px 0 0 -24px;
@@ -29,8 +42,9 @@ export const Containers = styled.div`
   ${Container} {
     margin: 24px 0 0 24px;
   }
-`;
 
+  ${getCategoryTheme("Containers")}
+`;
 
 export const Category: React.FC<CategoryProps> = ({ name, containers }) => {
   return (

@@ -52,7 +52,8 @@
     "analyze": "serve .next/analyze",
     "gen:gql": "graphql-codegen",
     "gen:icons": "node icongenerator.js",
-    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --ignoreErrors --required --strictNullChecks -o ./server/config-schema.json",
+    "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --aliasRefs --ignoreErrors --required --strictNullChecks -o ./server/config-schema.json",
+    "gen:json2": "ts-json-schema-generator -f ./tsconfig.json --no-type-check --type 'ServerConfig' -o ./server/config-schema.json",
     "gen": "yarn gen:gql && yarn gen:icons && yarn gen:json",
     "dev:build": "parcel ./server/index.ts --target node",
     "dev": "yarn gen && concurrently --kill-others-on-fail -n  gql,parcel,node \"yarn gen:gql -w\" \"yarn dev:build\" \"yarn start\"",
@@ -127,6 +128,7 @@
     "parcel-bundler": "^1.12.5",
     "rxjs-marbles": "^7.0.0",
     "semantic-release": "^17.4.4",
+    "ts-json-schema-generator": "^0.93.0",
     "ts-node": "^10.0.0",
     "typescript": "4.3.4",
     "typescript-json-schema": "^0.50.1"

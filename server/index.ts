@@ -57,10 +57,12 @@ function watchConfig(filePath: string, logger: Logger) {
     map((config) => config.loggingLevel),
     filter(Boolean)
   );
+  const theme$ = config$.pipe(map((config) => config.theme));
   return {
     loggingLevel$,
     connectors$,
     agentConfig$,
+    theme$,
   };
 }
 
@@ -100,7 +102,7 @@ async function startServer() {
   const { localConfigFile, loggingLevel } = environment();
   const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
-  const { connectors$, agentConfig$, loggingLevel$ } = watchConfig(
+  const { connectors$, agentConfig$, loggingLevel$, theme$ } = watchConfig(
     localConfigFile,
     logger
   );
@@ -135,6 +137,7 @@ async function startServer() {
     connectionPool,
     itemServer,
     logger,
+    theme$,
   });
   logger.verbose("startFrontend");
   const frontend = await startFrontend(expressServer);

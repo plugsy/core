@@ -15,7 +15,10 @@ import { map } from "rxjs/operators";
 import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import addMilliseconds from "date-fns/addMilliseconds";
 
-export const Query: QueryResolvers = {
+export const Query: Partial<QueryResolvers> = {
+  theme: async (_, __, { theme$ }) => {
+    return await firstValueFrom(theme$);
+  },
   categories: async (_, __, { itemServer }) => {
     return await firstValueFrom(itemServer.categories$);
   },
@@ -42,7 +45,13 @@ export const Mutation: MutationResolvers = {
   },
 };
 
-export const Subscription: SubscriptionResolvers = {
+export const Subscription: Partial<SubscriptionResolvers> = {
+  theme: {
+    subscribe: (_, __, { theme$ }) => {
+      return toAsyncIterable(theme$);
+    },
+    resolve: (x: any[]) => x,
+  },
   categories: {
     subscribe: (_, __, { itemServer }) => {
       return toAsyncIterable(itemServer.categories$);

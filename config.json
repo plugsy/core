@@ -1,5 +1,13 @@
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v3.0.3/config-schema.json",
+  "$schema": "./server/config-schema.json",
+  "loggingLevel": "silly",
+  "theme": {
+    "components": {
+      "Category": {
+        
+      }
+    }
+  },
   "connectors": [
     {
       "type": "DOCKER",
