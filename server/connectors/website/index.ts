@@ -44,6 +44,7 @@ export interface SiteConfig {
 export interface WebsiteConnectionConfig {
   id?: string;
   interval?: number;
+  timeout?: number;
   sites: SiteConfig[];
 }
 
@@ -52,6 +53,7 @@ export const websiteConnection = (
     id = CONNECTOR_TYPE,
     sites = [],
     interval = 30000,
+    timeout = 30000,
   }: WebsiteConnectionConfig,
   logger: Logger
 ) => {
@@ -81,7 +83,7 @@ export const websiteConnection = (
           tap({
             complete: () => logger.verbose("complete"),
           }),
-          switchMap((i) => {
+          exhaustMap((i) => {
             return of(i).pipe(
               exhaustMap(() => {
                 logger.verbose("createRequest");
@@ -99,9 +101,11 @@ export const websiteConnection = (
                 if (typeof request === "string")
                   return Axios.get(request, {
                     validateStatus,
+                    timeout,
                     responseType: "text",
                   });
                 return Axios.request({
+                  timeout,
                   ...request,
                   validateStatus,
                   responseType: "text",
