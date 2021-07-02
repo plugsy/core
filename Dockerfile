@@ -1,10 +1,10 @@
-FROM node:14 as base
+FROM node:14-slim as base
 
 WORKDIR /home/node
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --network-timeout 600000
 
 ENV PATH /home/node/node_modules/.bin:$PATH
 
