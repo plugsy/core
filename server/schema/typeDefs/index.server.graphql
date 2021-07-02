@@ -1,7 +1,9 @@
 scalar Date
 scalar Void
+scalar JSONObject
 
 type Query {
+  theme: JSONObject
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
@@ -9,6 +11,7 @@ type Query {
 }
 
 type Subscription {
+  theme: JSONObject!
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
@@ -74,7 +77,9 @@ input AgentUpdateConnectionData {
   items: [AgentUpdateConnectionItem!]!
 }
 
-
 type Mutation {
-  agentUpdate(localTime: Date!, connectionData: [AgentUpdateConnectionData!]!): Void
+  agentUpdate(
+    localTime: Date!
+    connectionData: [AgentUpdateConnectionData!]!
+  ): Void
 }

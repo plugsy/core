@@ -10,7 +10,9 @@ export type ContainerMap = {
     parents?: string[];
   };
 };
-interface LabeledParams {
+interface Params {
+  state: "GREY" | "RED" | "YELLOW" | "GREEN";
+  status: string;
   name: string;
   category: string | null;
   icon: string | null;
@@ -18,14 +20,15 @@ interface LabeledParams {
   parents: string[];
 }
 
-interface Params {
-  state: "GREY" | "RED" | "YELLOW" | "GREEN";
-  status: string;
-}
+export interface DockerContainer extends Params {}
 
-export interface DockerContainer extends Params, LabeledParams {}
-
-export type LabelConfig = { [name in `${keyof LabeledParams}Label`]: string };
+export type LabelConfig = {
+  nameLabel: string;
+  categoryLabel: string;
+  iconLabel: string;
+  linkLabel: string;
+  parentsLabel: string;
+};
 
 export async function getRunningDockerContainerCount(docker: Docker) {
   return (await docker.listContainers()).length;

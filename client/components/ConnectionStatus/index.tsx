@@ -4,6 +4,16 @@ import { useHarmonicIntervalFn } from "react-use";
 import styled from "styled-components";
 import { formatDistanceToNowShort } from "../../../lib/utils/format-distance-to-now-short";
 import { StatusBox } from "../StatusBox";
+import { getComponentTheme } from "../../theme";
+
+export type ConnectionStatusThemable =
+  | "StatusBoxContainer"
+  | "StatusBoxContainers"
+  | "ConnectionStatusContainer"
+  | "ConnectionStatusId";
+
+const getConnectionStatusTheme = (component: ConnectionStatusThemable) =>
+  getComponentTheme("ConnectionStatus", component);
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -20,6 +30,8 @@ export interface ConnectionStatusProps {
 const StatusBoxContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  ${getConnectionStatusTheme("StatusBoxContainer")}
 `;
 
 const StatusBoxContainers = styled.div`
@@ -32,15 +44,21 @@ const StatusBoxContainers = styled.div`
   ${StatusBoxContainer} {
     margin: 12px 0 0 12px;
   }
+
+  ${getConnectionStatusTheme("StatusBoxContainers")}
 `;
 const ConnectionStatusContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  ${getConnectionStatusTheme("ConnectionStatusContainer")}
 `;
 
 const ConnectionStatusId = styled.div`
   margin-top: 24px;
   margin-bottom: 12px;
+
+  ${getConnectionStatusTheme("ConnectionStatusId")}
 `;
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({

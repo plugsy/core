@@ -1,7 +1,7 @@
 import { ExpressContext } from "apollo-server-express";
 import { Operation } from "apollo-server-micro";
 import { NextPageContext } from "next";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { filter, takeUntil } from "rxjs/operators";
 import type { ConnectionPool } from "../../connection-pool";
 import type { ItemServer } from "../../item-server";
@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 
 export interface ContextDependencies {
   ctx?: NextPageContext;
+  theme$: Observable<any>;
   itemServer: ItemServer;
   connectionPool: ConnectionPool;
   logger: Logger;
@@ -19,6 +20,7 @@ export const initContext = ({
   logger,
   itemServer,
   connectionPool,
+  theme$,
 }: ContextDependencies) => {
   logger = logger.child({ component: "initContext" });
   return (ctx: { operation: Operation } & ExpressContext) => {
@@ -42,6 +44,7 @@ export const initContext = ({
         itemServer,
         connectionPool,
         isClosed$,
+        theme$,
       };
     } catch (error) {
       logger.error("initContext.fail", {

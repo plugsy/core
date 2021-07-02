@@ -5,7 +5,6 @@ import {
   exhaustMap,
   map,
   share,
-  switchMap,
   tap,
 } from "rxjs/operators";
 import { ConnectionData, Item } from "../model";
