@@ -1,10 +1,9 @@
 import next from "next";
 import { createServer, Server } from "http";
 import express, { Express } from "express";
-import { consoleFormat } from "winston-console-format";
+import { Logger } from "winston";
 
 import { ApolloServer } from "apollo-server-express";
-import { Logger, createLogger, transports, format } from "winston";
 import { ContextDependencies, serverOptions } from "./schema";
 import { getServerConfig } from "./config";
 import { filter, map, share, tap } from "rxjs/operators";
@@ -14,6 +13,7 @@ import { createItemServer } from "./item-server";
 import { environment } from "./environment";
 import { agent } from "./agent";
 import { ReplaySubject } from "rxjs";
+import { createLogger } from "./logger";
 
 const { port, dev } = environment();
 
@@ -97,36 +97,7 @@ async function startFrontend(expressServer: Express) {
 
 async function startServer() {
   const { localConfigFile, loggingLevel } = environment();
-  const logger = createLogger({
-    level: loggingLevel,
-    format: format.combine(
-      format.timestamp(),
-      format.ms(),
-      format.errors({ stack: true }),
-      format.splat(),
-      format.json()
-    ),
-    defaultMeta: { service: "Test", component: "startServer" },
-    transports: [
-      new transports.Console({
-        format: format.combine(
-          format.colorize({ all: true }),
-          format.padLevels(),
-          consoleFormat({
-            showMeta: true,
-            metaStrip: ["timestamp", "service"],
-            inspectOptions: {
-              depth: Infinity,
-              colors: true,
-              maxArrayLength: Infinity,
-              breakLength: 120,
-              compact: Infinity,
-            },
-          })
-        ),
-      }),
-    ],
-  });
+  const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
   const { connectors$, agentConfig$, loggingLevel$ } = watchConfig(
     localConfigFile,
