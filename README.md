@@ -20,11 +20,14 @@ And this has since grown into something that can give an up to date status on va
 ## Features
 
 - Links for every item on the dashboard!
+- Entirely customisable and themeable
+  - Dark mode capable, Dracula example in theming doc
+  - See [theming](/docs/theming.md)
 - Websocket connections for speedy updates
 - Any icon supported in react-icons see [icons](#icons)
 - Show children items on your dashboard- Will also show the status of children containers
   - Got a docker container that relies on a website being available? Why not show both!?
-  - see [children](#children)
+  - See [children](#children)
 - Docker
   - List all the containers with the given label
   - Display the status of the containers
