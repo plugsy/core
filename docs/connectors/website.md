@@ -4,6 +4,8 @@
 
 Can use a list of website urls (And other request formats) for Plugsy to ping and check against a status code or response regex.
 
+**Note**: You must use a full url, including the protocol (`http://`, `https://`... etc)
+
 ```jsonc
 {
   "$schema": "https://github.com/plugsy/core/releases/download/v4.0.0/config-schema.json",
