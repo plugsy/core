@@ -1,8 +1,13 @@
 {
-    "search.exclude": {
-        ".cache": true,
-        ".next": true,
-        "dist/*": true,
-        "yarn.lock": true
-    }
+  "search.exclude": {
+    ".cache": true,
+    ".next": true,
+    "dist/*": true,
+    "yarn.lock": true,
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

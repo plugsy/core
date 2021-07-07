@@ -1,12 +1,6 @@
 import { timer, of, combineLatest, ReplaySubject } from "rxjs";
-import { Axios } from "axios-observable";
-import {
-  catchError,
-  exhaustMap,
-  map,
-  share,
-  tap,
-} from "rxjs/operators";
+import { Axios } from "../../utils/axios-observable";
+import { catchError, exhaustMap, map, share, tap } from "rxjs/operators";
 import { ConnectionData, Item } from "../model";
 import { AxiosRequestConfig } from "axios";
 import { Logger } from "winston";
@@ -97,6 +91,7 @@ export const websiteConnection = (
                   }
                   return status >= 200 && status < 300; // default
                 };
+                console.log(request);
                 if (typeof request === "string")
                   return Axios.get(request, {
                     validateStatus,
@@ -115,7 +110,7 @@ export const websiteConnection = (
                 if (requiredBodyRegex) {
                   const body = response.data as string;
                   if (!requiredBodyRegex.test(body)) {
-                    logger.error("fail", {
+                    logger.error("regexFail", {
                       error: `Could not match required body for website ${requiredBodyRegex.source}.`,
                     });
                     throw new Error(
@@ -138,6 +133,7 @@ export const websiteConnection = (
               catchError((error) => {
                 logger.error("fail", {
                   error: error?.message ?? error.toString(),
+                  stack: error.stack
                 });
                 const item: Item = {
                   name,
