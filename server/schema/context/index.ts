@@ -1,5 +1,4 @@
-import { ExpressContext } from "apollo-server-express";
-import { Operation } from "apollo-server-micro";
+import { ExpressContext, Operation } from "apollo-server-express";
 import { NextPageContext } from "next";
 import { BehaviorSubject, Observable } from "rxjs";
 import { filter, takeUntil } from "rxjs/operators";

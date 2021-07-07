@@ -92,12 +92,13 @@ export const websiteConnection = (
                   return status >= 200 && status < 300; // default
                 };
                 console.log(request);
-                if (typeof request === "string")
+                if (typeof request === "string") {
                   return Axios.get(request, {
                     validateStatus,
                     timeout,
                     responseType: "text",
                   });
+                }
                 return Axios.request({
                   timeout,
                   ...request,
@@ -133,7 +134,7 @@ export const websiteConnection = (
               catchError((error) => {
                 logger.error("fail", {
                   error: error?.message ?? error.toString(),
-                  stack: error.stack
+                  stack: error.stack,
                 });
                 const item: Item = {
                   name,
