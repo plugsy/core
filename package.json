@@ -1,7 +1,6 @@
 {
   "name": "@plugsy/core",
   "version": "4.0.0",
-  "private": false,
   "license": "MIT",
   "config": {
     "imageRepo": "plugsy/core"
