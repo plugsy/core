@@ -12,8 +12,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/user/Internal/DockerDash/:/home/node/app
-      - notused:/home/node/app/node_modules
+      - .:/home/node/app
     ports:
       - '3000:3000'
 
