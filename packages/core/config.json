@@ -20,7 +20,7 @@
       "config": {
         "sites": [
           {
-            "request": "localhost:8148",
+            "request": "https://google.com",
             "display": {
               "name": "Home Assistant",
               "category": "Home",
@@ -29,7 +29,7 @@
             }
           },
           {
-            "request": "localhost:1294",
+            "request": "https://localhost:1294",
             "display": {
               "name": "Unifi",
               "category": "Home",

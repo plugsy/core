@@ -4,7 +4,7 @@ services:
   dockerdash-app:
     container_name: dockerdash
     build:
-      context: .
+      context: ./packages/core
       dockerfile: Dockerfile
       target: base
     command: yarn dev

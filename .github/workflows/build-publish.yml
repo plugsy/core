@@ -17,21 +17,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Setup yarn cache
-        uses: actions/cache@v2
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
 
       - name: Run schemagen to ensure that the file gets included in the release
         run: yarn run gen:json
 
       - name: Get version from package.json
         id: initversion
-        run: echo "::set-output name=version::$(yarn run --silent get-version)"
+        run: echo "::set-output name=version::$(yarn workspace @plugsy/core run --silent get-version)"
 
       - name: Release to GitHub
         id: release
@@ -41,11 +33,11 @@ jobs:
           GIT_AUTHOR_EMAIL: thomas@thenairn.com
           GIT_COMMITTER_NAME: add-bot
           GIT_COMMITTER_EMAIL: thomas@thenairn.com
-        run: npm run release
+        run: yarn run release
 
       - name: Get version from package.json after release step
         id: extractver
-        run: echo "::set-output name=version::$(yarn run --silent get-version)"
+        run: echo "::set-output name=version::$(yarn workspace @plugsy/core run --silent get-version)"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@master
@@ -76,7 +68,7 @@ jobs:
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./packages/core
           push: true
           # platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: plugsy/core:${{ steps.extractver.outputs.version }},plugsy/core:latest
