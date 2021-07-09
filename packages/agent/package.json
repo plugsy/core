@@ -1,0 +1,31 @@
+{
+  "name": "@plugsy/agent",
+  "version": "4.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build:lib": "tsc --build",
+    "build:dist": "parcel build ./src/server.ts --dist-dir ./dist",
+    "build": "yarn build:lib && yarn build:dist",
+    "gen:json": "typescript-json-schema ./tsconfig.json Config --aliasRefs --ignoreErrors --required --strictNullChecks -o ./src/config-schema.json",
+    "gen": "yarn gen:json"
+  },
+  "dependencies": {
+    "@plugsy/common": "workspace:packages/common",
+    "@plugsy/connectors": "workspace:packages/connectors",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.4.0",
+    "graphql-tag": "^2.12.5",
+    "rxjs": "^7.2.0",
+    "winston": "^3.3.3"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "devDependencies": {
+    "parcel": "next",
+    "typescript": "^4.3.5",
+    "typescript-json-schema": "^0.50.1"
+  },
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts"
+}

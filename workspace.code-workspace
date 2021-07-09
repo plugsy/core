@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/agent"
+    },
+    {
+      "path": "packages/common"
+    },
+    {
+      "path": "packages/connectors"
+    }
+  ],
+  "settings": {
+    "typescript.tsdk": "core/.yarn/sdks/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "eslint.nodePath": ".yarn/sdks"
+  }
+}

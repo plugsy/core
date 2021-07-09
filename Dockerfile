@@ -4,12 +4,9 @@ WORKDIR /home/node/app
 
 FROM base as production
 
-COPY package.json .
-COPY yarn.lock .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js .
 COPY .yarn .yarn
-COPY .yarnrc.yml .
-COPY packages/core packages/core
-COPY .pnp.js .
+COPY packages/ packages/
 
 ENV NODE_ENV=development
 ENV NODE_PATH=./dist
