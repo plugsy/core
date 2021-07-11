@@ -7,11 +7,11 @@ import {
 } from "@plugsy/connectors";
 import { filter, map, ReplaySubject, share, tap } from "rxjs";
 import { Logger } from "winston";
-import { agent, AgentConfig } from "./agent";
+import { agent, AgentConfig } from "./";
 import schema from "./config-schema.json";
 import { environment } from "./environment";
 
-interface Config {
+export interface Config {
   loggingLevel?: string;
   connectors: ConnectorConfig[] | ConnectorConfig;
   agent?: AgentConfig;

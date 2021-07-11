@@ -5,17 +5,28 @@ import { Logger } from "winston";
 
 import { ApolloServer } from "apollo-server-express";
 import { ContextDependencies, serverOptions } from "./schema";
-import { getServerConfig } from "./config";
+import { loadConfig, createLogger } from "@plugsy/common";
 import { filter, map, share, tap } from "rxjs/operators";
-import { getConnector } from "./connectors";
-import { createConnectionPool } from "./connection-pool";
-import { createItemServer } from "./item-server";
+import {
+  getConnector,
+  createConnectionPool,
+  createItemServer,
+} from "@plugsy/connectors";
 import { environment } from "./environment";
-import { agent } from "./agent";
 import { ReplaySubject } from "rxjs";
-import { createLogger } from "./logger";
+import { AgentConfig, agent } from "@plugsy/agent";
+import { ConnectorConfig } from "@plugsy/connectors";
+import { ThemeConfig } from "../client/theme";
+import schema from "./config-schema.json";
 
 const { port, dev } = environment();
+
+export interface ServerConfig {
+  loggingLevel?: string;
+  agent?: AgentConfig;
+  connectors: ConnectorConfig[] | ConnectorConfig;
+  theme?: ThemeConfig;
+}
 
 async function tryQuietly(fn: () => any | Promise<any>) {
   return async () => {
@@ -29,7 +40,24 @@ function watchConfig(filePath: string, logger: Logger) {
   logger = logger.child({
     component: "watchConfig",
   });
-  const config$ = getServerConfig(filePath, logger).pipe(
+  const config$ = loadConfig<ServerConfig>(
+    filePath,
+    logger,
+    {
+      connectors: [
+        {
+          type: "DOCKER",
+          config: {},
+        },
+      ],
+    },
+    [
+      {
+        name: "Config",
+        schema,
+      },
+    ]
+  ).pipe(
     share({
       connector: () => new ReplaySubject(1),
       resetOnComplete: true,

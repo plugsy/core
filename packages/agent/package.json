@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build:lib": "tsc --build",
-    "build:dist": "parcel build ./src/server.ts --dist-dir ./dist",
-    "build": "yarn build:lib && yarn build:dist",
+    "build": "yarn gen && yarn build:lib",
     "gen:json": "typescript-json-schema ./tsconfig.json Config --aliasRefs --ignoreErrors --required --strictNullChecks -o ./src/config-schema.json",
     "gen": "yarn gen:json"
   },
@@ -26,6 +25,6 @@
     "typescript": "^4.3.5",
     "typescript-json-schema": "^0.50.1"
   },
-  "main": "dist/lib/index.js",
-  "types": "dist/lib/index.d.ts"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
 }

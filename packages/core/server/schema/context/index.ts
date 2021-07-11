@@ -2,8 +2,7 @@ import { ExpressContext, Operation } from "apollo-server-express";
 import { NextPageContext } from "next";
 import { BehaviorSubject, Observable } from "rxjs";
 import { filter, takeUntil } from "rxjs/operators";
-import type { ConnectionPool } from "../../connection-pool";
-import type { ItemServer } from "../../item-server";
+import type { ItemServer, ConnectionPool } from "@plugsy/connectors";
 import { Logger } from "winston";
 import { nanoid } from "nanoid";
 

@@ -46,12 +46,11 @@
     "get-version": "node -pe \"require('./package.json').version\"",
     "release": "semantic-release",
     "type-check": "tsc",
-    "build": "yarn gen && parcel build ./server/index.ts --target node && ANALYZE=TRUE next build",
     "web:prod": "next start",
     "analyze": "serve .next/analyze",
-    "gen:icons": "node icongenerator.js",
     "gen:json": "typescript-json-schema ./tsconfig.json ServerConfig --aliasRefs --ignoreErrors --required --strictNullChecks -o ./server/config-schema.json && yarn node fix-config-json.js ./server/config-schema.json",
-    "gen": "yarn gen:icons && yarn gen:json",
+    "gen": "yarn gen:json",
+    "build": "yarn gen && parcel build ./server/index.ts --target node && ANALYZE=TRUE next build",
     "dev:build": "parcel ./server/index.ts --target node",
     "dev": "yarn gen && concurrently --kill-others-on-fail -n  gql,parcel,node  \"yarn dev:build\" \"yarn start\"",
     "test": "jest"
@@ -60,6 +59,10 @@
     "@apollo/client": "^3.3.21",
     "@babel/runtime": "^7.14.6",
     "@graphql-tools/schema": "^7.1.5",
+    "@plugsy/agent": "workspace:packages/agent",
+    "@plugsy/common": "workspace:packages/common",
+    "@plugsy/connectors": "workspace:packages/connectors",
+    "@plugsy/dynamic-icons": "workspace:packages/dynamic-icons",
     "@popperjs/core": "^2.9.2",
     "@react-icons/all-files": "^4.1.0",
     "apollo-link-logger": "^2.0.0",
@@ -83,7 +86,6 @@
     "raw-loader": "^4.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-fitty": "^1.0.1",
     "react-is": "^17.0.2",
     "react-tiny-popover": "^6.0.5",
     "react-use": "^17.2.4",
@@ -92,8 +94,7 @@
     "styled-components": "^5.3.0",
     "subscriptions-transport-ws": "^0.9.19",
     "webpack": "^5.43.0",
-    "winston": "^3.3.3",
-    "winston-console-format": "^1.0.8"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

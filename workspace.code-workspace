@@ -14,10 +14,13 @@
     },
     {
       "path": "packages/connectors"
+    },
+    {
+      "path": "packages/dynamic-icons"
     }
   ],
   "settings": {
-    "typescript.tsdk": "./.yarn/sdks/typescript/lib",
+    "typescript.tsdk": "DockerDash/.yarn/sdks/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "eslint.nodePath": ".yarn/sdks"
   }

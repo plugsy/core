@@ -1,10 +1,7 @@
 const path = require("path");
 const fs = require("fs");
-const TO_FOLDER = `./client/components/icons`;
-
-const location = `./node_modules/`;
+const TO_FOLDER = `./src`;
 const pkg = "@react-icons/all-files";
-
 
 try {
   console.warn("CLEANING ICON FILES...");
@@ -39,7 +36,9 @@ export const DynamicIcon: React.FC<DynamicIconProps> = ({
   });
   return;
 }
-const fullLocation = path.dirname(require.resolve('@react-icons/all-files/package.json'));
+const fullLocation = path.dirname(
+  require.resolve("@react-icons/all-files/package.json")
+);
 
 console.log(fullLocation);
 const files = fs.readdirSync(fullLocation);
