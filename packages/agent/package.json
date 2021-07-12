@@ -3,6 +3,7 @@
   "version": "4.0.0",
   "license": "MIT",
   "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n tsc,node 'tsc -b --watch' 'nodemon'",
     "build:lib": "tsc --build",
     "build": "yarn gen && yarn build:lib",
     "gen:json": "typescript-json-schema ./tsconfig.json Config --aliasRefs --ignoreErrors --required --strictNullChecks -o ./src/config-schema.json",
@@ -21,6 +22,8 @@
     "node": "14"
   },
   "devDependencies": {
+    "concurrently": "^6.2.0",
+    "nodemon": "^2.0.12",
     "parcel": "next",
     "typescript": "^4.3.5",
     "typescript-json-schema": "^0.50.1"

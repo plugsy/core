@@ -4,7 +4,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const withPlugins = require("next-compose-plugins");
 const withFonts = require("next-fonts");
 const withImages = require("next-images");
-const withTM = require('next-transpile-modules')(['@plugsy/dynamic-icons']);
 
 const withGraphQL = () => ({
   webpack: (config, options) => {
@@ -27,7 +26,6 @@ module.exports = withPlugins([
   // }), // TODO
   withGraphQL,
   withBundleAnalyzer,
-  withTM,
   {
     webpack5: true,
   },

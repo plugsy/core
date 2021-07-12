@@ -14,9 +14,6 @@
     },
     {
       "path": "packages/connectors"
-    },
-    {
-      "path": "packages/dynamic-icons"
     }
   ],
   "settings": {

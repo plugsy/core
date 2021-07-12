@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const TO_FOLDER = `./src`;
+const TO_FOLDER = `./client/components/icons`;
 const pkg = "@react-icons/all-files";
 
 try {

@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "allowJs": true,
@@ -20,5 +21,6 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts", "src/**/*.json"]
+  "include": ["src/**/*.ts", "src/**/*.json"],
+  "references": [{ "path": "../common" }, { "path": "../connectors" }]
 }

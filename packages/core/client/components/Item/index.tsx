@@ -6,7 +6,7 @@ import { VscJson } from "@react-icons/all-files/vsc/VscJson";
 import { HiOutlineGlobeAlt } from "@react-icons/all-files/hi/HiOutlineGlobeAlt";
 import { BsQuestion } from "@react-icons/all-files/bs/BsQuestion";
 import styled from "styled-components";
-import { DynamicIcon } from "@plugsy/dynamic-icons";
+import { DynamicIcon } from "../icons";
 import { SSRPopover } from "../SSRPopover";
 import { ArrowContainer } from "react-tiny-popover";
 import { getColor, getComponentTheme, Theme } from "../../theme";

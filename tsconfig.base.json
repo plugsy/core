@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "@plugsy/common": ["packages/common/src"],
+      "@plugsy/connectors": ["packages/connectors/src"],
+      "@plugsy/agent": ["packages/agent/src"]
+    }
+  }
+}
