@@ -16,9 +16,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2020",
-    "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "noEmit": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"]
 }

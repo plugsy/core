@@ -17,6 +17,6 @@
     "gen:icons": "node ./icongenerator.js",
     "build": "yarn gen:icons && tsc --build"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts"
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx"
 }
