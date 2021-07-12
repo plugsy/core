@@ -3,6 +3,7 @@
   "version": "4.0.0",
   "license": "MIT",
   "scripts": {
+    "start": "node ./dist/server.js",
     "dev": "concurrently --kill-others-on-fail -n tsc,node 'tsc -b --watch' 'nodemon'",
     "build:lib": "tsc --build",
     "build": "yarn gen && yarn build:lib",

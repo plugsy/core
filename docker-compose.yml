@@ -1,13 +1,25 @@
 version: '2'
 
 services:
-  dockerdash-app:
-    container_name: dockerdash
+  # dockerdash-app:
+  #   container_name: dockerdash
+  #   build:
+  #     context: ./packages/core
+  #     dockerfile: Dockerfile
+  #     target: base
+  #   command: yarn dev
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - .:/home/node/app
+  #   ports:
+  #     - '3000:3000'
+  dockerdash-agent:
+    container_name: dockerdash-agent
     build:
-      context: ./packages/core
-      dockerfile: Dockerfile
-      target: base
-    command: yarn dev
+      context: .
+      dockerfile: packages/agent/Dockerfile
     environment:
       - CHOKIDAR_USEPOLLING=true
     volumes:
