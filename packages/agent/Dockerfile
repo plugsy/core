@@ -73,9 +73,7 @@ RUN yarn build packages/agent
 ## Our nice plugin creates a yarn install just for us
 ## Your workspace should have a `prepack` script if you need to make sure that everything is built before
 ##
-RUN yarn prod-install --pack /opt/demo/prod
-
-WORKDIR /opt/demo/prod
+RUN yarn workspaces focus @plugsy/agent --production
 
 ##
 ## Final Image
@@ -107,13 +105,14 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 ## This includes our yarn install (like grabbing node_modules of old)
 ## Then includes the built code
 ##
-COPY --chown=node:node --from=install /opt/demo/prod/ /opt/demo/
+COPY --chown=node:node --from=install /opt/demo/ /opt/prod/
 
 ##
 ## How you start and build your app is up to you this is just an example
 ##
+WORKDIR /opt/prod
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-## This assums you have something like // file:package.json {"publishConfig": {"main": "lib/index.js"}}
+
 # CMD ["gosu", "node", "yarn", "workspace", "@plugsy/agent", "run", "start"]
-CMD ls -lash /opt/demo/
+CMD ls -lash /opt/prod /opt/prod/.yarn /opt/prod/.yarn/cache

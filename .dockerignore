@@ -1,14 +1,16 @@
 # add git-ignore syntax here of things you don't want copied into docker image
 
-.git
+**/.git
 *Dockerfile*
-*docker-compose*
-node_modules
-.cache
-.next
-.vscode
-dist
+**/*docker-compose*
+**/node_modules
+**/.cache
+**/.next
+**/.vscode
+**/dist
 *generated*
-.github
-README.md
+**/.github
+**/README.md
 **/Dockerfile
+**/tsconfig.tsbuildinfo
+
