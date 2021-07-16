@@ -5,7 +5,9 @@
     "dist/*": true,
     "yarn.lock": true,
     "**/.yarn": true,
-    "**/.pnp.*": true
+    "**/.pnp.*": true,
+    "**/.cache/**": true,
+    "**/.parcel-cache/**": true,
   },
   "eslint.nodePath": ".yarn/sdks",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",

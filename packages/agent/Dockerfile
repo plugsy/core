@@ -3,15 +3,11 @@
 ##
 ## Base
 ##
-FROM node:14 as install-prep
+FROM node:14-alpine as install-prep
 
 ARG BUILD_DIR=packages/agent
 
 WORKDIR /opt/demo
-
-COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
-COPY package.json .
-COPY yarn.lock .
 
 ##
 ## Only include non stateful files from yarn
@@ -23,9 +19,10 @@ COPY yarn.lock .
 ## !.yarn/releases
 ## !.yarn/plugins
 ##
+
+COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml .
 COPY .yarn/ /opt/demo/.yarn/
-COPY .yarnrc.yml /opt/demo/.yarnrc.yml
-COPY .pnp.js /opt/demo/.pnp.js
 
 ##
 ## If your workspace depends on any other workspace
@@ -41,7 +38,7 @@ COPY .pnp.js /opt/demo/.pnp.js
 
 COPY packages/common /opt/demo/packages/common
 COPY packages/connectors /opt/demo/packages/connectors
-# CMD ["ls", "-lash" ,"/opt/demo/packages/"]
+COPY packages/agent /opt/demo/packages/agent
 
 ##
 ## Install prod dependencies
@@ -56,7 +53,6 @@ WORKDIR /opt/demo
 ##
 RUN yarn install
 
-WORKDIR /opt/demo
 
 ##
 ## Copy the workspace we are building here
@@ -64,21 +60,15 @@ WORKDIR /opt/demo
 ## ie. a project root tsconfig.json
 ##
 COPY tsconfig.base.json tsconfig.base.json
-COPY packages/agent /opt/demo/packages/agent
 
 RUN yarn build packages/agent
 
-##
-## This is our secret weapon
-## Our nice plugin creates a yarn install just for us
-## Your workspace should have a `prepack` script if you need to make sure that everything is built before
-##
-RUN yarn workspaces focus @plugsy/agent --production
+RUN yarn workspaces focus -A --production
 
 ##
 ## Final Image
 ##
-FROM node:14
+FROM node:14-alpine
 ARG BUILD_DIR=packages/agent
 WORKDIR /opt/demo
 
@@ -96,10 +86,10 @@ WORKDIR /opt/demo
 
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
   --mount=type=cache,target=/var/lib/apt\
-  apt-get update && apt-get install -y \
-  gosu \
+  apk update && apk add \
+  su-exec \
   dumb-init \
-  && gosu node true
+  && su-exec node true
 
 ##
 ## This includes our yarn install (like grabbing node_modules of old)
@@ -114,5 +104,4 @@ WORKDIR /opt/prod
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-# CMD ["gosu", "node", "yarn", "workspace", "@plugsy/agent", "run", "start"]
-CMD ls -lash /opt/prod /opt/prod/.yarn /opt/prod/.yarn/cache
+CMD ["su-exec", "node", "yarn", "workspace", "@plugsy/agent", "run", "start"]

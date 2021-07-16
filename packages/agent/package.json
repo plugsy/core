@@ -25,7 +25,6 @@
   "devDependencies": {
     "concurrently": "^6.2.0",
     "nodemon": "^2.0.12",
-    "parcel": "next",
     "typescript": "^4.3.5",
     "typescript-json-schema": "^0.50.1"
   },

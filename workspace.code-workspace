@@ -17,7 +17,7 @@
     }
   ],
   "settings": {
-    "typescript.tsdk": "DockerDash/.yarn/sdks/typescript/lib",
+    "typescript.tsdk": "core/.yarn/sdks/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "eslint.nodePath": ".yarn/sdks"
   }
