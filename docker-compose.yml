@@ -15,11 +15,25 @@ services:
   #     - .:/home/node/app
   #   ports:
   #     - '3000:3000'
-  # dockerdash-agent:
-  #   container_name: dockerdash-agent
+  dockerdash-agent:
+    container_name: dockerdash-agent
+    build:
+      context: .
+      dockerfile: packages/agent/Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PGID=976
+      - PUID=976
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/home/node/app
+    ports:
+      - '3000:3000'
+  # dockerdash-core:
+  #   container_name: dockerdash-core
   #   build:
   #     context: .
-  #     dockerfile: packages/agent/Dockerfile
+  #     dockerfile: packages/core/Dockerfile
   #   environment:
   #     - CHOKIDAR_USEPOLLING=true
   #   volumes:
@@ -27,18 +41,6 @@ services:
   #     - .:/home/node/app
   #   ports:
   #     - '3000:3000'
-  dockerdash-core:
-    container_name: dockerdash-core
-    build:
-      context: .
-      dockerfile: packages/core/Dockerfile
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - .:/home/node/app
-    ports:
-      - '3000:3000'
 
 
 volumes:

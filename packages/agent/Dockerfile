@@ -100,8 +100,8 @@ COPY --chown=node:node --from=install /opt/demo/ /opt/prod/
 ##
 ## How you start and build your app is up to you this is just an example
 ##
-WORKDIR /opt/prod
+WORKDIR /opt/prod/packages/agent
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD ["su-exec", "node", "yarn", "workspace", "@plugsy/agent", "run", "start"]
+CMD su-exec ${PUID}:${PGID} yarn node dist/server.js
