@@ -1,11 +1,72 @@
 {
   "private": true,
+  "version": "5.0.0",
   "workspaces": [
     "packages/*"
   ],
+  "name": "@plugsy/all",
   "scripts": {
     "gen:gql": "graphql-codegen",
-    "gen": "yarn gen:gql && yarn workspaces foreach run gen"
+    "gen:artifacts": "",
+    "gen": "yarn gen:gql && yarn workspaces foreach run gen",
+    "release": "semantic-release"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "monorepo",
+        "channel": "beta",
+        "prerelease": "beta"
+      }
+    ],
+    "plugins": [
+      [
+        "@semantic-release/exec",
+        {
+          "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
+        }
+      ],
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "./packages/core/server/config-schema.json",
+              "label": "Core Config Schema"
+            },
+            {
+              "path": "./packages/agent/src/config-schema.json",
+              "label": "Agent Config Schema"
+            }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ]
+    ]
   },
   "dependencies": {
     "graphql": "^15.5.1",
@@ -24,7 +85,15 @@
     "@graphql-codegen/typescript-operations": "^1.18.3",
     "@graphql-codegen/typescript-react-apollo": "^2.3.0",
     "@graphql-codegen/typescript-resolvers": "^1.19.5",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/github": "^7.2.3",
+    "@semantic-release/npm": "^7.1.3",
+    "@semantic-release/release-notes-generator": "^9.0.3",
     "babel-types": "^6.26.0",
+    "conventional-changelog-conventionalcommits": "^4.6.0",
+    "semantic-release": "^17.4.4",
     "typescript": "^4.3.5"
   }
 }
