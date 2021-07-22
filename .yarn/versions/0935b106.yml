@@ -1,0 +1,5 @@
+undecided:
+  - "@plugsy/agent"
+  - "@plugsy/common"
+  - "@plugsy/connectors"
+  - "@plugsy/core"

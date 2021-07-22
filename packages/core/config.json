@@ -1,0 +1,53 @@
+{
+  "$schema": "./server/config-schema.json",
+  "loggingLevel": "verbose",
+  "theme": {
+    "pages": {
+      "Home": {
+        "HomeContainer": {
+          "maxWidth": 1500
+        }
+      }
+    }
+  },
+  "connectors": [
+    {
+      "type": "DOCKER",
+      "config": {}
+    },
+    {
+      "type": "WEBSITE",
+      "config": {
+        "sites": [
+          {
+            "request": "https://google.com",
+            "display": {
+              "name": "Home Assistant",
+              "category": "Home",
+              "icon": "si/SiHomeassistant",
+              "link": "https://my.homeassistant.com"
+            }
+          },
+          {
+            "request": "https://localhost:1294",
+            "display": {
+              "name": "Unifi",
+              "category": "Home",
+              "icon": "bi/BiNetworkChart",
+              "link": "https://my.unifi.com"
+            }
+          },
+          {
+            "request": "https://localhost:9345",
+            "display": {
+              "name": "Unraid",
+              "category": "Home",
+              "icon": "fi/FiServer",
+              "link": "https://my.unraid.com"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
