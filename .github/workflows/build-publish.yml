@@ -38,7 +38,7 @@ jobs:
   buildcore:
     needs: getversion
     name: "Build Release Core"
-    if: jobs.getversion.outputs.shouldBuild
+    if: needs.getversion.outputs.shouldBuild
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -78,7 +78,7 @@ jobs:
           context: .
           dockerfile: packages/core/Dockerfile
           push: true
-          tags: plugsy/core:${{ jobs.getversion.outputs.version }},plugsy/core:latest
+          tags: plugsy/core:${{ needs.getversion.outputs.version }},plugsy/core:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -94,7 +94,7 @@ jobs:
   buildagent:
     needs: getversion
     name: "Build Release Agent"
-    if: jobs.getversion.outputs.shouldBuild
+    if: needs.getversion.outputs.shouldBuild
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -134,7 +134,7 @@ jobs:
           context: .
           dockerfile: packages/agent/Dockerfile
           push: true
-          tags: plugsy/agent:${{ jobs.getversion.outputs.version }},plugsy/agent:latest
+          tags: plugsy/agent:${{ needs.getversion.outputs.version }},plugsy/agent:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -149,8 +149,8 @@ jobs:
 
   postbuild:
     runs-on: ubuntu-latest
-    needs: [buildcore, buildagent]
-    if: jobs.getversion.outputs.shouldBuild
+    needs: [getversion, buildcore, buildagent]
+    if: needs.getversion.outputs.shouldBuild
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -177,15 +177,15 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "https:\\/\\/github\\.com\\/plugsy\\/core\\/releases\\/download\\/(.*?)\\/config-schema\\.json"
-          replace: "https://github.com/plugsy/core/releases/download/v${{ jobs.getversion.outputs.version }}/config-schema.json"
+          replace: "https://github.com/plugsy/core/releases/download/v${{ needs.getversion.outputs.version }}/config-schema.json"
 
       - name: Create Pull Request with updated package files
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(release): ${{ jobs.getversion.outputs.version }}"
+          commit-message: "chore(release): ${{ needs.getversion.outputs.version }}"
           committer: add-bot <thomas@thenairn.com>
           author: add-bot <thomas@thenairn.com>
-          title: "chore(release): ${{ jobs.getversion.outputs.version }}"
-          body: "Version bump in package.json and yarn.lock for release [${{ jobs.getversion.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ jobs.getversion.outputs.version }})"
-          branch: version-bump/${{ jobs.getversion.outputs.version }}
+          title: "chore(release): ${{ needs.getversion.outputs.version }}"
+          body: "Version bump in package.json and yarn.lock for release [${{ needs.getversion.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ needs.getversion.outputs.version }})"
+          branch: version-bump/${{ needs.getversion.outputs.version }}
