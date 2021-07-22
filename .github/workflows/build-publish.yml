@@ -76,7 +76,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          dockerfile: packages/core/Dockerfile
+          file: packages/core/Dockerfile
           push: true
           tags: plugsy/core:${{ needs.getversion.outputs.version }},plugsy/core:latest
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -132,7 +132,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          dockerfile: packages/agent/Dockerfile
+          file: packages/agent/Dockerfile
           push: true
           tags: plugsy/agent:${{ needs.getversion.outputs.version }},plugsy/agent:latest
           cache-from: type=local,src=/tmp/.buildx-cache
