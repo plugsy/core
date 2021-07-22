@@ -78,7 +78,7 @@ jobs:
           context: .
           dockerfile: packages/core/Dockerfile
           push: true
-          tags: plugsy/core:${{ jobs.determineVersion.outputs.version }},plugsy/core:latest
+          tags: plugsy/core:${{ jobs.getversion.outputs.version }},plugsy/core:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -134,7 +134,7 @@ jobs:
           context: .
           dockerfile: packages/agent/Dockerfile
           push: true
-          tags: plugsy/agent:${{ jobs.determineVersion.outputs.version }},plugsy/agent:latest
+          tags: plugsy/agent:${{ jobs.getversion.outputs.version }},plugsy/agent:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -177,15 +177,15 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "https:\\/\\/github\\.com\\/plugsy\\/core\\/releases\\/download\\/(.*?)\\/config-schema\\.json"
-          replace: "https://github.com/plugsy/core/releases/download/v${{ jobs.determineVersion.outputs.version }}/config-schema.json"
+          replace: "https://github.com/plugsy/core/releases/download/v${{ jobs.getversion.outputs.version }}/config-schema.json"
 
       - name: Create Pull Request with updated package files
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(release): ${{ jobs.determineVersion.outputs.version }}"
+          commit-message: "chore(release): ${{ jobs.getversion.outputs.version }}"
           committer: add-bot <thomas@thenairn.com>
           author: add-bot <thomas@thenairn.com>
-          title: "chore(release): ${{ jobs.determineVersion.outputs.version }}"
-          body: "Version bump in package.json and yarn.lock for release [${{ jobs.determineVersion.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ jobs.determineVersion.outputs.version }})"
-          branch: version-bump/${{ jobs.determineVersion.outputs.version }}
+          title: "chore(release): ${{ jobs.getversion.outputs.version }}"
+          body: "Version bump in package.json and yarn.lock for release [${{ jobs.getversion.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ jobs.getversion.outputs.version }})"
+          branch: version-bump/${{ jobs.getversion.outputs.version }}
