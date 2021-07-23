@@ -1,0 +1,15 @@
+schema: "src/*.graphql"
+generates:
+  src/index.ts:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      useIndexSignature: true
+      defaultMapper: DeepPartial<{T}>
+      scalars:
+        Date: Date
+        Void: void
