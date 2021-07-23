@@ -2608,6 +2608,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@plugsy/agent@workspace:packages/agent"
   dependencies:
+    "@graphql-codegen/add": ^2.0.2
+    "@graphql-codegen/cli": ^1.21.6
+    "@graphql-codegen/import-types-preset": ^1.18.5
+    "@graphql-codegen/named-operations-object": ^1.18.2
+    "@graphql-codegen/near-operation-file-preset": ^1.18.4
+    "@graphql-codegen/typed-document-node": ^1.18.9
+    "@graphql-codegen/typescript": ^1.22.4
+    "@graphql-codegen/typescript-document-nodes": ^1.17.15
+    "@graphql-codegen/typescript-graphql-request": 3.2.4
+    "@graphql-codegen/typescript-operations": ^1.18.3
+    "@graphql-codegen/typescript-react-apollo": ^2.3.0
+    "@graphql-codegen/typescript-resolvers": ^1.19.5
     "@plugsy/common": "workspace:packages/common"
     "@plugsy/connectors": "workspace:packages/connectors"
     concurrently: ^6.2.0
@@ -2626,18 +2638,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@plugsy/all@workspace:."
   dependencies:
-    "@graphql-codegen/add": ^2.0.2
-    "@graphql-codegen/cli": ^1.21.6
-    "@graphql-codegen/import-types-preset": ^1.18.5
-    "@graphql-codegen/named-operations-object": ^1.18.2
-    "@graphql-codegen/near-operation-file-preset": ^1.18.4
-    "@graphql-codegen/typed-document-node": ^1.18.9
-    "@graphql-codegen/typescript": ^1.22.4
-    "@graphql-codegen/typescript-document-nodes": ^1.17.15
-    "@graphql-codegen/typescript-graphql-request": 3.2.4
-    "@graphql-codegen/typescript-operations": ^1.18.3
-    "@graphql-codegen/typescript-react-apollo": ^2.3.0
-    "@graphql-codegen/typescript-resolvers": ^1.19.5
     "@semantic-release/changelog": ^5.0.1
     "@semantic-release/commit-analyzer": ^8.0.1
     "@semantic-release/exec": ^5.0.0
@@ -2688,11 +2688,24 @@ __metadata:
     "@apollo/client": ^3.3.21
     "@babel/core": ^7.14.6
     "@babel/runtime": ^7.14.6
+    "@graphql-codegen/add": ^2.0.2
+    "@graphql-codegen/cli": ^1.21.6
+    "@graphql-codegen/import-types-preset": ^1.18.5
+    "@graphql-codegen/named-operations-object": ^1.18.2
+    "@graphql-codegen/near-operation-file-preset": ^1.18.4
+    "@graphql-codegen/typed-document-node": ^1.18.9
+    "@graphql-codegen/typescript": ^1.22.4
+    "@graphql-codegen/typescript-document-nodes": ^1.17.15
+    "@graphql-codegen/typescript-graphql-request": 3.2.4
+    "@graphql-codegen/typescript-operations": ^1.18.3
+    "@graphql-codegen/typescript-react-apollo": ^2.3.0
+    "@graphql-codegen/typescript-resolvers": ^1.19.5
     "@graphql-tools/schema": ^7.1.5
     "@next/bundle-analyzer": ^11.0.1
     "@plugsy/agent": "workspace:packages/agent"
     "@plugsy/common": "workspace:packages/common"
     "@plugsy/connectors": "workspace:packages/connectors"
+    "@plugsy/schema": "workspace:packages/schema"
     "@react-icons/all-files": ^4.1.0
     "@types/express": ^4.17.13
     "@types/node": ^16.0.0
@@ -2733,6 +2746,29 @@ __metadata:
     typescript-json-schema: ^0.50.1
     webpack: ^5.43.0
     winston: ^3.3.3
+  languageName: unknown
+  linkType: soft
+
+"@plugsy/schema@workspace:packages/schema":
+  version: 0.0.0-use.local
+  resolution: "@plugsy/schema@workspace:packages/schema"
+  dependencies:
+    "@graphql-codegen/add": ^2.0.2
+    "@graphql-codegen/cli": ^1.21.6
+    "@graphql-codegen/import-types-preset": ^1.18.5
+    "@graphql-codegen/named-operations-object": ^1.18.2
+    "@graphql-codegen/near-operation-file-preset": ^1.18.4
+    "@graphql-codegen/typed-document-node": ^1.18.9
+    "@graphql-codegen/typescript": ^1.22.4
+    "@graphql-codegen/typescript-document-nodes": ^1.17.15
+    "@graphql-codegen/typescript-graphql-request": 3.2.4
+    "@graphql-codegen/typescript-operations": ^1.18.3
+    "@graphql-codegen/typescript-react-apollo": ^2.3.0
+    "@graphql-codegen/typescript-resolvers": ^1.19.5
+    graphql: ^15.5.1
+    graphql-request: ^3.4.0
+    graphql-tag: ^2.12.5
+    typescript: ^4.3.5
   languageName: unknown
   linkType: soft
 

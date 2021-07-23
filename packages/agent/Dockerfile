@@ -21,7 +21,7 @@ WORKDIR /opt/demo
 ##
 
 COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
-COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
 COPY .yarn/ /opt/demo/.yarn/
 
 ##
@@ -36,6 +36,7 @@ COPY .yarn/ /opt/demo/.yarn/
 ## by defautl from your base image.
 ##
 
+COPY packages/schema /opt/demo/packages/schema
 COPY packages/common /opt/demo/packages/common
 COPY packages/connectors /opt/demo/packages/connectors
 COPY packages/agent /opt/demo/packages/agent
@@ -53,13 +54,7 @@ WORKDIR /opt/demo
 ##
 RUN yarn install
 
-
-##
-## Copy the workspace we are building here
-## include any files outside of the workspace that maybe needed to build also
-## ie. a project root tsconfig.json
-##
-COPY tsconfig.base.json tsconfig.base.json
+RUN yarn gen
 
 RUN yarn build packages/agent
 

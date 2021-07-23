@@ -5,7 +5,7 @@
 ##
 FROM node:14-alpine as install-prep
 
-ARG BUILD_DIR=packages/core
+ARG BUILD_DIR=packages/agent
 
 WORKDIR /opt/demo
 
@@ -20,6 +20,7 @@ WORKDIR /opt/demo
 ## !.yarn/plugins
 ##
 
+COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
 COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
 COPY .yarn/ /opt/demo/.yarn/
 
@@ -35,17 +36,15 @@ COPY .yarn/ /opt/demo/.yarn/
 ## by defautl from your base image.
 ##
 
-COPY packages/schema /opt/demo/packages/schema
 COPY packages/common /opt/demo/packages/common
 COPY packages/connectors /opt/demo/packages/connectors
 COPY packages/agent /opt/demo/packages/agent
-COPY packages/core /opt/demo/packages/core
 
 ##
 ## Install prod dependencies
 ##
 FROM install-prep as install
-ARG BUILD_DIR=packages/core
+ARG BUILD_DIR=packages/agent
 
 WORKDIR /opt/demo
 
@@ -54,22 +53,17 @@ WORKDIR /opt/demo
 ##
 RUN yarn install
 
+RUN yarn gen
 
-##
-## Copy the workspace we are building here
-## include any files outside of the workspace that maybe needed to build also
-## ie. a project root tsconfig.json
-##
+RUN yarn build packages/agent
 
-RUN yarn build packages/core
-
-# RUN yarn workspaces focus -A --production
+RUN yarn workspaces focus -A --production
 
 ##
 ## Final Image
 ##
 FROM node:14-alpine
-ARG BUILD_DIR=packages/core
+ARG BUILD_DIR=packages/agent
 WORKDIR /opt/demo
 
 ##
@@ -97,9 +91,11 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 ##
 COPY --chown=node:node --from=install /opt/demo/ /opt/prod/
 
-WORKDIR /opt/prod/packages/core
+##
+## How you start and build your app is up to you this is just an example
+##
+WORKDIR /opt/prod/packages/agent
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-CMD su-exec ${PUID}:${PGID} yarn node dist/index.js
-# CMD ls -lash /opt/prod /opt/prod/packages /opt/prod/packages/core /opt/prod/packages/core/dist
+CMD su-exec ${PUID}:${PGID} yarn node dist/server.js

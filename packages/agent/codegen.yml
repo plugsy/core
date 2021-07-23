@@ -1,0 +1,15 @@
+schema: "../schema/src/**/*.graphql"
+generates:
+  src/agent/agent.generated.graphql.ts:
+    documents: "src/agent/*.graphql"
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-graphql-request
+      - typescript-operations
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      rawRequest: true
+

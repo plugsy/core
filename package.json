@@ -6,9 +6,7 @@
   ],
   "name": "@plugsy/all",
   "scripts": {
-    "gen:gql": "graphql-codegen",
-    "gen:artifacts": "",
-    "gen": "yarn gen:gql && yarn workspaces foreach run gen",
+    "gen": "yarn workspaces foreach run gen",
     "release": "semantic-release"
   },
   "release": {
@@ -73,18 +71,6 @@
     "graphql-tag": "^2.12.5"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^2.0.2",
-    "@graphql-codegen/cli": "^1.21.6",
-    "@graphql-codegen/import-types-preset": "^1.18.5",
-    "@graphql-codegen/named-operations-object": "^1.18.2",
-    "@graphql-codegen/near-operation-file-preset": "^1.18.4",
-    "@graphql-codegen/typed-document-node": "^1.18.9",
-    "@graphql-codegen/typescript": "^1.22.4",
-    "@graphql-codegen/typescript-document-nodes": "^1.17.15",
-    "@graphql-codegen/typescript-graphql-request": "3.2.4",
-    "@graphql-codegen/typescript-operations": "^1.18.3",
-    "@graphql-codegen/typescript-react-apollo": "^2.3.0",
-    "@graphql-codegen/typescript-resolvers": "^1.19.5",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/exec": "^5.0.0",
