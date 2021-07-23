@@ -7,6 +7,7 @@
   "name": "@plugsy/all",
   "scripts": {
     "gen": "yarn workspaces foreach run gen",
+    "gen:artifacts": "yarn workspace @plugsy/core run gen:json && yarn workspace @plugsy/agent run gen:json ",
     "release": "semantic-release"
   },
   "release": {
