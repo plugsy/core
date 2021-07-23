@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "5.0.0",
+  "version": "5.0.1",
   "workspaces": [
     "packages/*"
   ],
@@ -50,10 +50,12 @@
           "assets": [
             {
               "path": "./packages/core/server/config-schema.json",
+              "name": "core-config-schema.json",
               "label": "Core Config Schema"
             },
             {
               "path": "./packages/agent/src/config-schema.json",
+              "name": "agent-config-schema.json",
               "label": "Agent Config Schema"
             }
           ]

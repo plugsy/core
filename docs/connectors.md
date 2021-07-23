@@ -24,7 +24,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
 
 ```
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v4.0.0/config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v4.0.0/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
