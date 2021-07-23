@@ -62,6 +62,7 @@ RUN yarn install
 ##
 
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN yarn build packages/core
 
