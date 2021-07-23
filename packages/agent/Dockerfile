@@ -48,6 +48,8 @@ FROM install-prep as install
 ARG BUILD_DIR=packages/agent
 
 WORKDIR /opt/demo
+ENV NODE_ENV=production
+
 
 ##
 ## This is needed as the install state will be invalid otherwise
@@ -66,6 +68,8 @@ RUN yarn workspaces focus -A --production
 FROM node:14-alpine
 ARG BUILD_DIR=packages/agent
 WORKDIR /opt/demo
+ENV NODE_ENV=production
+
 
 ##
 ## The installing of gosu, dumb-init and the use of --chown are optional

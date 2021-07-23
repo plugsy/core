@@ -61,6 +61,8 @@ RUN yarn install
 ## ie. a project root tsconfig.json
 ##
 
+ENV NODE_ENV=production
+
 RUN yarn build packages/core
 
 # RUN yarn workspaces focus -A --production
@@ -100,6 +102,8 @@ COPY --chown=node:node --from=install /opt/demo/ /opt/prod/
 WORKDIR /opt/prod/packages/core
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+ENV NODE_ENV=production
 
 CMD su-exec ${PUID}:${PGID} yarn node dist/index.js
 # CMD ls -lash /opt/prod /opt/prod/packages /opt/prod/packages/core /opt/prod/packages/core/dist
