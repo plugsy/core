@@ -14,7 +14,7 @@
     "branches": [
       "main",
       {
-        "name": "monorepo",
+        "name": "beta",
         "channel": "beta",
         "prerelease": "beta"
       }
