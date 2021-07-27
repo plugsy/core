@@ -8,7 +8,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v5.1.0-beta.1/core-config-schema.json",
   "connectors": [
     {
       "type": "WEBSITE",
@@ -32,7 +32,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v5.1.0-beta.1/core-config-schema.json",
   "connectors": [
     {
       "type": "WEBSITE",
