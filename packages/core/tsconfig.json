@@ -23,7 +23,13 @@
     "composite": true
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types.graphql.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "types.graphql.ts",
+    "**/*.json"
+  ],
   "references": [
     { "path": "../common" },
     { "path": "../connectors" },

@@ -106,5 +106,5 @@ ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 ENV NODE_ENV=production
 
-CMD su-exec ${PUID}:${PGID} yarn node dist/index.js
+CMD su-exec ${PUID}:${PGID} yarn node dist/server/index.js
 # CMD ls -lash /opt/prod /opt/prod/packages /opt/prod/packages/core /opt/prod/packages/core/dist
