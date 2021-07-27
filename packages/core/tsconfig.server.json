@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist",
+    "target": "es2017",
+    "isolatedModules": false,
+    "noEmit": false
+  },
+  "exclude": ["pages"],
+  "include": [
+    "server/**/*.ts",
+    "server/**/*.json",
+    "typings/**/*.ts",
+    "lib/**/*.ts",
+    "client/**/*.ts",
+    "client/**/*.tsx",
+    "types.graphql.ts"
+  ]
+}

@@ -40,8 +40,6 @@ type Item {
   name: String!
   category: String
   icon: String
-  iconName: String
-  iconPack: String
   link: String
   state: State!
   status: String

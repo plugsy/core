@@ -79,8 +79,6 @@ export const Subscription: Partial<SubscriptionResolvers> = {
 };
 
 export const Item: Partial<ItemResolvers> = {
-  iconName: ({ icon }) => icon?.split("/")[1] ?? null,
-  iconPack: ({ icon }) => icon?.split("/")[0] ?? null,
   children: async ({ name }, __, { itemServer }) => {
     if (!name) return [];
     return await firstValueFrom(

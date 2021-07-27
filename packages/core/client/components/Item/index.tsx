@@ -1,12 +1,6 @@
 import React, { Fragment, useMemo, useState } from "react";
-import { FiExternalLink } from "@react-icons/all-files/fi/FiExternalLink";
-import { FiMoreVertical } from "@react-icons/all-files/fi/FiMoreVertical";
-import { FaDocker } from "@react-icons/all-files/fa/FaDocker";
-import { VscJson } from "@react-icons/all-files/vsc/VscJson";
-import { HiOutlineGlobeAlt } from "@react-icons/all-files/hi/HiOutlineGlobeAlt";
-import { BsQuestion } from "@react-icons/all-files/bs/BsQuestion";
 import styled from "styled-components";
-import { DynamicIcon } from "../icons";
+import { DynamicIcon, staticIcon } from "../DynamicIcon";
 import { SSRPopover } from "../SSRPopover";
 import { ArrowContainer } from "react-tiny-popover";
 import { getColor, getComponentTheme, Theme } from "../../theme";
@@ -34,8 +28,7 @@ const getItemTheme = (component: ItemThemable) =>
   getComponentTheme("Item", component);
 
 interface ItemData {
-  iconName?: string | null;
-  iconPack?: string | null;
+  icon?: string | null;
   text?: string;
   link?: string;
   status?: string;
@@ -84,14 +77,14 @@ const TextContainer = styled.div`
 export const Popover: React.FC<{ entities: ItemData[] }> = ({ entities }) => {
   return (
     <PopoverContainer>
-      {entities.map(({ text, iconName, status, iconPack, state }, i) => (
+      {entities.map(({ text, icon, status, state }, i) => (
         <Fragment key={`child-${text}`}>
           <PopoverEntity>
             <StatusBar state={state} />
             <TagInfo>
-              {iconName && iconPack ? (
+              {icon ? (
                 <Icon>
-                  <DynamicIcon icon={iconName} iconPack={iconPack} />
+                  <DynamicIcon icon={icon} width={12} height={12} />
                 </Icon>
               ) : null}
               <TextContainer>
@@ -204,8 +197,7 @@ const Margins = styled.div`
 `;
 
 export const Item: React.FC<ItemProps> = ({
-  iconName,
-  iconPack,
+  icon,
   text,
   link,
   status,
@@ -217,12 +209,12 @@ export const Item: React.FC<ItemProps> = ({
   const ConnectorIcon = useMemo(
     () =>
       connectorType === "DOCKER"
-        ? FaDocker
+        ? staticIcon("@styled-icons/ionicons-solid/LogoDocker")
         : connectorType === "RAW"
-        ? VscJson
+        ? staticIcon("@styled-icons/simple-icons/Visualstudiocode")
         : connectorType === "WEBSITE"
-        ? HiOutlineGlobeAlt
-        : BsQuestion,
+        ? staticIcon("@styled-icons/bootstrap/Globe")
+        : staticIcon("@styled-icons/bootstrap/QuestionCircle"),
     [connectorType]
   );
   const theme = useTheme() as Theme;
@@ -255,9 +247,9 @@ export const Item: React.FC<ItemProps> = ({
           <StatusBar state={state} />
           <Margins>
             <TagInfo>
-              {iconName && iconPack ? (
+              {icon ? (
                 <Icon>
-                  <DynamicIcon icon={iconName} iconPack={iconPack} />
+                  <DynamicIcon icon={icon} width={12} height={12} />
                 </Icon>
               ) : null}
               <TextContainer>
@@ -268,11 +260,23 @@ export const Item: React.FC<ItemProps> = ({
           </Margins>
           <ExternalLinkContainerColumn>
             <ExternalLinkContainer>
-              {link ? <FiExternalLink size={10} /> : null}
-              {children.length > 0 ? <FiMoreVertical size={10} /> : null}
+              {link ? (
+                <DynamicIcon
+                  icon="@styled-icons/feather/ExternalLink"
+                  width={10}
+                  height={10}
+                />
+              ) : null}
+              {children.length > 0 ? (
+                <DynamicIcon
+                  width={10}
+                  height={10}
+                  icon="@styled-icons/feather/MoreVertical"
+                />
+              ) : null}
             </ExternalLinkContainer>
             <ExternalLinkContainerColumnSeparator>
-              <ConnectorIcon size={10} />
+              <ConnectorIcon width={10} height={10} />
             </ExternalLinkContainerColumnSeparator>
           </ExternalLinkContainerColumn>
         </Container>

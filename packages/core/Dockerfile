@@ -20,7 +20,7 @@ WORKDIR /opt/demo
 ## !.yarn/plugins
 ##
 
-COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json ./
 COPY .yarn/ /opt/demo/.yarn/
 
 ##

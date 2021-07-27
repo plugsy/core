@@ -13,7 +13,15 @@
   "connectors": [
     {
       "type": "DOCKER",
-      "config": {}
+      "config": {
+        "containerMap": {
+          "plugsy": {
+            "category": "Home",
+            "icon": "@styled-icons/boxicons-regular/Crown",
+            "name": "Plugsy"
+          }
+        }
+      }
     },
     {
       "type": "WEBSITE",
@@ -24,7 +32,7 @@
             "display": {
               "name": "Home Assistant",
               "category": "Home",
-              "icon": "si/SiHomeassistant",
+              "icon": "simple-icons/plex",
               "link": "https://my.homeassistant.com"
             }
           },
@@ -33,7 +41,7 @@
             "display": {
               "name": "Unifi",
               "category": "Home",
-              "icon": "bi/BiNetworkChart",
+              "icon": "boxicons-regular/network-chart",
               "link": "https://my.unifi.com"
             }
           },
@@ -42,7 +50,7 @@
             "display": {
               "name": "Unraid",
               "category": "Home",
-              "icon": "fi/FiServer",
+              "icon": "fa-solid/server",
               "link": "https://my.unraid.com"
             }
           }
