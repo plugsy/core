@@ -32,7 +32,7 @@
             "display": {
               "name": "Home Assistant",
               "category": "Home",
-              "icon": "simple-icons/plex",
+              "icon": "@styled-icons/simple-icons/Plex",
               "link": "https://my.homeassistant.com"
             }
           },
@@ -41,7 +41,7 @@
             "display": {
               "name": "Unifi",
               "category": "Home",
-              "icon": "boxicons-regular/network-chart",
+              "icon": "@styled-icons/boxicons-regular/NetworkChart",
               "link": "https://my.unifi.com"
             }
           },
@@ -50,7 +50,7 @@
             "display": {
               "name": "Unraid",
               "category": "Home",
-              "icon": "fa-solid/server",
+              "icon": "@styled-icons/fa-solid/Server",
               "link": "https://my.unraid.com"
             }
           }

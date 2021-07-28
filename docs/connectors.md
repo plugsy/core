@@ -22,7 +22,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
 
 # A full example
 
-```
+```jsonc
 {
   "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
   "connectors": [
@@ -51,7 +51,7 @@ Can use a list of website urls (And other request formats) for Plugsy to ping an
           {
             "name": "Home Assistant",
             "category": "Home",
-            "link": https://my.home-assistant.io
+            "link": "https://my.home-assistant.io"
           }
         ]
       }
