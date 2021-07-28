@@ -54,13 +54,13 @@ ENV NODE_ENV=production
 ##
 ## This is needed as the install state will be invalid otherwise
 ##
-RUN yarn install
+RUN CI=true yarn install
 
-RUN yarn gen
+RUN CI=true yarn gen
 
-RUN yarn build packages/agent
+RUN CI=true yarn build packages/agent
 
-RUN yarn workspaces focus -A --production
+RUN CI=true yarn workspaces focus -A --production
 
 ##
 ## Final Image
