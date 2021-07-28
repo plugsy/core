@@ -1,6 +1,6 @@
 import SVG, { Props as SVGProps } from "react-inlinesvg";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export interface DynamicIconProps extends Omit<SVGProps, "src"> {
   icon: string;
@@ -12,13 +12,23 @@ export const DynamicIcon: React.FC<DynamicIconProps> = ({
   height,
   ...props
 }) => {
-  return (
+  const [error, setError] = useState(false);
+  useEffect(() => setError(false), [icon]);
+  return !error ? (
     <SVG
       width={width}
       height={height}
       src={`/icons/${icon}`}
       loader={<div style={{ width, height }} />}
-      onError={console.log}
+      onError={() => setError(true)}
+      {...props}
+    />
+  ) : (
+    <SVG
+      width={width}
+      height={height}
+      src={`/icons/@styled-icons/fluentui-system-regular/DocumentError`}
+      loader={<div style={{ width, height }} />}
       {...props}
     />
   );
