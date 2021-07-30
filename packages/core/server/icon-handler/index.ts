@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { Handler } from "express";
 import { paramCase } from "change-case";
-const EXAMPLES = ["@styled-icons/simple-icons/Plex"];
+const EXAMPLES = ["@svg-icons/simple-icons/Plex"];
 
 export const svgIconHandler: Handler = (req, res) => {
   const { iconPath } = req.params;

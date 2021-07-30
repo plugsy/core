@@ -104,17 +104,17 @@ services:
           "vikunjafrontend": {
             "name": "Vikunja",
             "category": "Home",
-            "icon": "@styled-icons/bootstrap/Pencil",
+            "icon": "@svg-icons/bootstrap/Pencil",
             "link": "https://my.vikunja.com"
           },
           "vikunjaapi": {
             "name": "API",
-            "icon": "@styled-icons/boxicons-regular/Server",
+            "icon": "@svg-icons/boxicons-regular/Server",
             "parents": ["Vikunja"]
           },
           "vikunjadb": {
             "name": "DB",
-            "icon": "@styled-icons/fa-solid/Database",
+            "icon": "@svg-icons/fa-solid/Database",
             "parents": ["Vikunja"]
           }
         }

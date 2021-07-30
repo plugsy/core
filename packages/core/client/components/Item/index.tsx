@@ -209,12 +209,12 @@ export const Item: React.FC<ItemProps> = ({
   const ConnectorIcon = useMemo(
     () =>
       connectorType === "DOCKER"
-        ? staticIcon("@styled-icons/ionicons-solid/LogoDocker")
+        ? staticIcon("@svg-icons/ionicons-solid/LogoDocker")
         : connectorType === "RAW"
-        ? staticIcon("@styled-icons/simple-icons/Visualstudiocode")
+        ? staticIcon("@svg-icons/simple-icons/Visualstudiocode")
         : connectorType === "WEBSITE"
-        ? staticIcon("@styled-icons/bootstrap/Globe")
-        : staticIcon("@styled-icons/bootstrap/QuestionCircle"),
+        ? staticIcon("@svg-icons/bootstrap/Globe")
+        : staticIcon("@svg-icons/bootstrap/QuestionCircle"),
     [connectorType]
   );
   const theme = useTheme() as Theme;
@@ -262,7 +262,7 @@ export const Item: React.FC<ItemProps> = ({
             <ExternalLinkContainer>
               {link ? (
                 <DynamicIcon
-                  icon="@styled-icons/feather/ExternalLink"
+                  icon="@svg-icons/feather/ExternalLink"
                   width={10}
                   height={10}
                 />
@@ -271,7 +271,7 @@ export const Item: React.FC<ItemProps> = ({
                 <DynamicIcon
                   width={10}
                   height={10}
-                  icon="@styled-icons/feather/MoreVertical"
+                  icon="@svg-icons/feather/MoreVertical"
                 />
               ) : null}
             </ExternalLinkContainer>

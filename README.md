@@ -116,12 +116,12 @@ config.json
             "category": "Other",
             "name": "Beer Tab",
             "state": "GREEN",
-            "icon": "@styled-icons/boxicons-regular/Beer"
+            "icon": "@svg-icons/boxicons-regular/Beer"
           },
           {
             "name": "Beer Tab Dependency",
             "state": "GREEN",
-            "icon": "@styled-icons/ionicons-solid/Beer",
+            "icon": "@svg-icons/ionicons-solid/Beer",
             "parents": ["Beer Tab"]
           }
         ]
@@ -157,8 +157,8 @@ You can use any icons available in [styled-icons](https://styled-icons.js.org/).
 Super simple, go to the page above, click the icon you would like to use, and use it in your config or docker labels.
 
 Example using docker labels:
-`dockerDash.icon: '@styled-icons/simple-icons/Plex'` is to load the `Plex` icon in the [simple-icons](https://styled-icons.js.org/?s=plex) pack
-`dockerDash.icon: '@styled-icons/simple-icons/Homeassistant'` is to load the `Homeassistant` icon in the [simple-icons pack](https://styled-icons.js.org/?s=home%20assistant)
+`dockerDash.icon: '@svg-icons/simple-icons/Plex'` is to load the `Plex` icon in the [simple-icons](https://styled-icons.js.org/?s=plex) pack
+`dockerDash.icon: '@svg-icons/simple-icons/Homeassistant'` is to load the `Homeassistant` icon in the [simple-icons pack](https://styled-icons.js.org/?s=home%20assistant)
 
 Example using config.json:
 
@@ -170,7 +170,7 @@ Example using config.json:
         "containerMap": {
           "plugsy-container-name": {
             "category": "Home",
-            "icon": "@styled-icons/boxicons-regular/Crown",
+            "icon": "@svg-icons/boxicons-regular/Crown",
             "name": "Plugsy"
           }
         }
@@ -203,12 +203,12 @@ Example using the [raw connector](docs/connectors/raw.md):
             "category": "Other",
             "name": "Beer Tab",
             "state": "GREEN",
-            "icon": "@styled-icons/boxicons-regular/Beer"
+            "icon": "@svg-icons/boxicons-regular/Beer"
           },
           {
             "name": "Beer Tab Dependency",
             "state": "GREEN",
-            "icon": "@styled-icons/ionicons-solid/Beer",
+            "icon": "@svg-icons/ionicons-solid/Beer",
             "parents": ["Beer Tab"]
           }
         ]

@@ -21,7 +21,7 @@ WORKDIR /opt/demo
 ##
 
 COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
-COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json ./
 COPY .yarn/ /opt/demo/.yarn/
 
 ##

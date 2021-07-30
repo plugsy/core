@@ -15,7 +15,7 @@
       "type": "DOCKER",
       "config": {
         "containerMap": {
-          "plugsy": {
+          "dockerdash-core": {
             "category": "Home",
             "icon": "@styled-icons/boxicons-regular/Crown",
             "name": "Plugsy"
@@ -32,7 +32,7 @@
             "display": {
               "name": "Home Assistant",
               "category": "Home",
-              "icon": "@styled-icons/simple-icons/Plex",
+              "icon": "https://github.com/ground7/unraid-animated-svgs/blob/master/Always%20Animate/downloads.svg",
               "link": "https://my.homeassistant.com"
             }
           },
