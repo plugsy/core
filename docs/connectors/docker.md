@@ -36,7 +36,7 @@ services:
     labels:
       dockerDash.name: "DB"
       dockerDash.parents: "Todo"
-      dockerDash.icon: "fi/FiDatabase"
+      dockerDash.icon: "@styled-icons/feather/Database"
     container_name: vikunjadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
     labels:
       dockerDash.name: "API"
       dockerDash.parents: "Todo"
-      dockerDash.icon: "fi/FiServer"
+      dockerDash.icon: "@styled-icons/feather/Server"
 
   vikunjafrontend:
     image: vikunja/frontend
@@ -57,7 +57,7 @@ services:
     labels:
       dockerDash.name: "Todo"
       dockerDash.category: "Home"
-      dockerDash.icon: "fi/FiPenTool"
+      dockerDash.icon: "@styled-icons/fa-solid/Horse"
       dockerDash.link: https://my.vikunja.com
 ```
 
