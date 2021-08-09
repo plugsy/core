@@ -13,8 +13,8 @@ jobs:
     outputs:
       shouldBuild: ${{ steps.determineVersion.outputs.shouldBuild }}
       version: ${{ steps.determineVersion.outputs.version }}
-      coreLabels: ${{ steps.setLabels.core }}
-      agentLabels: ${{ steps.setLabels.agent }}
+      coreLabels: ${{ steps.setLabels.outputs.core }}
+      agentLabels: ${{ steps.setLabels.outputs.agent }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
