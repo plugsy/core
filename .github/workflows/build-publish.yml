@@ -13,7 +13,8 @@ jobs:
     outputs:
       shouldBuild: ${{ steps.determineVersion.outputs.shouldBuild }}
       version: ${{ steps.determineVersion.outputs.version }}
-      dockerLabels: ${{ steps.setLabels.labels }}
+      coreLabels: ${{ steps.setLabels.core }}
+      agentLabels: ${{ steps.setLabels.agent }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -42,9 +43,11 @@ jobs:
         run: |
           if [$REF == 'refs/heads/main']
           then
-              echo "::set-output name=labels::plugsy/core:${{ steps.determineVersion.outputs.version }},plugsy/core:latest"
+              echo "::set-output name=core::plugsy/core:${{ steps.determineVersion.outputs.version }},plugsy/core:latest"
+              echo "::set-output name=agent::plugsy/agent:${{ steps.determineVersion.outputs.version }},plugsy/agent:latest"
           else
-              echo "::set-output name=labels::plugsy/core:${{ steps.determineVersion.outputs.version }}"
+              echo "::set-output name=core::plugsy/core:${{ steps.determineVersion.outputs.version }}"
+              echo "::set-output name=agent::plugsy/agent:${{ steps.determineVersion.outputs.version }}"
           fi
         env:
           REF: ${{ github.ref }}
@@ -93,7 +96,7 @@ jobs:
           context: .
           file: packages/core/Dockerfile
           push: true
-          tags: ${{ needs.getversion.outputs.dockerLabels }}
+          tags: ${{ needs.getversion.outputs.coreLabels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
@@ -150,7 +153,7 @@ jobs:
           context: .
           file: packages/agent/Dockerfile
           push: true
-          tags: plugsy/agent:${{ needs.getversion.outputs.version }},plugsy/agent:latest
+          tags: ${{ needs.getversion.outputs.agentLabels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
