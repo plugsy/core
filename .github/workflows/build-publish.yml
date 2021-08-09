@@ -13,6 +13,7 @@ jobs:
     outputs:
       shouldBuild: ${{ steps.determineVersion.outputs.shouldBuild }}
       version: ${{ steps.determineVersion.outputs.version }}
+      dockerLabels: ${{ steps.setLabels.labels }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -35,6 +36,18 @@ jobs:
           (test -e .VERSION && echo "::set-output name=shouldBuild::true") || echo "::set-output name=shouldBuild::false"
           echo "::set-output name=version::$(cat .VERSION)"
           echo "Determined next version to be: $(cat .VERSION)"
+
+      - name: Set Labels
+        id: setLabels
+        run: |
+          if [$REF == 'refs/heads/main']
+          then
+              echo "::set-output name=labels::plugsy/core:${{ steps.determineVersion.outputs.version }},plugsy/core:latest"
+          else
+              echo "::set-output name=labels::plugsy/core:${{ steps.determineVersion.outputs.version }}"
+          fi
+        env:
+          REF: ${{ github.ref }}
 
   buildcore:
     needs: getversion
@@ -80,7 +93,7 @@ jobs:
           context: .
           file: packages/core/Dockerfile
           push: true
-          tags: plugsy/core:${{ needs.getversion.outputs.version }},plugsy/core:latest
+          tags: ${{ needs.getversion.outputs.dockerLabels }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
         # This ugly bit is necessary if you don't want your cache to grow forever
