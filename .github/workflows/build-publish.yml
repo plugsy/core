@@ -42,8 +42,7 @@ jobs:
       - name: Set Labels
         id: setLabels
         run: |
-          if ["$REF" == "refs/heads/main"]
-          then
+          if [[ $REF == "refs/heads/main" ]]; then
               echo "::set-output name=core::plugsy/core:${{ steps.determineVersion.outputs.version }},plugsy/core:latest"
               echo "::set-output name=agent::plugsy/agent:${{ steps.determineVersion.outputs.version }},plugsy/agent:latest"
           else
