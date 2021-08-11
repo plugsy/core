@@ -1,3 +1,29 @@
+## [6.0.0](https://github.com/plugsy/core/compare/v5.0.1...v6.0.0) (2021-08-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* Environment variables have been changed from DOCKER_DASH_ to PLUGSY_
+* react-icons are no longer supported and will need to be moved over to the new icon format.
+
+### Features
+
+* Allow icons to be loaded externally ([1f3abbb](https://github.com/plugsy/core/commit/1f3abbb1394f8f20e89934f7a042baed8dd5ddba))
+* Build core with armv7 ([7e8c9f9](https://github.com/plugsy/core/commit/7e8c9f90fc3e5c043db14e1ec2d1cf8565080ae6))
+* enable beta builds and multiple platforms docker ([da9f856](https://github.com/plugsy/core/commit/da9f856efb74ac1b3c4bd003b90f789a7c0554a3))
+* Fully move to styled-icons ([a6a4c0f](https://github.com/plugsy/core/commit/a6a4c0ffbb8f4f66526bfa9533c95463e192c155))
+* Plugsy agent endpoint can be specified using environment variables ([6f7ecd4](https://github.com/plugsy/core/commit/6f7ecd467912afb28b84d3ee243088339c99da9f))
+
+
+### Bug Fixes
+
+* Display error svg if invalid icon supplied ([29099d2](https://github.com/plugsy/core/commit/29099d2a820c4b1ea2fe72a1c15e2765acda16fa))
+
+
+### Miscellaneous Chores
+
+* Change environment variables from DOCKER_DASH to PLUGSY ([cf74932](https://github.com/plugsy/core/commit/cf74932e6d5b132982475f79974d80c7542d49ee))
+
 ## [6.0.0-beta.1](https://github.com/plugsy/core/compare/v5.1.0-beta.1...v6.0.0-beta.1) (2021-08-09)
 
 
