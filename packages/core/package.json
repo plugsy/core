@@ -68,7 +68,6 @@
     "@svg-icons/zondicons": "^1.39.1",
     "apollo-link-logger": "^2.0.0",
     "apollo-server-express": "^2.25.2",
-    "apollo-server-micro": "^2.25.2",
     "babel-types": "^6.26.0",
     "change-case": "^4.1.2",
     "date-fns": "^2.23.0",
