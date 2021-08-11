@@ -9,7 +9,7 @@
     "node": "14"
   },
   "scripts": {
-    "start": "DOCKER_DASH_LOCAL_CONFIG_FILE=./config.json nodemon",
+    "start": "PLUGSY_LOCAL_CONFIG_FILE=./config.json nodemon",
     "get-version": "node -pe \"require('./package.json').version\"",
     "type-check": "tsc",
     "web:prod": "next start",
