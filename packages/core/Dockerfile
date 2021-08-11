@@ -20,7 +20,7 @@ WORKDIR /opt/demo
 ## !.yarn/plugins
 ##
 
-COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json ./
 COPY .yarn/ /opt/demo/.yarn/
 
 ##
@@ -48,25 +48,17 @@ FROM install-prep as install
 ARG BUILD_DIR=packages/core
 
 WORKDIR /opt/demo
+ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 ##
 ## This is needed as the install state will be invalid otherwise
 ##
-RUN yarn install
+RUN CI=true yarn install
 
+RUN CI=true yarn gen
 
-##
-## Copy the workspace we are building here
-## include any files outside of the workspace that maybe needed to build also
-## ie. a project root tsconfig.json
-##
-
-ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
-RUN yarn build packages/core
-
-# RUN yarn workspaces focus -A --production
+RUN CI=true yarn build packages/core
 
 ##
 ## Final Image
@@ -106,5 +98,5 @@ ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 ENV NODE_ENV=production
 
-CMD su-exec ${PUID}:${PGID} yarn node dist/index.js
+CMD su-exec ${PUID}:${PGID} yarn node dist/server/index.js
 # CMD ls -lash /opt/prod /opt/prod/packages /opt/prod/packages/core /opt/prod/packages/core/dist

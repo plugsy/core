@@ -39,6 +39,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/home/node/app
+      - ./packages/core/config.json:/config.json
     ports:
       - '3000:3000'
 

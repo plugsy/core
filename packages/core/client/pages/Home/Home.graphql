@@ -3,16 +3,14 @@ fragment FullCategory on Category {
   items {
     name
     status
-    iconName
-    iconPack
+    icon
     link
     state
     connectorType
     children {
       name
       state
-      iconName
-      iconPack
+      icon
       status
       connectorType
     }

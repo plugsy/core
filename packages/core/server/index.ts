@@ -18,6 +18,7 @@ import { AgentConfig, agent } from "@plugsy/agent";
 import { ConnectorConfig } from "@plugsy/connectors";
 import { ThemeConfig } from "../client/theme";
 import schema from "./config-schema.json";
+import { svgIconHandler } from "./icon-handler";
 
 const { port, dev } = environment();
 
@@ -65,6 +66,7 @@ function watchConfig(filePath: string, logger: Logger) {
       resetOnRefCountZero: true,
     })
   );
+
   const connectors$ = config$.pipe(
     map((config) => config.connectors),
     map((connectors) => {
@@ -157,8 +159,11 @@ async function startServer() {
   ).subscribe();
 
   const expressServer = express();
-  const httpServer = createServer(expressServer);
 
+  expressServer.get('/icons/:iconPath(*)', svgIconHandler)
+
+  const httpServer = createServer(expressServer);
+  
   logger.verbose("startAPI");
   const api = await startAPI(httpServer, expressServer, {
     connectionPool,
@@ -168,7 +173,7 @@ async function startServer() {
   });
   logger.verbose("startFrontend");
   const frontend = await startFrontend(expressServer);
-
+  
   logger.verbose("listen");
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 

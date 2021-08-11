@@ -177,8 +177,7 @@ export function Home({
                   ({
                     name,
                     link,
-                    iconName,
-                    iconPack,
+                    icon,
                     state,
                     children,
                     status,
@@ -188,8 +187,7 @@ export function Home({
                       key: name,
                       text: name,
                       link: link ?? undefined,
-                      iconPack,
-                      iconName,
+                      icon,
                       connectorType,
                       state: statesToStatus([
                         state,
@@ -199,16 +197,14 @@ export function Home({
                       children: children.map(
                         ({
                           name,
-                          iconName,
-                          iconPack,
+                          icon,
                           state,
                           status,
                           connectorType,
                         }) => ({
                           key: name,
                           connectorType,
-                          iconName,
-                          iconPack,
+                          icon,
                           text: name,
                           status: status ? toTitleCase(status) : undefined,
                           state: statesToStatus([state]),

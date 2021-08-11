@@ -13,7 +13,15 @@
   "connectors": [
     {
       "type": "DOCKER",
-      "config": {}
+      "config": {
+        "containerMap": {
+          "dockerdash-core": {
+            "category": "Home",
+            "icon": "@styled-icons/boxicons-regular/Crown",
+            "name": "Plugsy"
+          }
+        }
+      }
     },
     {
       "type": "WEBSITE",
@@ -24,7 +32,7 @@
             "display": {
               "name": "Home Assistant",
               "category": "Home",
-              "icon": "si/SiHomeassistant",
+              "icon": "https://github.com/ground7/unraid-animated-svgs/blob/master/Always%20Animate/downloads.svg",
               "link": "https://my.homeassistant.com"
             }
           },
@@ -33,7 +41,7 @@
             "display": {
               "name": "Unifi",
               "category": "Home",
-              "icon": "bi/BiNetworkChart",
+              "icon": "@styled-icons/boxicons-regular/NetworkChart",
               "link": "https://my.unifi.com"
             }
           },
@@ -42,7 +50,7 @@
             "display": {
               "name": "Unraid",
               "category": "Home",
-              "icon": "fi/FiServer",
+              "icon": "@styled-icons/fa-solid/Server",
               "link": "https://my.unraid.com"
             }
           }

@@ -21,7 +21,7 @@ WORKDIR /opt/demo
 ##
 
 COPY ${BUILD_DIR}/package.json ${BUILD_DIR}/
-COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json .
+COPY package.json yarn.lock .yarnrc.yml .pnp.js codegen.yml tsconfig.base.json ./
 COPY .yarn/ /opt/demo/.yarn/
 
 ##
@@ -54,13 +54,13 @@ ENV NODE_ENV=production
 ##
 ## This is needed as the install state will be invalid otherwise
 ##
-RUN yarn install
+RUN CI=true yarn install
 
-RUN yarn gen
+RUN CI=true yarn gen
 
-RUN yarn build packages/agent
+RUN CI=true yarn build packages/agent
 
-RUN yarn workspaces focus -A --production
+RUN CI=true yarn workspaces focus -A --production
 
 ##
 ## Final Image

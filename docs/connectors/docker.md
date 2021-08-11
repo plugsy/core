@@ -6,7 +6,7 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -36,7 +36,7 @@ services:
     labels:
       dockerDash.name: "DB"
       dockerDash.parents: "Todo"
-      dockerDash.icon: "fi/FiDatabase"
+      dockerDash.icon: "@styled-icons/feather/Database"
     container_name: vikunjadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
     labels:
       dockerDash.name: "API"
       dockerDash.parents: "Todo"
-      dockerDash.icon: "fi/FiServer"
+      dockerDash.icon: "@styled-icons/feather/Server"
 
   vikunjafrontend:
     image: vikunja/frontend
@@ -57,7 +57,7 @@ services:
     labels:
       dockerDash.name: "Todo"
       dockerDash.category: "Home"
-      dockerDash.icon: "fi/FiPenTool"
+      dockerDash.icon: "@styled-icons/fa-solid/Horse"
       dockerDash.link: https://my.vikunja.com
 ```
 
@@ -95,7 +95,7 @@ services:
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -104,17 +104,17 @@ services:
           "vikunjafrontend": {
             "name": "Vikunja",
             "category": "Home",
-            "icon": "fi/FiPenTool",
+            "icon": "@svg-icons/bootstrap/Pencil",
             "link": "https://my.vikunja.com"
           },
           "vikunjaapi": {
             "name": "API",
-            "icon": "fi/FiServer",
+            "icon": "@svg-icons/boxicons-regular/Server",
             "parents": ["Vikunja"]
           },
           "vikunjadb": {
             "name": "DB",
-            "icon": "fi/FiDatabase",
+            "icon": "@svg-icons/fa-solid/Database",
             "parents": ["Vikunja"]
           }
         }
@@ -130,7 +130,7 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v5.0.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",

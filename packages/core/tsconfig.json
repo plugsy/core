@@ -1,32 +1,38 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "alwaysStrict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "es2017"
-    ],
+    "target": "esnext",
     "module": "esnext",
+    "jsx": "preserve",
+    "lib": ["dom", "es2017"],
+    "baseUrl": ".",
     "moduleResolution": "node",
+    "strict": true,
+    "allowJs": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "isolatedModules": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext", 
+    "composite": true
   },
+  "exclude": ["dist", ".next", "out", "next.config.js"],
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "icongenerator.js"
+    "types.graphql.ts",
+    "**/*.json"
   ],
-  "exclude": [
-    "node_modules"
+  "references": [
+    { "path": "../common" },
+    { "path": "../connectors" },
+    { "path": "../schema" }
   ]
 }
