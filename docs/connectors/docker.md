@@ -6,7 +6,7 @@ A docker connector, provides access directly to a docker socket or URL mapping e
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -95,7 +95,7 @@ services:
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
@@ -130,7 +130,7 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0-beta.1/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0/core-config-schema.json",
   "connectors": [
     {
       "type": "DOCKER",
