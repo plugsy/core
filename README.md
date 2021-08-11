@@ -180,6 +180,36 @@ Example using config.json:
 }
 ```
 
+##### Icons using a URL 
+
+** NEW IN V6 **
+
+You can now use icons using a URL!
+
+
+Example using docker labels:
+`dockerDash.icon: 'https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.png'`
+
+Example using config.json:
+
+```jsonc{
+"connectors": [
+    {
+      "type": "DOCKER",
+      "config": {
+        "containerMap": {
+          "plugsy-container-name": {
+            "category": "Home",
+            "icon": "https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.png",
+            "name": "Plugsy"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
 #### Children
 
 In order to show dependent containers, you need only ensure that the item you wish to show has a parents label pointing at the same name as another item.
