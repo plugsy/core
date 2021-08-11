@@ -5,7 +5,7 @@ import {
   createItemServer,
   getConnector,
 } from "@plugsy/connectors";
-import { filter, map, ReplaySubject, share, tap } from "rxjs";
+import { filter, map, of, ReplaySubject, share, switchMap, tap } from "rxjs";
 import { Logger } from "winston";
 import { agent, AgentConfig } from "./";
 import schema from "./config-schema.json";
@@ -81,7 +81,7 @@ function watchConfig(filePath: string, logger: Logger) {
 }
 
 async function startServer() {
-  const { localConfigFile, loggingLevel } = environment();
+  const { localConfigFile, loggingLevel, agentEndpoint } = environment();
   const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
   const { connectors$, agentConfig$, loggingLevel$ } = watchConfig(
@@ -106,7 +106,17 @@ async function startServer() {
 
   logger.verbose("initAgent");
   const agentSubscription = agent(
-    agentConfig$,
+    agentConfig$.pipe(
+      switchMap((config) => {
+        return of(
+          config ?? agentEndpoint
+            ? {
+                endpoint: agentEndpoint,
+              }
+            : undefined
+        );
+      })
+    ),
     itemServer.connectionData$,
     logger
   ).subscribe();
