@@ -82,6 +82,7 @@
     "@semantic-release/release-notes-generator": "^9.0.3",
     "babel-types": "^6.26.0",
     "conventional-changelog-conventionalcommits": "^4.6.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
     "semantic-release": "^17.4.4",
     "typescript": "^4.3.5"
   }
