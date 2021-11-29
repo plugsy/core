@@ -62,9 +62,9 @@ services:
   vikunjadb:
     image: mariadb:10
     labels:
-      dockerDash.name: "DB"
-      dockerDash.parents: "Todo"
-      dockerDash.icon: "@styled-icons/feather/Database"
+      plugsy.name: "DB"
+      plugsy.parents: "Todo"
+      plugsy.icon: "@styled-icons/feather/Database"
     container_name: vikunjadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
@@ -74,19 +74,19 @@ services:
     image: vikunja/api
     restart: unless-stopped
     labels:
-      dockerDash.name: "API"
-      dockerDash.parents: "Todo"
-      dockerDash.icon: "@styled-icons/feather/Server"
+      plugsy.name: "API"
+      plugsy.parents: "Todo"
+      plugsy.icon: "@styled-icons/feather/Server"
 
   vikunjafrontend:
     image: vikunja/frontend
     container_name: vikunjafrontend
     restart: unless-stopped
     labels:
-      dockerDash.name: "Todo"
-      dockerDash.category: "Home"
-      dockerDash.icon: "@styled-icons/fa-solid/Horse"
-      dockerDash.link: https://my.vikunja.com
+      plugsy.name: "Todo"
+      plugsy.category: "Home"
+      plugsy.icon: "@styled-icons/fa-solid/Horse"
+      plugsy.link: https://my.vikunja.com
 ```
 
 ## Configuration
@@ -157,8 +157,8 @@ You can use any icons available in [styled-icons](https://styled-icons.js.org/).
 Super simple, go to the page above, click the icon you would like to use, and use it in your config or docker labels.
 
 Example using docker labels:
-`dockerDash.icon: '@svg-icons/simple-icons/Plex'` is to load the `Plex` icon in the [simple-icons](https://styled-icons.js.org/?s=plex) pack
-`dockerDash.icon: '@svg-icons/simple-icons/Homeassistant'` is to load the `Homeassistant` icon in the [simple-icons pack](https://styled-icons.js.org/?s=home%20assistant)
+`plugsy.icon: '@svg-icons/simple-icons/Plex'` is to load the `Plex` icon in the [simple-icons](https://styled-icons.js.org/?s=plex) pack
+`plugsy.icon: '@svg-icons/simple-icons/Homeassistant'` is to load the `Homeassistant` icon in the [simple-icons pack](https://styled-icons.js.org/?s=home%20assistant)
 
 Example using config.json:
 
@@ -188,7 +188,7 @@ You can now use icons using a URL!
 
 
 Example using docker labels:
-`dockerDash.icon: 'https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.png'`
+`plugsy.icon: 'https://symbols.getvecta.com/stencil_82/45_google-icon.d8d982f8a1.png'`
 
 Example using config.json:
 
@@ -256,19 +256,19 @@ vikunjaapi:
   image: vikunja/api
   restart: unless-stopped
   labels:
-    dockerDash.name: "API"
-    dockerDash.parents: "Todo"
-    dockerDash.icon: "@styled-icons/feather/Server"
+    plugsy.name: "API"
+    plugsy.parents: "Todo"
+    plugsy.icon: "@styled-icons/feather/Server"
 
 vikunjafrontend:
   image: vikunja/frontend
   container_name: vikunjafrontend
   restart: unless-stopped
   labels:
-    dockerDash.name: "Todo"
-    dockerDash.category: "Home"
-    dockerDash.icon: "@styled-icons/fa-solid/Horse"
-    dockerDash.link: https://my.vikunja.com
+    plugsy.name: "Todo"
+    plugsy.category: "Home"
+    plugsy.icon: "@styled-icons/fa-solid/Horse"
+    plugsy.link: https://my.vikunja.com
 ```
 
 ## Development
@@ -294,6 +294,6 @@ Based off of [AsyncAPIs blog](https://www.asyncapi.com/blog/automated-releases)
 
 Ensure that a both a category and a name are defined,
 if you're using the default docker configuration and labels,
-that will require both the `dockerDash.category` and `dockerDash.name` labels on your container.
+that will require both the `plugsy.category` and `plugsy.name` labels on your container.
 
 **Category is required**, you can only omit category when you want the container to appear as a child of another item on the dashboard.

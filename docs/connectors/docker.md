@@ -34,9 +34,9 @@ services:
   vikunjadb:
     image: mariadb:10
     labels:
-      dockerDash.name: "DB"
-      dockerDash.parents: "Todo"
-      dockerDash.icon: "@styled-icons/feather/Database"
+      plugsy.name: "DB"
+      plugsy.parents: "Todo"
+      plugsy.icon: "@styled-icons/feather/Database"
     container_name: vikunjadb
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
@@ -46,19 +46,19 @@ services:
     image: vikunja/api
     restart: unless-stopped
     labels:
-      dockerDash.name: "API"
-      dockerDash.parents: "Todo"
-      dockerDash.icon: "@styled-icons/feather/Server"
+      plugsy.name: "API"
+      plugsy.parents: "Todo"
+      plugsy.icon: "@styled-icons/feather/Server"
 
   vikunjafrontend:
     image: vikunja/frontend
     container_name: vikunjafrontend
     restart: unless-stopped
     labels:
-      dockerDash.name: "Todo"
-      dockerDash.category: "Home"
-      dockerDash.icon: "@styled-icons/fa-solid/Horse"
-      dockerDash.link: https://my.vikunja.com
+      plugsy.name: "Todo"
+      plugsy.category: "Home"
+      plugsy.icon: "@styled-icons/fa-solid/Horse"
+      plugsy.link: https://my.vikunja.com
 ```
 
 ### Example usage with docker-compose and config file:
@@ -144,11 +144,11 @@ See [Dockerode](https://www.npmjs.com/package/dockerode) for alternative connect
         "interval": "20000", // Optional, Number in milliseconds defaults to 20 seconds
         "labelConfig": {
           // Optional, defaults below
-          "name": "dockerDash.name",
-          "category": "dockerDash.category",
-          "icon": "dockerDash.icon",
-          "link": "dockerDash.link",
-          "parents": "dockerDash.parents"
+          "name": "plugsy.name",
+          "category": "plugsy.category",
+          "icon": "plugsy.icon",
+          "link": "plugsy.link",
+          "parents": "plugsy.parents"
         },
         "containerMap": {
           "container_name": {

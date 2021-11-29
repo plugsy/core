@@ -20,7 +20,7 @@
     }
   ],
   "settings": {
-    "typescript.tsdk": "core/.yarn/sdks/typescript/lib",
+    "typescript.tsdk": "plugsy/.yarn/sdks/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "eslint.nodePath": ".yarn/sdks"
   }

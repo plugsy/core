@@ -63,11 +63,11 @@ export const dockerConnection = (
       getDockerContainers(
         docker,
         {
-          nameLabel: labelConfig?.nameLabel ?? "dockerDash.name",
-          categoryLabel: labelConfig?.categoryLabel ?? "dockerDash.category",
-          iconLabel: labelConfig?.iconLabel ?? "dockerDash.icon",
-          linkLabel: labelConfig?.linkLabel ?? "dockerDash.link",
-          parentsLabel: labelConfig?.parentsLabel ?? "dockerDash.parents",
+          nameLabel: labelConfig?.nameLabel ?? "plugsy.name",
+          categoryLabel: labelConfig?.categoryLabel ?? "plugsy.category",
+          iconLabel: labelConfig?.iconLabel ?? "plugsy.icon",
+          linkLabel: labelConfig?.linkLabel ?? "plugsy.link",
+          parentsLabel: labelConfig?.parentsLabel ?? "plugsy.parents",
         },
         containerMap,
         logger
