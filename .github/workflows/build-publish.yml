@@ -207,7 +207,7 @@ jobs:
       - name: Create Pull Request with updated package files
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MACHINE_USER_PAT }}
           commit-message: "chore(release): ${{ needs.getversion.outputs.version }}"
           committer: add-bot <thomas@thenairn.com>
           author: add-bot <thomas@thenairn.com>
