@@ -20,7 +20,9 @@ interface Params {
   parents: string[];
 }
 
-export interface DockerContainer extends Params {}
+export interface DockerContainer extends Params {
+  id: string;
+}
 
 export type LabelConfig = {
   nameLabel: string;
@@ -73,6 +75,7 @@ export async function getDockerContainers(
 
   const labeledContainers = containers.map((container): DockerContainer => {
     return {
+      id: container.Id,
       state: dockerStateToStatus(container.State, logger),
       status: container.State,
       name: container.Labels[labelConfig.nameLabel] ?? null,
@@ -98,6 +101,7 @@ export async function getDockerContainers(
       return [
         ...prev,
         {
+          id: container.Id,
           name: item.name,
           category: item.category ?? null,
           icon: item.icon ?? null,
@@ -117,7 +121,19 @@ export async function getDockerContainers(
     return prev;
   }, []);
 
-  return [...labeledContainers, ...mappedContainers].filter(
+  const containerList = [...labeledContainers, ...mappedContainers].filter(
     (container) => container.name !== null
   );
+
+  const inspectedContainers = containerList.map(async (container): Promise<DockerContainer> => {
+    try {
+      const inspectResult = await docker.getContainer(container.id).inspect();
+      const status = inspectResult.State.Health?.Status ?? container.status;
+      return { ...container, status }
+    } catch {
+      return container;
+    }
+  })
+
+  return Promise.all(inspectedContainers);
 }
