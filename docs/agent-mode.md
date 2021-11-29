@@ -45,7 +45,7 @@ docker-compose.yml
 config.json
 ```json
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0/agent-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.1.0/agent-config-schema.json",
   "agent": {
     "endpoint": "http://localhost:3000/graphql",
     "clientConfig": {
@@ -87,7 +87,7 @@ Simply add the agent section to your configuration file with the location of you
 
 ```jsonc
 {
-  "$schema": "https://github.com/plugsy/core/releases/download/v6.0.0/core-config-schema.json",
+  "$schema": "https://github.com/plugsy/core/releases/download/v6.1.0/core-config-schema.json",
   "agent": {
     "endpoint": "http://localhost:3000/graphql"
   }

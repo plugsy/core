@@ -1,3 +1,10 @@
+## [6.1.0](https://github.com/plugsy/core/compare/v6.0.0...v6.1.0) (2021-11-29)
+
+
+### Features
+
+* Docker containers now show their health if they have it ([b407b28](https://github.com/plugsy/core/commit/b407b28b246651a23b7f9358ef89b3e99a24c90a))
+
 ## [6.0.0](https://github.com/plugsy/core/compare/v5.0.1...v6.0.0) (2021-08-11)
 
 
