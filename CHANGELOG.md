@@ -1,3 +1,21 @@
+## [7.0.0](https://github.com/plugsy/core/compare/v6.1.0...v7.0.0) (2021-11-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* Docker container labels have been renamed:
+
+from: dockerDash.*
+to: plugsy.*
+
+example:
+    plugsy.name: "Todo"
+    plugsy.category: "Home"
+    plugsy.icon: "@styled-icons/fa-solid/Horse"
+    plugsy.link: https://my.vikunja.com
+
+* Bump to V7 ([1b3090a](https://github.com/plugsy/core/commit/1b3090ae99a36707c9436e75c0bda10d8d35b6da))
+
 ## [6.0.0](https://github.com/plugsy/core/compare/v5.0.1...v6.0.0) (2021-08-11)
 
 

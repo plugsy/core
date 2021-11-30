@@ -196,13 +196,13 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "https:\\/\\/github\\.com\\/plugsy\\/core\\/releases\\/download\\/(.*?)\\/core-config-schema\\.json"
-          replace: "https://github.com/plugsy/core/releases/download/v${{ needs.getversion.outputs.version }}/core-config-schema.json"
+          replace: "https://github.com/plugsy/core/releases/download/v7.0.0/core-config-schema.json"
 
       - name: Find and Replace
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "https:\\/\\/github\\.com\\/plugsy\\/core\\/releases\\/download\\/(.*?)\\/agent-config-schema\\.json"
-          replace: "https://github.com/plugsy/core/releases/download/v${{ needs.getversion.outputs.version }}/agent-config-schema.json"
+          replace: "https://github.com/plugsy/core/releases/download/v7.0.0/agent-config-schema.json"
 
       - name: Create Pull Request with updated package files
         uses: peter-evans/create-pull-request@v3
