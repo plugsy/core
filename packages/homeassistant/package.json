@@ -1,0 +1,45 @@
+{
+  "name": "@plugsy/homeassistant",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "concurrently --kill-others-on-fail -n tsc,node 'tsc -b --watch' 'nodemon'",
+    "build:lib": "tsc --build",
+    "build": "yarn build:lib"
+  },
+  "dependencies": {
+    "@plugsy/common": "workspace:packages/common",
+    "@types/ws": "^8.2.1",
+    "await-to-js": "^3.0.0",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.4.0",
+    "graphql-tag": "^2.12.5",
+    "home-assistant-js-websocket": "^5.11.3",
+    "nanoid": "^3.1.30",
+    "rxjs": "^7.2.0",
+    "websocket": "^1.0.34",
+    "winston": "^3.3.3",
+    "ws": "^8.3.0"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^2.0.2",
+    "@graphql-codegen/cli": "^1.21.6",
+    "@graphql-codegen/import-types-preset": "^1.18.5",
+    "@graphql-codegen/named-operations-object": "^1.18.2",
+    "@graphql-codegen/near-operation-file-preset": "^1.18.4",
+    "@graphql-codegen/typed-document-node": "^1.18.9",
+    "@graphql-codegen/typescript": "^1.22.4",
+    "@graphql-codegen/typescript-document-nodes": "^1.17.15",
+    "@graphql-codegen/typescript-graphql-request": "3.2.4",
+    "@graphql-codegen/typescript-operations": "^1.18.3",
+    "@graphql-codegen/typescript-react-apollo": "^2.3.0",
+    "@graphql-codegen/typescript-resolvers": "^1.19.5",
+    "typescript": "^4.3.5"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
+}
