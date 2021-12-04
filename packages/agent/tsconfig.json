@@ -21,6 +21,10 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts", "src/**/*.json"],
-  "references": [{ "path": "../common" }, { "path": "../connectors" }]
+  "include": ["src/**/*.ts", "src/**/*.json", "typings"],
+  "references": [
+    { "path": "../common" },
+    { "path": "../connectors" },
+    { "path": "../schema" }
+  ]
 }

@@ -3,12 +3,12 @@ import { NextPageContext } from "next";
 import { ContextDependencies, initContext } from "./context";
 import { DateScalarType } from "../../lib/apollo/scalars/Date";
 import { resolvers as scalarResolvers } from "graphql-scalars";
-import 'graphql-import-node';
+import { PluginFn } from "@plugsy/schema";
 
 import * as resolvers from "./resolvers";
 import indexSchema from "@plugsy/schema/dist/index.graphql";
+import path from "path";
 export const schemas = [indexSchema];
-
 
 export const schema = makeExecutableSchema({
   typeDefs: schemas,
@@ -27,7 +27,15 @@ export const serverOptions = (
   return {
     schema,
     context: initContext({ ...dependencies, ctx }),
+    
   };
 };
 
 export * from "./context";
+
+export const ServerPlugin: PluginFn = async () => {
+  return {
+    resolvers: 
+    schemaPaths: [path.join(__dirname, "./schema/index.core.graphql")],
+  };
+};

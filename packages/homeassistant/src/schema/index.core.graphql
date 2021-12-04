@@ -1,0 +1,5 @@
+type HomeAssistantPlugin implements Plugin {
+  id: String!
+}
+
+extend union Plugin = HomeAssistantPlugin

@@ -1,0 +1,28 @@
+scalar Date
+scalar Void
+
+input AgentUpdateConnectionItem {
+  name: String!
+  category: String
+  icon: String
+  link: String
+  state: State!
+  status: String
+  parents: [String!]!
+  connectorType: ConnectorType!
+}
+
+input AgentUpdateConnectionData {
+  id: String!
+  connected: Boolean!
+  lastUpdated: Date
+  error: String
+  items: [AgentUpdateConnectionItem!]!
+}
+
+extend type Mutation {
+  agentUpdate(
+    localTime: Date!
+    connectionData: [AgentUpdateConnectionData!]!
+  ): Void
+}

@@ -1,21 +1,22 @@
-schema: "../schema/src/**/*.graphql"
+schema:
+  - "../schema/dist/**/*.graphql"
 generates:
-  ./:
-    documents: "client/**/*.graphql"
-    preset: near-operation-file
-    config:
-      enumsAsTypes: true
-      avoidOptionals: true
-    presetConfig:
-      extension: .generated.graphql.ts
-      baseTypesPath: types.graphql.ts
-    plugins:
-      - add:
-          content: "/* eslint-disable */"
-      - typescript
-      - named-operations-object
-      - typescript-operations
-      - typescript-react-apollo
+  # ./:
+  #   documents: "client/**/*.graphql"
+  #   preset: near-operation-file
+  #   config:
+  #     enumsAsTypes: true
+  #     avoidOptionals: true
+  #   presetConfig:
+  #     extension: .generated.graphql.ts
+  #     baseTypesPath: types.graphql.ts
+  #   plugins:
+  #     - add:
+  #         content: "/* eslint-disable */"
+  #     - typescript
+  #     - named-operations-object
+  #     - typescript-operations
+  #     - typescript-react-apollo
 
   ./types.graphql.ts:
     config:
@@ -26,7 +27,9 @@ generates:
           content: "/* eslint-disable */"
       - typescript
 
-  ./server/schema/typeDefs.ts:
+  ./server/plugins/server-time/server-time.generated.graphql.ts:
+    schema:
+      - ./server/plugins/server-time/*.core.graphql
     plugins:
       - add:
           content: "/* eslint-disable */"
@@ -37,9 +40,28 @@ generates:
     config:
       enumsAsTypes: true
       avoidOptionals: true
-      contextType: ./context#Context
       useIndexSignature: true
       defaultMapper: DeepPartial<{T}>
       scalars:
         Date: Date
         Void: void
+
+        
+  ./server/plugins/theme/theme.generated.graphql.ts:
+    schema:
+      - ./server/plugins/theme/*.core.graphql
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typed-document-node
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      useIndexSignature: true
+      defaultMapper: DeepPartial<{T}>
+      contextType: ./context#ThemeContext
+      scalars:
+        JSONObject: object

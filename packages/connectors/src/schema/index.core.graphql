@@ -1,21 +1,19 @@
 scalar Date
 scalar Void
-scalar JSONObject
 
-type Query {
-  theme: JSONObject
+type StatusConnectorsPlugin implements PluginBase {
+  id: String!
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
-  serverTime: Date!
 }
 
-type Subscription {
-  theme: JSONObject!
+extend union Plugin = StatusConnectorsPlugin
+
+extend type Subscription {
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
-  serverTime: Date!
 }
 
 type Category {
@@ -54,30 +52,4 @@ type Connection {
   lastUpdated: Date
   error: String
   items: [Item!]!
-}
-
-input AgentUpdateConnectionItem {
-  name: String!
-  category: String
-  icon: String
-  link: String
-  state: State!
-  status: String
-  parents: [String!]!
-  connectorType: ConnectorType!
-}
-
-input AgentUpdateConnectionData {
-  id: String!
-  connected: Boolean!
-  lastUpdated: Date
-  error: String
-  items: [AgentUpdateConnectionItem!]!
-}
-
-type Mutation {
-  agentUpdate(
-    localTime: Date!
-    connectionData: [AgentUpdateConnectionData!]!
-  ): Void
 }

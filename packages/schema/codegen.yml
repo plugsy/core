@@ -1,6 +1,6 @@
-schema: "src/*.graphql"
+schema: "src/schema/*.core.graphql"
 generates:
-  src/index.ts:
+  src/schema/index.ts:
     plugins:
       - add:
           content: "/* eslint-disable */"

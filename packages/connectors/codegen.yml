@@ -1,0 +1,35 @@
+schema: "../schema/dist/**/*.graphql"
+generates:
+  src/agent/agent.generated.graphql.ts:
+    documents: "src/agent/agent.graphql"
+    schema:
+      - "src/schema/*.core.graphql"
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-graphql-request
+      - typescript-operations
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      rawRequest: true
+
+  src/schema/index.ts:
+    schema: "src/schema/*.core.graphql"
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typed-document-node
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+      useIndexSignature: true
+      defaultMapper: DeepPartial<{T}>
+      contextType: ../context#ConnectorContext
+      scalars:
+        Date: Date
+        Void: void

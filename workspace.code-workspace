@@ -17,11 +17,17 @@
     },
     {
       "path": "packages/schema"
+    },
+    {
+      "path": "packages/homeassistant"
     }
   ],
   "settings": {
     "typescript.tsdk": "plugsy/.yarn/sdks/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
-    "eslint.nodePath": ".yarn/sdks"
+    "eslint.nodePath": ".yarn/sdks",
+    "files.associations": {
+      "*.yaml": "home-assistant"
+    }
   }
 }

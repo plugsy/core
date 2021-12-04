@@ -3,29 +3,24 @@ import { createServer, Server } from "http";
 import express, { Express } from "express";
 import { Logger } from "winston";
 
-import { ApolloServer } from "apollo-server-express";
-import { ContextDependencies, serverOptions } from "./schema";
+import { ApolloServer, IResolvers } from "apollo-server-express";
 import { loadConfig, createLogger } from "@plugsy/common";
-import { filter, map, share, tap } from "rxjs/operators";
-import {
-  getConnector,
-  createConnectionPool,
-  createItemServer,
-} from "@plugsy/connectors";
+import { filter, map, share, switchMap } from "rxjs/operators";
+import { DEFAULT_CONNECTOR_PLUGIN_CONFIG } from "@plugsy/connectors";
 import { environment } from "./environment";
 import { ReplaySubject } from "rxjs";
-import { AgentConfig, agent } from "@plugsy/agent";
-import { ConnectorConfig } from "@plugsy/connectors";
 import { ThemeConfig } from "../client/theme";
 import schema from "./config-schema.json";
 import { svgIconHandler } from "./icon-handler";
+import { pluginManager$, PlugsyPluginsConfig } from "./plugin-manager";
+import { loadSchemaSync } from '@graphql-tools/load';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 const { port, dev } = environment();
 
 export interface ServerConfig {
   loggingLevel?: string;
-  agent?: AgentConfig;
-  connectors: ConnectorConfig[] | ConnectorConfig;
+  plugins: PlugsyPluginsConfig[];
   theme?: ThemeConfig;
 }
 
@@ -45,10 +40,10 @@ function watchConfig(filePath: string, logger: Logger) {
     filePath,
     logger,
     {
-      connectors: [
+      plugins: [
         {
-          type: "DOCKER",
-          config: {},
+          type: "connectors",
+          config: DEFAULT_CONNECTOR_PLUGIN_CONFIG,
         },
       ],
     },
@@ -67,21 +62,7 @@ function watchConfig(filePath: string, logger: Logger) {
     })
   );
 
-  const connectors$ = config$.pipe(
-    map((config) => config.connectors),
-    map((connectors) => {
-      if (Array.isArray(connectors)) {
-        return connectors.map((connector) => getConnector(connector, logger));
-      }
-      return [getConnector(connectors, logger)];
-    }),
-    tap((connectors) =>
-      logger.info(`loadConnectors`, {
-        count: connectors.length,
-      })
-    )
-  );
-  const agentConfig$ = config$.pipe(map((config) => config.agent));
+  const pluginConfigs$ = config$.pipe(map(({ plugins }) => plugins));
   const loggingLevel$ = config$.pipe(
     map((config) => config.loggingLevel),
     filter(Boolean)
@@ -89,33 +70,9 @@ function watchConfig(filePath: string, logger: Logger) {
   const theme$ = config$.pipe(map((config) => config.theme));
   return {
     loggingLevel$,
-    connectors$,
-    agentConfig$,
+    pluginConfigs$,
     theme$,
   };
-}
-
-async function startAPI(
-  httpServer: Server,
-  expressServer: Express,
-  dependencies: ContextDependencies
-) {
-  const apolloServer = new ApolloServer({
-    ...serverOptions(dependencies),
-    tracing: true,
-    subscriptions: {
-      path: "/graphql",
-      keepAlive: 9000,
-    },
-    playground: {
-      subscriptionEndpoint: "/graphql",
-    },
-  });
-
-  apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
-  apolloServer.installSubscriptionHandlers(httpServer);
-
-  return apolloServer;
 }
 
 async function startFrontend(expressServer: Express) {
@@ -131,49 +88,60 @@ async function startServer() {
   const { localConfigFile, loggingLevel } = environment();
   const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
-  const { connectors$, agentConfig$, loggingLevel$, theme$ } = watchConfig(
+  const { pluginConfigs$, loggingLevel$ } = watchConfig(
     localConfigFile,
     logger
+  );
+
+  const plugins$ = pluginManager$(
+    logger.child({ component: "pluginManager" }),
+    pluginConfigs$
   );
 
   const loggingLevelSubscription = loggingLevel$.subscribe(
     (level) => (logger.level = level)
   );
 
-  logger.verbose("createConnectionPool");
-  const connectionPool = createConnectionPool(logger);
-
-  logger.verbose("createItemServer");
-  const itemServer = createItemServer(connectionPool.connections$, logger);
-
-  logger.verbose("subscribeInternalConnections");
-  const connectorSubscription = connectors$.subscribe(
-    connectionPool.setInternalConnections
-  );
-
-  logger.verbose("initAgent");
-  const agentSubscription = agent(
-    agentConfig$,
-    itemServer.connectionData$,
-    logger
-  ).subscribe();
-
   const expressServer = express();
 
-  expressServer.get('/icons/:iconPath(*)', svgIconHandler)
+  expressServer.get("/icons/:iconPath(*)", svgIconHandler);
 
   const httpServer = createServer(expressServer);
-  
+
+  plugins$
+    .pipe(
+      switchMap(async ({ schemaPaths, ...rest }) => {
+
+
+
+        return { ...rest };
+      }),
+      map(({ resolvers, context }) => {
+        const apolloServer = new ApolloServer({
+          tracing: true,
+          subscriptions: {
+            path: "/graphql",
+            keepAlive: 9000,
+          },
+          playground: {
+            subscriptionEndpoint: "/graphql",
+          },
+          resolvers,
+        });
+
+        apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
+        apolloServer.installSubscriptionHandlers(httpServer);
+      })
+    )
+    .subscribe();
+
   logger.verbose("startAPI");
-  const api = await startAPI(httpServer, expressServer, {
-    connectionPool,
-    itemServer,
-    logger,
-    theme$,
-  });
+
+  return apolloServer;
+
   logger.verbose("startFrontend");
   const frontend = await startFrontend(expressServer);
-  
+
   logger.verbose("listen");
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));
 

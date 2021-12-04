@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "graphql": "^15.5.1",
-    "graphql-tag": "^2.12.5"
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",

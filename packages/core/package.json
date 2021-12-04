@@ -25,6 +25,8 @@
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@babel/runtime": "^7.14.8",
+    "@graphql-tools/graphql-file-loader": "^7.3.3",
+    "@graphql-tools/load": "^7.4.1",
     "@graphql-tools/schema": "^7.1.5",
     "@plugsy/agent": "workspace:packages/agent",
     "@plugsy/common": "workspace:packages/common",
@@ -115,7 +117,7 @@
     "concurrently": "^6.2.0",
     "eslint": "^7.31.0",
     "eslint-config-next": "^11.0.1",
-    "graphql-tag": "^2.12.5",
+    "graphql-tag": "^2.12.6",
     "next-compose-plugins": "^2.2.1",
     "next-fonts": "^1.5.1",
     "next-images": "^1.8.1",

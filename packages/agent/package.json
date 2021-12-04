@@ -7,16 +7,18 @@
     "dev": "concurrently --kill-others-on-fail -n tsc,node 'tsc -b --watch' 'nodemon'",
     "build:lib": "tsc --build",
     "build": "yarn gen && yarn build:lib",
-    "gen:gql": "graphql-codegen",
     "gen:json": "typescript-json-schema ./tsconfig.gen.json Config --aliasRefs --ignoreErrors --required --strictNullChecks -o ./src/config-schema.json",
-    "gen": "yarn gen:gql && yarn gen:json"
+    "gen": "yarn gen:json"
   },
   "dependencies": {
     "@plugsy/common": "workspace:packages/common",
     "@plugsy/connectors": "workspace:packages/connectors",
+    "@plugsy/schema": "workspace:packages/schema",
+    "date-fns": "^2.23.0",
     "graphql": "^15.5.1",
+    "graphql-import": "^1.0.2",
     "graphql-request": "^3.4.0",
-    "graphql-tag": "^2.12.5",
+    "graphql-tag": "^2.12.6",
     "rxjs": "^7.2.0",
     "winston": "^3.3.3"
   },

@@ -1,0 +1,9 @@
+scalar JSONObject
+
+extend type Query {
+  serverTime: Date!
+}
+
+extend type Subscription {
+  serverTime: Date!
+}

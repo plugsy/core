@@ -14,7 +14,7 @@
     "await-to-js": "^3.0.0",
     "graphql": "^15.5.1",
     "graphql-request": "^3.4.0",
-    "graphql-tag": "^2.12.5",
+    "graphql-tag": "^2.12.6",
     "home-assistant-js-websocket": "^5.11.3",
     "nanoid": "^3.1.30",
     "rxjs": "^7.2.0",

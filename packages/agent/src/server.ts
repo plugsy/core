@@ -1,20 +1,17 @@
 import { createLogger, loadConfig } from "@plugsy/common";
 import {
-  ConnectorConfig,
-  createConnectionPool,
-  createItemServer,
-  getConnector,
+  ConnectorPlugin,
+  ConnectorPluginConfig,
+  DEFAULT_CONNECTOR_PLUGIN_CONFIG,
 } from "@plugsy/connectors";
-import { filter, map, of, ReplaySubject, share, switchMap, tap } from "rxjs";
+import { CorePlugin } from "@plugsy/schema";
+import { filter, map, ReplaySubject, share } from "rxjs";
 import { Logger } from "winston";
-import { agent, AgentConfig } from "./";
 import schema from "./config-schema.json";
 import { environment } from "./environment";
 
-export interface Config {
+export interface Config extends ConnectorPluginConfig {
   loggingLevel?: string;
-  connectors: ConnectorConfig[] | ConnectorConfig;
-  agent?: AgentConfig;
 }
 
 async function tryQuietly(fn: () => any | Promise<any>) {
@@ -32,14 +29,7 @@ function watchConfig(filePath: string, logger: Logger) {
   const config$ = loadConfig<Config>(
     filePath,
     logger,
-    {
-      connectors: [
-        {
-          type: "DOCKER",
-          config: {},
-        },
-      ],
-    },
+    DEFAULT_CONNECTOR_PLUGIN_CONFIG,
     [
       {
         name: "AgentConfig",
@@ -54,29 +44,14 @@ function watchConfig(filePath: string, logger: Logger) {
       resetOnRefCountZero: true,
     })
   );
-  const connectors$ = config$.pipe(
-    map((config) => config.connectors),
-    map((connectors) => {
-      if (Array.isArray(connectors)) {
-        return connectors.map((connector) => getConnector(connector, logger));
-      }
-      return [getConnector(connectors, logger)];
-    }),
-    tap((connectors) =>
-      logger.info(`loadConnectors`, {
-        count: connectors.length,
-      })
-    )
-  );
-  const agentConfig$ = config$.pipe(map((config) => config.agent));
   const loggingLevel$ = config$.pipe(
     map((config) => config.loggingLevel),
     filter(Boolean)
   );
+
   return {
     loggingLevel$,
-    connectors$,
-    agentConfig$,
+    config$,
   };
 }
 
@@ -84,47 +59,37 @@ async function startServer() {
   const { localConfigFile, loggingLevel, agentEndpoint } = environment();
   const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
-  const { connectors$, agentConfig$, loggingLevel$ } = watchConfig(
-    localConfigFile,
-    logger
-  );
+  const { config$, loggingLevel$ } = watchConfig(localConfigFile, logger);
 
   const loggingLevelSubscription = loggingLevel$.subscribe(
     (level) => (logger.level = level)
   );
 
-  logger.verbose("createConnectionPool");
-  const connectionPool = createConnectionPool(logger);
-
-  logger.verbose("createItemServer");
-  const itemServer = createItemServer(connectionPool.connections$, logger);
-
-  logger.verbose("subscribeInternalConnections");
-  const connectorSubscription = connectors$.subscribe(
-    connectionPool.setInternalConnections
+  const corePlugin = await CorePlugin(
+    logger.child({ component: "CorePlugin" })
   );
 
-  logger.verbose("initAgent");
-  const agentSubscription = agent(
-    agentConfig$.pipe(
-      switchMap((config) => {
-        return of(
-          config ?? agentEndpoint
+  const connectorPlugin = await ConnectorPlugin(
+    logger.child({ component: "ConnectorPlugin" }),
+    config$.pipe(
+      map(({ agent, ...config }) => ({
+        ...config,
+        agent:
+          agent ||
+          (agentEndpoint
             ? {
                 endpoint: agentEndpoint,
               }
-            : undefined
-        );
-      })
-    ),
-    itemServer.connectionData$,
-    logger
-  ).subscribe();
+            : undefined),
+      }))
+    )
+  );
+
+  const teardowns = [corePlugin.onTeardown, connectorPlugin.onTeardown];
 
   async function closeServer() {
     logger.info("Stopping Server");
-    await tryQuietly(connectorSubscription.unsubscribe);
-    await tryQuietly(agentSubscription.unsubscribe);
+    teardowns.forEach((fn) => fn?.());
     await tryQuietly(loggingLevelSubscription.unsubscribe);
     logger.info("Server Stopped");
     process.exit(0);
