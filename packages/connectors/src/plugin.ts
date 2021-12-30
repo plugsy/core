@@ -24,7 +24,7 @@ export const DEFAULT_CONNECTOR_PLUGIN_CONFIG: ConnectorPluginConfig = {
 
 const schemaPaths = [path.join(__dirname, "schema/index.core.graphql")];
 
-export const ConnectorPlugin: PluginFn<
+export const ConnectorPlugin: ServerPluginFn<
   ConnectorPluginConfig,
   ConnectorContext
 > = async (logger, _, config$) => {
@@ -67,6 +67,6 @@ export const ConnectorPlugin: PluginFn<
       agentSubscription.unsubscribe();
     },
     getContext: (logger) =>
-      initConnectorContext({ itemServer, connectionPool, logger, theme$ }),
+      initConnectorContext({ itemServer, connectionPool, logger }),
   };
 };

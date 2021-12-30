@@ -24,7 +24,7 @@
     "paths": {
       // Gross. Only needed until we can support Node 14 Exports in TS
       // See https://stackoverflow.com/questions/55518870/use-yarn-workspaces-and-typescripts-project-references-to-reference-another-pac
-      "@plugsy/schema/server": ["../schema/dist/server"] 
+      "@plugsy/schema/server": ["../schema/dist/server"]
     }
   },
   "exclude": ["dist", ".next", "out", "next.config.js"],
@@ -34,7 +34,7 @@
     "**/*.tsx",
     "types.graphql.ts",
     "**/*.json"
-, "../schema/src/server/apollo-config.ts"  ],
+  ],
   "references": [
     { "path": "../common" },
     { "path": "../connectors" },

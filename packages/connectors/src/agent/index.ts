@@ -10,7 +10,7 @@ import {
   tap,
 } from "rxjs/operators";
 import { Logger } from "winston";
-import { ConnectionData } from '@plugsy/connectors'
+import { ConnectionData } from "../connectors/model";
 import { getSdk } from "./agent.generated.graphql";
 
 export interface AgentConfig {

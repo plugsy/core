@@ -8,8 +8,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["es2020"],
-    "module": "commonjs",
+    "lib": ["dom", "es2020"],
+    "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
@@ -17,9 +17,15 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2020",
+    "target": "esnext",
     "outDir": "dist",
-    "rootDir": "src"
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      // Gross. Only needed until we can support Node 14 Exports in TS
+      // See https://stackoverflow.com/questions/55518870/use-yarn-workspaces-and-typescripts-project-references-to-reference-another-pac
+      "@plugsy/schema/server": ["../schema/dist/server"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.json", "typings"],
   "references": [{ "path": "../common" }, { "path": "../schema" }]

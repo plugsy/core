@@ -1,4 +1,4 @@
-schema: "../schema/dist/**/*.graphql"
+schema: "../schema/dist/server/**/*.graphql"
 generates:
   src/agent/agent.generated.graphql.ts:
     documents: "src/agent/agent.graphql"
