@@ -2,8 +2,15 @@ import { readFile as _readFile, exists as _exists } from "fs";
 import { promisify } from "util";
 import { Schema, Validator } from "jsonschema";
 import { fileWatchObservable } from "../utils/file-watch-observable";
-import { catchError, debounceTime, map, switchMap, tap } from "rxjs/operators";
-import { BehaviorSubject, concat, EMPTY, from, of } from "rxjs";
+import {
+  catchError,
+  debounceTime,
+  map,
+  share,
+  switchMap,
+  tap,
+} from "rxjs/operators";
+import { BehaviorSubject, concat, EMPTY, from, of, ReplaySubject } from "rxjs";
 import { Logger } from "winston";
 const exists = promisify(_exists);
 const readFile = promisify(_readFile);
@@ -16,11 +23,15 @@ export function loadConfig<T extends any>(
   defaultConfig: T,
   validations: { name: string; schema: Schema }[]
 ) {
-  logger = logger.child({
-    component: "getServerConfig",
-  });
   logger.verbose("init");
-  const defaultConfig$ = new BehaviorSubject<T>(defaultConfig);
+  const defaultConfig$ = new BehaviorSubject<T>(defaultConfig).pipe(
+    share({
+      connector: () => new ReplaySubject(1),
+      resetOnComplete: true,
+      resetOnError: true,
+      resetOnRefCountZero: true,
+    })
+  );
 
   return from(exists(filePath)).pipe(
     switchMap((fileExists) => {
@@ -80,7 +91,13 @@ export function loadConfig<T extends any>(
                 return EMPTY;
               })
             )
-          )
+          ),
+          share({
+            connector: () => new ReplaySubject(1),
+            resetOnComplete: true,
+            resetOnError: true,
+            resetOnRefCountZero: true,
+          })
         );
       }
 

@@ -1,15 +1,21 @@
-schema: "src/schema/*.core.graphql"
+
 generates:
-  src/schema/index.ts:
+  src/server/schema/index.ts:
+    schema: "src/server/schema/*.core.graphql"
     plugins:
       - add:
           content: "/* eslint-disable */"
       - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typed-document-node
     config:
       enumsAsTypes: true
       avoidOptionals: true
       useIndexSignature: true
       defaultMapper: DeepPartial<{T}>
+      contextType: ../types#PlugsyContext
+      
       scalars:
         Date: Date
         Void: void

@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    {
+      "type": "message",
+      "config": {
+        "message": "tes2wft"
+      }
+    },
+    {
+      "id": "test",
+      "type": "message",
+      "config": {
+        "message": "tes2wft"
+      }
+    }
+  ]
+}

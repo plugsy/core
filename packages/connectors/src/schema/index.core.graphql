@@ -1,14 +1,11 @@
 scalar Date
 scalar Void
 
-type StatusConnectorsPlugin implements PluginBase {
-  id: String!
+extend type Query {
   items: [Item!]!
   categories: [Category!]!
   connections: [Connection!]!
 }
-
-extend union Plugin = StatusConnectorsPlugin
 
 extend type Subscription {
   items: [Item!]!
@@ -52,4 +49,30 @@ type Connection {
   lastUpdated: Date
   error: String
   items: [Item!]!
+}
+
+input AgentUpdateConnectionItem {
+  name: String!
+  category: String
+  icon: String
+  link: String
+  state: State!
+  status: String
+  parents: [String!]!
+  connectorType: ConnectorType!
+}
+
+input AgentUpdateConnectionData {
+  id: String!
+  connected: Boolean!
+  lastUpdated: Date
+  error: String
+  items: [AgentUpdateConnectionItem!]!
+}
+
+extend type Mutation {
+  agentUpdate(
+    localTime: Date!
+    connectionData: [AgentUpdateConnectionData!]!
+  ): Void
 }

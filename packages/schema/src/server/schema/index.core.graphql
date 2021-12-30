@@ -1,0 +1,54 @@
+scalar JSONObject
+scalar Void
+scalar ColorTone
+scalar HexColor
+
+type ColorShades {
+  _100: HexColor!
+  _200: HexColor!
+  _300: HexColor!
+  _400: HexColor!
+  _500: HexColor!
+  color: HexColor!
+  _600: HexColor!
+  _700: HexColor!
+  _800: HexColor!
+  _900: HexColor!
+}
+
+type Palette {
+  background: ColorShades!
+  foreground: ColorShades!
+  primary: ColorShades!
+  secondary: ColorShades!
+  success: ColorShades!
+  warning: ColorShades!
+  error: ColorShades!
+  neutral: ColorShades!
+}
+
+type Theme {
+  palette: Palette!
+}
+
+type Component {
+  name: String!
+  props: JSONObject
+}
+
+type Query {
+  version: String!
+  loadedPlugins: [String!]!
+  components: [Component!]!
+  theme: Theme!
+}
+
+type Subscription {
+  loadedPlugins: [String!]!
+  components: [Component!]!
+  theme: Theme!
+}
+
+type Mutation {
+  reload: Void
+}

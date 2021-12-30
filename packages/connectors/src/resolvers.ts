@@ -12,8 +12,21 @@ import { map } from "rxjs/operators";
 import { addMilliseconds, differenceInMilliseconds } from "date-fns";
 import { MutationResolvers } from "./schema";
 
-export const Query: Partial<QueryResolvers> = {};
+export const Query: Partial<QueryResolvers> = {
+  theme: async (_, __, { theme$ }) => {
+    return await firstValueFrom(theme$);
+  },
 
+  categories: async (_, __, { statusConnectors: { itemServer } }) => {
+    return await firstValueFrom(itemServer.categories$);
+  },
+  items: async (_, __, { statusConnectors: { itemServer } }) => {
+    return await firstValueFrom(itemServer.items$);
+  },
+  connections: async (_, __, { statusConnectors: { itemServer } }) => {
+    return await firstValueFrom(itemServer.connectionData$);
+  },
+};
 
 export const Mutation: Partial<MutationResolvers> = {
   agentUpdate: async (
@@ -29,20 +42,7 @@ export const Mutation: Partial<MutationResolvers> = {
       }))
       .forEach(connectionPool.updateExternalConnection);
   },
-}
-
-export const StatusConnectionPlugin: Partial<StatusConnectorsPluginResolvers> =
-  {
-    categories: async (_, __, { statusConnectors: { itemServer } }) => {
-      return await firstValueFrom(itemServer.categories$);
-    },
-    items: async (_, __, { statusConnectors: { itemServer } }) => {
-      return await firstValueFrom(itemServer.items$);
-    },
-    connections: async (_, __, { statusConnectors: { itemServer } }) => {
-      return await firstValueFrom(itemServer.connectionData$);
-    },
-  };
+};
 
 export const Subscription: Partial<SubscriptionResolvers> = {
   categories: {
@@ -62,6 +62,12 @@ export const Subscription: Partial<SubscriptionResolvers> = {
       return toAsyncIterable(itemServer.connectionData$);
     },
     resolve: (x: GQLConnection[]) => x,
+  },
+  theme: {
+    subscribe: (_, __, { theme$ }) => {
+      return toAsyncIterable(theme$);
+    },
+    resolve: (x: any[]) => x,
   },
 };
 

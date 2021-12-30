@@ -1,5 +1,6 @@
 schema:
-  - "../schema/dist/**/*.graphql"
+  - ../schema/server/schema/*.core.graphql
+
 generates:
   # ./:
   #   documents: "client/**/*.graphql"
@@ -27,9 +28,7 @@ generates:
           content: "/* eslint-disable */"
       - typescript
 
-  ./server/plugins/server-time/server-time.generated.graphql.ts:
-    schema:
-      - ./server/plugins/server-time/*.core.graphql
+  ./server/schema/index.ts:
     plugins:
       - add:
           content: "/* eslint-disable */"
@@ -42,26 +41,9 @@ generates:
       avoidOptionals: true
       useIndexSignature: true
       defaultMapper: DeepPartial<{T}>
+      contextType: ../context#Context
       scalars:
         Date: Date
         Void: void
 
         
-  ./server/plugins/theme/theme.generated.graphql.ts:
-    schema:
-      - ./server/plugins/theme/*.core.graphql
-    plugins:
-      - add:
-          content: "/* eslint-disable */"
-      - typescript
-      - typescript-resolvers
-      - typescript-operations
-      - typed-document-node
-    config:
-      enumsAsTypes: true
-      avoidOptionals: true
-      useIndexSignature: true
-      defaultMapper: DeepPartial<{T}>
-      contextType: ./context#ThemeContext
-      scalars:
-        JSONObject: object

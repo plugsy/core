@@ -1,26 +1,31 @@
 import next from "next";
-import { createServer, Server } from "http";
+import { createServer } from "http";
 import express, { Express } from "express";
 import { Logger } from "winston";
 
-import { ApolloServer, IResolvers } from "apollo-server-express";
 import { loadConfig, createLogger } from "@plugsy/common";
-import { filter, map, share, switchMap } from "rxjs/operators";
-import { DEFAULT_CONNECTOR_PLUGIN_CONFIG } from "@plugsy/connectors";
+import { filter, map, share } from "rxjs/operators";
+import {
+  ConnectorPlugin,
+  DEFAULT_CONNECTOR_PLUGIN_CONFIG,
+} from "@plugsy/connectors";
 import { environment } from "./environment";
 import { ReplaySubject } from "rxjs";
-import { ThemeConfig } from "../client/theme";
 import schema from "./config-schema.json";
-import { svgIconHandler } from "./icon-handler";
-import { pluginManager$, PlugsyPluginsConfig } from "./plugin-manager";
-import { loadSchemaSync } from '@graphql-tools/load';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import {
+  ComponentConfig,
+  createPluginServer,
+  PluginConfig,
+  ThemeConfig,
+} from "@plugsy/schema/server";
+import { registerIconHandler } from "./handlers/icon-handler";
 
 const { port, dev } = environment();
 
 export interface ServerConfig {
   loggingLevel?: string;
-  plugins: PlugsyPluginsConfig[];
+  plugins: PluginConfig<any, any>[];
+  components: ComponentConfig[];
   theme?: ThemeConfig;
 }
 
@@ -40,6 +45,7 @@ function watchConfig(filePath: string, logger: Logger) {
     filePath,
     logger,
     {
+      components: [],
       plugins: [
         {
           type: "connectors",
@@ -62,16 +68,13 @@ function watchConfig(filePath: string, logger: Logger) {
     })
   );
 
-  const pluginConfigs$ = config$.pipe(map(({ plugins }) => plugins));
   const loggingLevel$ = config$.pipe(
     map((config) => config.loggingLevel),
     filter(Boolean)
   );
-  const theme$ = config$.pipe(map((config) => config.theme));
   return {
     loggingLevel$,
-    pluginConfigs$,
-    theme$,
+    config$,
   };
 }
 
@@ -88,56 +91,25 @@ async function startServer() {
   const { localConfigFile, loggingLevel } = environment();
   const logger = createLogger(loggingLevel);
   logger.verbose("watchConfig");
-  const { pluginConfigs$, loggingLevel$ } = watchConfig(
-    localConfigFile,
-    logger
-  );
-
-  const plugins$ = pluginManager$(
-    logger.child({ component: "pluginManager" }),
-    pluginConfigs$
-  );
+  const { config$, loggingLevel$ } = watchConfig(localConfigFile, logger);
 
   const loggingLevelSubscription = loggingLevel$.subscribe(
     (level) => (logger.level = level)
   );
 
   const expressServer = express();
-
-  expressServer.get("/icons/:iconPath(*)", svgIconHandler);
-
   const httpServer = createServer(expressServer);
 
-  plugins$
-    .pipe(
-      switchMap(async ({ schemaPaths, ...rest }) => {
-
-
-
-        return { ...rest };
-      }),
-      map(({ resolvers, context }) => {
-        const apolloServer = new ApolloServer({
-          tracing: true,
-          subscriptions: {
-            path: "/graphql",
-            keepAlive: 9000,
-          },
-          playground: {
-            subscriptionEndpoint: "/graphql",
-          },
-          resolvers,
-        });
-
-        apolloServer.applyMiddleware({ app: expressServer, path: "/graphql" });
-        apolloServer.installSubscriptionHandlers(httpServer);
-      })
-    )
-    .subscribe();
-
-  logger.verbose("startAPI");
-
-  return apolloServer;
+  registerIconHandler(expressServer);
+  const pluginServer = createPluginServer({
+    logger: logger.child({ component: "createPluginServer" }),
+    config$,
+    expressServer,
+    httpServer,
+    plugins: {
+      test: ConnectorPlugin,
+    },
+  });
 
   logger.verbose("startFrontend");
   const frontend = await startFrontend(expressServer);
@@ -148,10 +120,8 @@ async function startServer() {
   async function closeServer() {
     logger.info("Stopping Server");
     await tryQuietly(frontend.close);
-    await tryQuietly(connectorSubscription.unsubscribe);
-    await tryQuietly(agentSubscription.unsubscribe);
     await tryQuietly(loggingLevelSubscription.unsubscribe);
-    await tryQuietly(api.stop);
+    await tryQuietly(pluginServer.unsubscribe);
     await tryQuietly(() =>
       httpServer.close(() => logger.info("HTTP Server Closed"))
     );

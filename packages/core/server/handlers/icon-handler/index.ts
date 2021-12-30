@@ -1,9 +1,9 @@
 import { readFileSync } from "fs";
-import { Handler } from "express";
+import { Express, Handler } from "express";
 import { paramCase } from "change-case";
 const EXAMPLES = ["@svg-icons/simple-icons/Plex"];
 
-export const svgIconHandler: Handler = (req, res) => {
+export const iconHandler: Handler = (req, res) => {
   const { iconPath } = req.params;
   let filteredIconPath = iconPath.split("/");
   if (filteredIconPath.length == 3) {
@@ -55,4 +55,8 @@ export const svgIconHandler: Handler = (req, res) => {
       error,
     });
   }
+};
+
+export const registerIconHandler = (expressServer: Express) => {
+  expressServer.get("/icons/:iconPath(*)", iconHandler);
 };

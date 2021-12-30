@@ -1,14 +1,14 @@
 import { ConnectorConfig, getConnector } from "./connectors";
 import { ConnectorContext, initConnectorContext } from "./context";
 import * as resolvers from "./resolvers";
-import { PluginFn } from "@plugsy/schema";
+import { ServerPluginFn } from "@plugsy/schema/server";
 import { createConnectionPool } from "./connection-pool";
 import { createItemServer } from "./item-server";
 import { agent, AgentConfig } from "./agent";
 import { map, tap } from "rxjs";
 import path from "path";
-
 export interface ConnectorPluginConfig {
+  theme$?: any;
   connectors: ConnectorConfig | ConnectorConfig[];
   agent?: AgentConfig;
 }
@@ -22,10 +22,12 @@ export const DEFAULT_CONNECTOR_PLUGIN_CONFIG: ConnectorPluginConfig = {
   ],
 };
 
+const schemaPaths = [path.join(__dirname, "schema/index.core.graphql")];
+
 export const ConnectorPlugin: PluginFn<
   ConnectorPluginConfig,
   ConnectorContext
-> = async (logger, config$) => {
+> = async (logger, _, config$) => {
   const connectorConfig$ = config$.pipe(map(({ connectors }) => connectors));
   logger.verbose("createConnectionPool");
   const connectionPool = createConnectionPool(logger);
@@ -59,15 +61,12 @@ export const ConnectorPlugin: PluginFn<
 
   return {
     resolvers,
-    schemas: [
-      path.join(__dirname, "schema/index.core.graphql"),
-      path.join(__dirname, "schema/agent.core.graphql"),
-    ],
+    schemaPaths,
     onTeardown: () => {
       connectorSubscription.unsubscribe();
       agentSubscription.unsubscribe();
     },
-    getContext: () =>
-      initConnectorContext({ itemServer, connectionPool, logger }),
+    getContext: (logger) =>
+      initConnectorContext({ itemServer, connectionPool, logger, theme$ }),
   };
 };

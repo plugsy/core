@@ -1,0 +1,8 @@
+
+interface Palette {
+    
+}
+
+interface Theme {
+    palette: Palette
+}
