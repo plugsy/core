@@ -4,7 +4,6 @@ import {
   ConnectorPluginConfig,
   DEFAULT_CONNECTOR_PLUGIN_CONFIG,
 } from "@plugsy/connectors";
-import { CorePlugin } from "@plugsy/schema";
 import { filter, map, ReplaySubject, share } from "rxjs";
 import { Logger } from "winston";
 import schema from "./config-schema.json";
@@ -65,12 +64,9 @@ async function startServer() {
     (level) => (logger.level = level)
   );
 
-  const corePlugin = await CorePlugin(
-    logger.child({ component: "CorePlugin" })
-  );
-
   const connectorPlugin = await ConnectorPlugin(
     logger.child({ component: "ConnectorPlugin" }),
+    "N/A",
     config$.pipe(
       map(({ agent, ...config }) => ({
         ...config,
@@ -85,7 +81,7 @@ async function startServer() {
     )
   );
 
-  const teardowns = [corePlugin.onTeardown, connectorPlugin.onTeardown];
+  const teardowns = [connectorPlugin.onTeardown];
 
   async function closeServer() {
     logger.info("Stopping Server");
