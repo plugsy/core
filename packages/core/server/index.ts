@@ -18,7 +18,6 @@ import {
   PluginConfig,
   ThemeConfig,
 } from "@plugsy/schema/server";
-import { registerIconHandler } from "./handlers/icon-handler";
 
 const { port, dev } = environment();
 
@@ -100,7 +99,6 @@ async function startServer() {
   const expressServer = express();
   const httpServer = createServer(expressServer);
 
-  registerIconHandler(expressServer);
   const pluginServer = createPluginServer({
     logger: logger.child({ component: "createPluginServer" }),
     config$,

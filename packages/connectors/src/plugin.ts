@@ -1,10 +1,10 @@
-import { ConnectorConfig, getConnector } from "./connectors";
-import { ConnectorContext, initConnectorContext } from "./context";
-import * as resolvers from "./resolvers";
+import { ConnectorConfig, getConnector } from "./server/connectors";
+import { ConnectorContext, initConnectorContext } from "./server/context";
+import * as resolvers from "./server/resolvers";
 import { ServerPluginFn } from "@plugsy/schema/server";
-import { createConnectionPool } from "./connection-pool";
-import { createItemServer } from "./item-server";
-import { agent, AgentConfig } from "./agent";
+import { createConnectionPool } from "./server/connection-pool";
+import { createItemServer } from "./server/item-server";
+import { agent, AgentConfig } from "./server/agent";
 import { map, tap } from "rxjs";
 import path from "path";
 export interface ConnectorPluginConfig {

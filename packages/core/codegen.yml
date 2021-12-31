@@ -1,23 +1,23 @@
 schema:
-  - ../schema/server/schema/*.core.graphql
+  - ../schema/dist/server/schema/*.core.graphql
 
 generates:
-  # ./:
-  #   documents: "client/**/*.graphql"
-  #   preset: near-operation-file
-  #   config:
-  #     enumsAsTypes: true
-  #     avoidOptionals: true
-  #   presetConfig:
-  #     extension: .generated.graphql.ts
-  #     baseTypesPath: types.graphql.ts
-  #   plugins:
-  #     - add:
-  #         content: "/* eslint-disable */"
-  #     - typescript
-  #     - named-operations-object
-  #     - typescript-operations
-  #     - typescript-react-apollo
+  ./:
+    documents: "client/**/*.graphql"
+    preset: near-operation-file
+    config:
+      enumsAsTypes: true
+      avoidOptionals: true
+    presetConfig:
+      extension: .generated.graphql.ts
+      baseTypesPath: types.graphql.ts
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - named-operations-object
+      - typescript-operations
+      - typescript-react-apollo
 
   ./types.graphql.ts:
     config:
@@ -43,7 +43,7 @@ generates:
       defaultMapper: DeepPartial<{T}>
       contextType: ../context#Context
       scalars:
-        Date: Date
+        DateTime: Date
         Void: void
 
         

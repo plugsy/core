@@ -1,0 +1,54 @@
+fragment allShades on ColorShades {
+  _100
+  _200
+  _300
+  _400
+  _500
+  color
+  _600
+  _700
+  _800
+  _900
+}
+
+fragment fullTheme on Theme {
+  palette {
+    background {
+      ...allShades
+    }
+    foreground {
+      ...allShades
+    }
+    primary {
+      ...allShades
+    }
+    secondary {
+      ...allShades
+    }
+    success {
+      ...allShades
+    }
+    warning {
+      ...allShades
+    }
+    error {
+      ...allShades
+    }
+    neutral {
+      ...allShades
+    }
+  }
+  plugins
+}
+
+query Theme {
+  theme {
+    ...fullTheme
+  }
+}
+
+subscription SubscribeTheme {
+  theme {
+    ...fullTheme
+  }
+}

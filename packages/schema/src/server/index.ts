@@ -11,6 +11,7 @@ import { Logger } from "winston";
 import { plugsyApolloServerConfig$ } from "./apollo-config";
 import { PluginMap, PlugsyConfig } from "./types";
 import http from "http";
+import { registerIconHandler } from "./handlers/icon-handler";
 
 interface CreatePluginServerOptions {
   logger: Logger;
@@ -27,6 +28,7 @@ export const createPluginServer = ({
   config$,
   plugins,
 }: CreatePluginServerOptions) => {
+  registerIconHandler(expressServer);
   return plugsyApolloServerConfig$(
     logger.child({ component: "plugsyApolloServerConfig$" }),
     config$,

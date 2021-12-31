@@ -1,0 +1,6 @@
+mutation agentUpdate(
+  $localTime: Date!
+  $connectionData: [AgentUpdateConnectionData!]!
+) {
+  agentUpdate(localTime: $localTime, connectionData: $connectionData)
+}

@@ -2,6 +2,7 @@ scalar JSONObject
 scalar Void
 scalar ColorTone
 scalar HexColor
+scalar DateTime
 
 type ColorShades {
   _100: HexColor!
@@ -29,6 +30,7 @@ type Palette {
 
 type Theme {
   palette: Palette!
+  plugins: JSONObject!
 }
 
 type Component {
@@ -41,10 +43,12 @@ type Query {
   loadedPlugins: [String!]!
   components: [Component!]!
   theme: Theme!
+  serverTime: DateTime!
 }
 
 type Subscription {
   loadedPlugins: [String!]!
+  serverTime: DateTime!
   components: [Component!]!
   theme: Theme!
 }

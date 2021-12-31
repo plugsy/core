@@ -1,56 +1,24 @@
-fragment FullCategory on Category {
-  name
-  items {
-    name
-    status
-    icon
-    link
-    state
-    connectorType
-    children {
-      name
-      state
-      icon
-      status
-      connectorType
-    }
-  }
-}
-
-fragment FullConnection on Connection {
-  id
-  connected
-  lastUpdated
-  error
-}
-
 query Init {
-  theme
+  version
+  loadedPlugins
   serverTime
-  categories {
-    ...FullCategory
-  }
-  connections {
-    ...FullConnection
-  }
-}
-
-subscription Connections {
-  connections {
-    ...FullConnection
-  }
-}
-
-subscription Categories {
-  categories {
-    ...FullCategory
+  components {
+    name
+    props
   }
 }
 
 subscription ServerTime {
-  serverTime
+    serverTime
 }
 
-subscription Theme {
-  theme
+subscription LoadedPlugins {
+  loadedPlugins
+}
+
+subscription Components {
+  components {
+    name
+    props
+  }
 }

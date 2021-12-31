@@ -45,9 +45,11 @@ export interface ComponentConfig {
 export type ColorNames = keyof Omit<GQLPalette, "__typename">;
 
 export type PaletteConfig = Partial<{ [key in ColorNames]: string }>;
+
 export type ThemeConfig =
   | {
-      palette: PaletteConfig;
+      palette?: PaletteConfig;
+      plugins?: any;
     }
   | undefined
   | null;

@@ -4,7 +4,7 @@ import {
   SubscriptionResolvers,
 } from "./schema";
 import { resolvers as scalarResolvers } from "graphql-scalars";
-import { firstValueFrom, map } from "rxjs";
+import { firstValueFrom, map, timer } from "rxjs";
 import { latestValueFrom as toAsyncIterable } from "rxjs-for-await";
 
 const Query: QueryResolvers = {
@@ -16,6 +16,9 @@ const Query: QueryResolvers = {
     return Object.keys(plugins);
   },
   theme: async (_, __, { theme$ }) => await firstValueFrom(theme$),
+  serverTime: () => {
+    return new Date();
+  },
 };
 
 const Mutation: MutationResolvers = {
@@ -44,6 +47,12 @@ const Subscription: SubscriptionResolvers = {
       return toAsyncIterable(theme$);
     },
     resolve: (x: any) => x,
+  },
+  serverTime: {
+    subscribe: () => {
+      return toAsyncIterable(timer(0, 5000).pipe(map(() => new Date())));
+    },
+    resolve: (x: Date) => x,
   },
 };
 

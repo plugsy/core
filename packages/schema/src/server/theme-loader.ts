@@ -33,6 +33,7 @@ const getPalette = (config: Partial<PaletteConfig>): FullPalette => {
 
 export interface FullTheme {
   palette: FullPalette;
+  plugins: any;
 }
 
 export const themeLoader$ = (
@@ -43,13 +44,14 @@ export const themeLoader$ = (
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
     map((config): FullTheme => {
       const configPalette = config?.palette ?? {};
+      const plugins = config?.plugins ?? {};
       const palette = getPalette(configPalette);
       logger.silly("Generated new palette", {
         config: configPalette,
         palette,
       });
       return {
-        ...config,
+        plugins,
         palette,
       };
     })
